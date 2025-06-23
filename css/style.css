@@ -1,0 +1,344 @@
+/* Variables de color para modo claro */
+:root {
+  --fondo: #ffffff; /* Color de fondo principal */
+  --texto: #111111; /* Color de texto principal */
+  --acento: #d2b48c; /* Color de acento (sepia claro) */
+  --gris: #f5f5f5; /* Gris claro para encabezados y pies de página */
+  --borde: #e0e0e0; /* Color de borde */
+  --oscuro: #2a2a2a; /* Fondo oscuro para el constructor */
+  --texto-claro: #f0f0f0; /* Texto claro para el constructor */
+  --constructor-bg-output: #3a3a3a; /* Fondo del área de salida del constructor */
+}
+/* Variables de color para modo oscuro */
+html.dark-mode {
+  --fondo: #1a1a1a;
+  --texto: #e0e0e0;
+  --acento: #f0c080; /* Un acento más brillante para el modo oscuro */
+  --gris: #222222;
+  --borde: #444444;
+  --oscuro: #111111;
+  --texto-claro: #ffffff;
+  --constructor-bg-output: #2b2b2b;
+}
+/* Estilos base del cuerpo */
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--fondo);
+  color: var(--texto);
+  line-height: 1.7;
+  overflow-x: hidden; /* Evita el scroll horizontal */
+  scroll-behavior: smooth; /* Habilita el scroll suave para los enlaces ancla */
+}
+/* Cinematic Hero Section Styles */
+#hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Ruta de la imagen de fondo corregida a .png */
+  background-image: url('../images/montanas-flotantes.png'); /* ¡Corregido a .png! */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  color: var(--texto-claro); /* Adjusted for dark background */
+}
+#hero h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #fff; /* White text for contrast on dark background */
+  /* Painterly text effect */
+  text-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.7),
+    -2px -2px 4px rgba(0, 0, 0, 0.7),
+    4px 4px 8px rgba(0, 0, 0, 0.5),
+    -4px -4px 8px rgba(0, 0, 0, 0.5),
+    6px 6px 12px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1.5s ease-out;
+}
+#hero p {
+  font-size: 1.2rem;
+  color: #ccc; /* Lighter gray for contrast */
+  margin-top: 1rem;
+  animation: fadeIn 2s ease-out 0.5s forwards;
+  opacity: 0; /* Starts hidden for animation */
+}
+#hero a {
+  margin-top: 2.5rem;
+  padding: 1rem 2rem;
+  border: 2px solid var(--acento);
+  color: #fff; /* White text for button */
+  background-color: rgba(0,0,0,0.3); /* Semi-transparent background for the button */
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover */
+  border-radius: 8px; /* Rounded corners for the button */
+}
+#hero a:hover {
+  background-color: var(--acento);
+  color: var(--oscuro); /* Dark text on accent background for contrast */
+}
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos del encabezado */
+header {
+  padding: 4rem 2rem;
+  text-align: center;
+  background-color: transparent; /* Changed to transparent */
+  border-bottom: 4px solid var(--acento);
+}
+/* Estilos del título del encabezado */
+header h1 {
+  font-size: 3rem;
+  letter-spacing: 2px;
+  margin: 0;
+}
+/* Estilos de la barra de navegación */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  background-color: var(--gris); /* Usar --gris para consistencia */
+  border-bottom: 1px solid var(--borde);
+  position: relative; /* Para posicionar el botón de tema */
+}
+/* Estilos de los enlaces de navegación */
+nav a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: color 0.3s ease; /* Transición suave para el hover */
+}
+/* Efecto hover de los enlaces de navegación */
+nav a:hover {
+  color: var(--acento);
+}
+/* Botón de cambio de tema */
+#theme-toggle {
+  background-color: var(--acento);
+  color: var(--texto-claro);
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 20px; /* Espacio para el botón */
+}
+#theme-toggle:hover {
+  background-color: #c0a07c;
+  transform: translateY(-2px);
+}
+/* Estilos de las secciones */
+section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 3rem 2rem;
+  border-bottom: 1px solid var(--borde);
+  /* Animación de fade-in para secciones */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Estilos de las tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  /* Eliminado opacity: 0 y transform: translateY(10px) aquí para que sean visibles por defecto */
+  /* La animación de fade-in se aplicará cuando la sección sea visible */
+  transition: opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s;
+}
+/* Clase visible para tablas, si se desea animar individualmente al aparecer con la sección */
+table.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Estilos del encabezado y celdas de tabla */
+th, td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--borde); /* Usar --borde para consistencia */
+  text-align: left;
+}
+/* Estilos específicos del encabezado de tabla */
+th {
+  color: var(--acento);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+/* Estilos del pie de página */
+footer {
+  background-color: var(--gris);
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+/* Estilo para el botón de reproducción de audio */
+.play-button, .play-output-button {
+  background-color: var(--acento);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.play-button:hover, .play-output-button:hover {
+  background-color: #c0a07c; /* Acennto ligeramente más oscuro */
+  transform: translateY(-2px); /* Pequeño efecto de elevación */
+}
+/* Estilos para la sección del constructor de frases */
+.constructor-container {
+  background-color: var(--oscuro);
+  color: var(--texto-claro);
+  padding: 3rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--borde);
+}
+.constructor-container h2 {
+  color: var(--texto-claro);
+  border-left-color: var(--acento);
+}
+.constructor-container p {
+  color: var(--texto-claro);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+.constructor-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.constructor-inputs select {
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  border: 1px solid var(--borde);
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  min-width: 180px;
+}
+.constructor-inputs button {
+  background-color: var(--acento);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+.constructor-inputs button:hover {
+  background-color: #c0a07c;
+}
+.constructor-output {
+  background-color: var(--constructor-bg-output); /* Usar variable para consistencia */
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 2rem;
+  color: var(--texto-claro);
+  border: 1px solid #555;
+}
+.constructor-output h3 {
+  color: var(--acento);
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+.constructor-output p {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.constructor-output .ipa {
+  font-family: monospace;
+  color: #aaa;
+  font-size: 1.1rem;
+}
+.constructor-output .meaning {
+  font-style: italic;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+/* Nuevos estilos para los tonos emocionales */
+.constructor-output.poetico {
+  background: #3a3040;
+  box-shadow: 0 0 15px rgba(180, 100, 200, 0.5); /* Sombra púrpura suave */
+}
+.constructor-output.afectivo {
+  background: #41302f;
+  box-shadow: 0 0 15px rgba(255, 100, 100, 0.5); /* Sombra rojiza suave */
+}
+.constructor-output.melancolico {
+  background: #2a2f38;
+  box-shadow: 0 0 15px rgba(100, 150, 255, 0.5); /* Sombra azul suave */
+}
+
+/* Estilos para la animación de caracteres */
+.character-cell {
+  cursor: pointer;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+  font-size: 2rem; /* Aumenta el tamaño para que el efecto sea visible */
+}
+.character-cell:hover {
+  transform: scale(1.3); /* Expande el carácter */
+  text-shadow: 0 0 10px var(--acento); /* Efecto de brillo */
+}
+/* Estilos para el modal personalizado */
+.custom-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background-color: var(--fondo); color: var(--texto);
+  padding: 20px; border: 1px solid var(--borde); border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000;
+  text-align: center; font-family: 'Outfit', sans-serif;
+}
+.custom-modal button {
+  background-color: var(--acento); color: white; border: none; border-radius: 5px;
+  padding: 8px 15px; cursor: pointer; margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+.custom-modal button:hover {
+  background-color: #c0a07c;
+}
+/* Styles for the "Scroll to Top" button */
+#btnTop {
+  position: fixed;
+  bottom: 40px;
+  right: 30px;
+  z-index: 99;
+  background-color: var(--acento); /* Use accent color */
+  color: var(--fondo); /* Use background color for contrast */
+  border: none;
+  padding: 12px 18px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: background 0.3s, transform 0.3s, opacity 0.3s;
+  display: none; /* Hidden by default, shown on scroll */
+}
+#btnTop:hover {
+  background-color: #bfa072; /* Slightly darker accent for hover */
+  transform: scale(1.1);
+}
