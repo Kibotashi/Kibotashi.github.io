@@ -30,7 +30,7 @@ const verbsData = {
       "Lun": { kibotashi: "Tael", ipa: "/ta.el/", meaning: "will be" },
       "Bua": { kibotashi: "Tuel", ipa: "/tu.el/", meaning: "will be" },
       "Sual": { kibotashi: "Taiel", ipa: "/tai.el/", meaning: "will be" },
-      "Nual": { kibotashi: "Tanel", ipa: "/ta.nel/", meaning: "will be" }
+      "Nual": { kibotashi: "Tanel", ipa: "/ta.nel/", meaning: "were" }
     },
     negation: { // Specific negation forms for Ta from user's table
       "Ena": { kibotashi: "Netao", ipa: "/ne.ta.o/", meaning: "am not" },
