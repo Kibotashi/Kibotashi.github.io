@@ -20,7 +20,7 @@ const verbsData = {
     },
     past: { // Specific past forms for Ta from user's table
       "Ena": { kibotashi: "Taor", ipa: "/ta.or/", meaning: "was" },
-      "Lun": { kibotashi: "Taor", ipa: "/ta.or/", meaning: "was" },
+      "Lun": { kibotashi: "Taor", ipa: "tā.or", meaning: "was" },
       "Bua": { kibotashi: "Tauor", ipa: "/tau.or/", meaning: "were" },
       "Sual": { kibotashi: "Tair", ipa: "/tair/", meaning: "was" },
       "Nual": { kibotashi: "Tanor", ipa: "/ta.nor/", meaning: "were" }
@@ -30,7 +30,7 @@ const verbsData = {
       "Lun": { kibotashi: "Tael", ipa: "/ta.el/", meaning: "will be" },
       "Bua": { kibotashi: "Tuel", ipa: "/tu.el/", meaning: "will be" },
       "Sual": { kibotashi: "Taiel", ipa: "/tai.el/", meaning: "will be" },
-      "Nual": { kibotashi: "Tanal", ipa: "/ta.nel/", meaning: "are not" } // Corrected meaning
+      "Nual": { kibotashi: "Tanel", ipa: "/ta.nel/", meaning: "will be" }
     },
     negation: { // Specific negation forms for Ta from user's table
       "Ena": { kibotashi: "Netao", ipa: "/ne.ta.o/", meaning: "am not" },
@@ -73,32 +73,35 @@ const relationsData = {
 };
 
 // Data for Affixes
-const affixData = { // Defined globally for access in randomize
+const affixData = {
   "": "Sin sufijo",
   "ul": "Cariño suave (-ul)",
   "ei": "Íntimo (-ei)",
-  "an": "Confianza (-an)" // Updated text
+  "an": "Confianza (-an)"
 };
 
 // Data for Moods
-const moodData = { // Defined globally for access in randomize
-  "indicativo": "Modo Indicativo", // Updated text
-  "condicional": "Modo Condicional" // Updated text
+const moodData = {
+  "indicativo": "Modo Indicativo",
+  "condicional": "Modo Condicional"
 };
 
 // Data for Emotions
-const emotionData = { // Defined globally for access in randomize
-  "": "Tono neutro", // Updated text
-  "poetico": "Poético", // Updated text (was 'poetico', now 'Poético')
-  "afectivo": "Afectivo", // Updated text (was 'afectivo', now 'Afectivo')
-  "melancolico": "Melancólico" // Updated text (was 'melancolico', now 'Melancólico')
+const emotionData = {
+  "": "Tono neutro",
+  "poetico": "Poético",
+  "afectivo": "Afectivo",
+  "melancolico": "Melancólico"
 };
 
 // Declara una variable para el sintetizador de sonido
 let matchSoundPlayer;
 let reverb;
 let lastSoundPlayTime = 0;
-const minTimeBetweenSounds = 0.1; // Mínimo tiempo en segundos entre sonidos para que se perciba la cola de reverb
+const minTimeBetweenSounds = 0.1; // Minimum time in seconds between sounds for reverb tail to be perceived
+
+// Reference to the audio element for the "Entrar al Mundo" button
+let gameStartAudioElement;
 
 // Populate dropdowns on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -113,29 +116,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnTop = document.getElementById('btnTop'); // Get the scroll to top button
   const themeToggle = document.getElementById('theme-toggle'); // Get the theme toggle button
   const characterCells = document.querySelectorAll('.character-cell'); // Get all character cells
+  const enterWorldButton = document.getElementById('enter-world-button'); // Get the Enter World button by its ID
+  gameStartAudioElement = document.getElementById('game-start-audio'); // Get the game start audio element
 
-  // Inicializa el sintetizador de sonido de Tone.js
+  // Initialize Tone.js sound synthesizer
   if (typeof Tone !== 'undefined') {
-    // Configura el efecto de reverb para un sonido más etéreo
+    // Configure reverb effect for a more ethereal sound
     reverb = new Tone.Reverb({
-      decay: 4,     // Mayor duración de la cola de la reverb
-      preDelay: 0.05, // Ligero retraso antes de que empiece la reverb
-      wet: 0.8      // Mayor cantidad de señal con efecto para un sonido más ambiental
-    }).toDestination(); // Conecta la reverb al destino final
+      decay: 4,     // Longer reverb tail duration
+      preDelay: 0.05, // Slight delay before reverb starts
+      wet: 0.8      // More affected signal for a more ambient sound
+    }).toDestination(); // Connect reverb to the final destination
 
-    // Usar PolySynth con FMSynth para un timbre suave y resonante con toque metálico de carillón
+    // Use PolySynth with FMSynth for a soft, resonant timbre with a metallic chime touch
     matchSoundPlayer = new Tone.PolySynth(Tone.FMSynth, {
       oscillator: {
-        type: "sine" // Onda senoidal para un sonido base puro
+        type: "sine" // Sine wave for a pure base sound
       },
       envelope: {
-        attack: 0.01,   // Ataque muy rápido para un "ding" nítido
-        decay: 0.2,    // Decaimiento rápido
-        sustain: 0,  // Sin sostenido
-        release: 1.5   // Liberación larga para una cola suave y envolvente
+        attack: 0.01,   // Very fast attack for a sharp "ding"
+        decay: 0.2,    // Fast decay
+        sustain: 0,  // No sustain
+        release: 1.5   // Long release for a soft, enveloping tail
       },
       modulation: {
-        type: "sine" // Onda senoidal para el modulador para un timbre más limpio de campana
+        type: "sine" // Sine wave for the modulator for a cleaner bell timbre
       },
       modulationEnvelope: {
         attack: 0.01,
@@ -143,10 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sustain: 0,
         release: 0.2
       },
-      harmonicity: 3.5, // Ajuste para un timbre más complejo y armónico de campana/carillón
-      modulationIndex: 5, // Índice de modulación para un sonido limpio y no demasiado "ruidoso"
-      volume: -18 // Volumen ajustado para que no sea intrusivo
-    }).connect(reverb); // Conecta el sintetizador a la reverb
+      harmonicity: 3.5, // Adjustment for a more complex, harmonic bell/chime timbre
+      modulationIndex: 5, // Modulation index for a clean and not too "noisy" sound
+      volume: -18 // Adjusted volume so it's not intrusive
+    }).connect(reverb); // Connect the synthesizer to the reverb
   } else {
     console.warn("Tone.js no se cargó. Los sonidos de los caracteres no funcionarán.");
   }
@@ -279,25 +284,25 @@ document.addEventListener('DOMContentLoaded', () => {
   characterCells.forEach(cell => {
     // Existing mouseover for sound
     cell.addEventListener('mouseover', () => {
-      // Asegurarse de que el contexto de audio esté activo con la primera interacción del usuario
+      // Ensure the audio context is active with the first user interaction
       if (Tone.context.state !== 'running') {
           Tone.start();
       }
 
       const currentTime = Tone.now();
-      // Solo reproducir el sonido si ha pasado el tiempo mínimo desde la última reproducción
+      // Only play the sound if the minimum time has passed since the last play
       if (currentTime - lastSoundPlayTime > minTimeBetweenSounds) {
         if (matchSoundPlayer) {
-          // Reproducir la nota G5 para el efecto de carillón agudo
-          matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime); // Nota G5, duración 1.5 segundos
-          lastSoundPlayTime = currentTime; // Actualizar el último tiempo de reproducción
+          // Play G5 note for acute chime effect
+          matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime); // G5 note, 1.5 second duration
+          lastSoundPlayTime = currentTime; // Update last play time
         }
       }
     });
 
     // New click event for pronunciation - uses the same matchSoundPlayer for consistency
     cell.addEventListener('click', () => {
-      // Asegurarse de que el contexto de audio esté activo con la primera interacción del usuario
+      // Ensure the audio context is active with the first user interaction
       if (Tone.context.state !== 'running') {
           Tone.start();
       }
@@ -305,7 +310,66 @@ document.addEventListener('DOMContentLoaded', () => {
       matchSoundPlayer.triggerAttackRelease("C5", "8n");
     });
   });
+
+  // Event listener for the "Entrar al Mundo" button
+  if (enterWorldButton) {
+    console.log("Botón 'Entrar al Mundo' encontrado. Añadiendo event listener.");
+    enterWorldButton.addEventListener('click', (event) => {
+      console.log("Botón 'Entrar al Mundo' clickeado.");
+      event.preventDefault(); // Prevents immediate navigation to play sound first
+
+      // Ensure Tone.js audio context is active with user interaction
+      if (Tone.context.state !== 'running') {
+        Tone.start().then(() => {
+          console.log("Tone.js context started.");
+          playGameStartSoundAndNavigate(enterWorldButton.href);
+        }).catch(e => console.error("Error al iniciar Tone.js:", e));
+      } else {
+        playGameStartSoundAndNavigate(enterWorldButton.href);
+      }
+    });
+  } else {
+    console.warn("Botón 'Entrar al Mundo' no encontrado. Asegúrate de que tenga el ID 'enter-world-button'.");
+  }
+
+  // Correction for Biné audio: "bine.mpuro3" to "bine.mp3"
+  // This part was already in the provided index.html snippet, but it's good to keep it here for completeness
+  const bineAudioElement = document.getElementById('bine-audio');
+  if (bineAudioElement && bineAudioElement.src.includes('bine.mpuro3')) {
+    bineAudioElement.src = 'audios/bine.mp3';
+    console.log("Ruta de audio 'bine-audio' corregida.");
+  }
 });
+
+// Function to play the sound and then navigate
+function playGameStartSoundAndNavigate(targetHref) {
+  if (gameStartAudioElement) {
+    console.log("Intento de reproducción de 'Game Star.mp3'. Estado del audio:", gameStartAudioElement.readyState, "Src:", gameStartAudioElement.src);
+    
+    // Ensure the audio context is active
+    if (Tone.context.state !== 'running') {
+      Tone.start().then(() => console.log("AudioContext reanudado al intentar reproducir Game Star.mp3")).catch(e => console.error("Error al reanudar AudioContext para Game Star.mp3:", e));
+    }
+
+    gameStartAudioElement.currentTime = 0; // Reset audio
+    gameStartAudioElement.play().then(() => {
+      console.log("'Game Star.mp3' reproducido exitosamente. Navegando...");
+      // Navigate after a delay if audio has duration, or a fixed delay
+      const delay = gameStartAudioElement.duration > 0 ? gameStartAudioElement.duration * 1000 + 100 : 500; // 500ms if duration is 0 or NaN
+      setTimeout(() => {
+        window.location.href = targetHref;
+      }, delay);
+    }).catch(e => {
+      console.error("Error (Promise rejected) al intentar reproducir 'Game Star.mp3':", e);
+      // Navigate anyway if playback fails (autoplay policy, etc.)
+      console.warn("Navegando directamente debido a un error de reproducción de audio.");
+      window.location.href = targetHref;
+    });
+  } else {
+    console.warn("Elemento de audio 'game-start-audio' no encontrado. Navegando directamente.");
+    window.location.href = targetHref;
+  }
+}
 
 // Function to build the phrase based on selections
 function buildPhrase() {
@@ -318,7 +382,7 @@ function buildPhrase() {
   let selectedEmotion = document.getElementById('emotion-select').value; // Get selected emotion
   const randomize = document.getElementById('randomize-checkbox').checked; // Get randomize checkbox state
 
-  // Si se selecciona aleatorio, escoge componentes al azar
+  // If randomize is selected, choose random components
   if (randomize) {
     const pronounKeys = Object.keys(pronounsData);
     const verbKeys = Object.keys(verbsData);
@@ -334,12 +398,9 @@ function buildPhrase() {
     // The function will continue and use the newly set values.
   }
 
-
   let pronoun = pronounsData[selectedPronounKey];
   let verb = verbsData[selectedVerbKey];
-  let object = relationsData[selectedObjectKey];
-
-
+  
   let kibotashiPhrase = "";
   let ipaPhrase = "";
   let meaningPhrase = "";
@@ -433,7 +494,7 @@ function buildPhrase() {
   if (selectedMood === "condicional") {
     kibotashiPhrase = `Ka ${kibotashiPhrase}`;
     ipaPhrase = `/ka/ ${ipaPhrase}`;
-    meaningPhrase = `If ${meaningPhrase}`;
+    meaningPhrase = `If ${meaningPhrase}`; 
   }
 
   // Apply emotional tone
@@ -518,15 +579,15 @@ function speakText(text) {
   }
 }
 
-// Function to play a subtle sound effect
+// Function to play a subtle sound effect (for character cells)
 function playMatchSound() {
   const currentTime = Tone.now();
-  // Solo reproducir el sonido si ha pasado el tiempo mínimo desde la última reproducción
+  // Only play the sound if the minimum time has passed since the last play
   if (currentTime - lastSoundPlayTime > minTimeBetweenSounds) {
     if (matchSoundPlayer) {
-      // Reproducir la nota G5 para el efecto de carillón agudo
-      matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime); // Nota G5, duración 1.5 segundos
-      lastSoundPlayTime = currentTime; // Actualizar el último tiempo de reproducción
+      // Play G5 note for acute chime effect
+      matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime); // G5 note, 1.5 second duration
+      lastSoundPlayTime = currentTime; // Update last play time
     }
   }
 }
@@ -548,7 +609,9 @@ const sectionObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      observer.unobserve(entry.target); // Stop observing once it's visible
+    } else {
+      // Optional: remove visible class when out of view, if you want re-trigger
+      // entry.target.classList.remove('visible');
     }
   });
 }, observerOptions);
