@@ -20,7 +20,7 @@ const verbsData = {
     },
     past: { // Specific past forms for Ta from user's table
       "Ena": { kibotashi: "Taor", ipa: "/ta.or/", meaning: "was" },
-      "Lun": { kibotashi: "Taor", ipa: "tā.or", meaning: "was" },
+      "Lun": { kibotashi: "Taor", ipa: "/ta.or/", meaning: "was" },
       "Bua": { kibotashi: "Tauor", ipa: "/tau.or/", meaning: "were" },
       "Sual": { kibotashi: "Tair", ipa: "/tair/", meaning: "was" },
       "Nual": { kibotashi: "Tanor", ipa: "/ta.nor/", meaning: "were" }
@@ -94,14 +94,15 @@ const emotionData = {
   "melancolico": "Melancólico"
 };
 
-// Declara una variable para el sintetizador de sonido
+// Declare variables for sound synthesizers and audio elements
 let matchSoundPlayer;
 let reverb;
 let lastSoundPlayTime = 0;
 const minTimeBetweenSounds = 0.1; // Minimum time in seconds between sounds for reverb tail to be perceived
 
-// Reference to the audio element for the "Entrar al Mundo" button
-let gameStartAudioElement;
+let gameStartAudioElement; // Audio element for the "Entrar al Mundo" button
+let heroicIntroAudioElement; // Audio element for the heroic intro music
+let voiceIntroAudioElement; // Audio element for the heroic voice intro
 
 // Populate dropdowns on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -109,49 +110,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const verbSelect = document.getElementById('verb-select');
   const tenseSelect = document.getElementById('tense-select');
   const objectSelect = document.getElementById('object-select');
-  const affixSelect = document.getElementById('affix-select'); // New affix select
-  const moodSelect = document.getElementById('mood-select'); // New mood select
-  const emotionSelect = document.getElementById('emotion-select'); // New emotion select
-  const randomizeCheckbox = document.getElementById('randomize-checkbox'); // New randomize checkbox
-  const btnTop = document.getElementById('btnTop'); // Get the scroll to top button
-  const themeToggle = document.getElementById('theme-toggle'); // Get the theme toggle button
-  const characterCells = document.querySelectorAll('.character-cell'); // Get all character cells
-  const enterWorldButton = document.getElementById('enter-world-button'); // Get the Enter World button by its ID
-  gameStartAudioElement = document.getElementById('game-start-audio'); // Get the game start audio element
+  const affixSelect = document.getElementById('affix-select');
+  const moodSelect = document.getElementById('mood-select');
+  const emotionSelect = document.getElementById('emotion-select');
+  const randomizeCheckbox = document.getElementById('randomize-checkbox');
+  const btnTop = document.getElementById('btnTop');
+  const themeToggle = document.getElementById('theme-toggle');
+  const characterCells = document.querySelectorAll('.character-cell');
+  const enterWorldButton = document.getElementById('enter-world-button');
+
+  gameStartAudioElement = document.getElementById('game-start-audio');
+  heroicIntroAudioElement = document.getElementById('heroic-intro-audio');
+  voiceIntroAudioElement = document.getElementById('voice-intro-audio'); // Get the voice intro audio element
 
   // Initialize Tone.js sound synthesizer
   if (typeof Tone !== 'undefined') {
     // Configure reverb effect for a more ethereal sound
     reverb = new Tone.Reverb({
-      decay: 4,     // Longer reverb tail duration
-      preDelay: 0.05, // Slight delay before reverb starts
-      wet: 0.8      // More affected signal for a more ambient sound
-    }).toDestination(); // Connect reverb to the final destination
+      decay: 4,
+      preDelay: 0.05,
+      wet: 0.8
+    }).toDestination();
 
     // Use PolySynth with FMSynth for a soft, resonant timbre with a metallic chime touch
     matchSoundPlayer = new Tone.PolySynth(Tone.FMSynth, {
-      oscillator: {
-        type: "sine" // Sine wave for a pure base sound
-      },
-      envelope: {
-        attack: 0.01,   // Very fast attack for a sharp "ding"
-        decay: 0.2,    // Fast decay
-        sustain: 0,  // No sustain
-        release: 1.5   // Long release for a soft, enveloping tail
-      },
-      modulation: {
-        type: "sine" // Sine wave for the modulator for a cleaner bell timbre
-      },
-      modulationEnvelope: {
-        attack: 0.01,
-        decay: 0.1,
-        sustain: 0,
-        release: 0.2
-      },
-      harmonicity: 3.5, // Adjustment for a more complex, harmonic bell/chime timbre
-      modulationIndex: 5, // Modulation index for a clean and not too "noisy" sound
-      volume: -18 // Adjusted volume so it's not intrusive
-    }).connect(reverb); // Connect the synthesizer to the reverb
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 1.5 },
+      modulation: { type: "sine" },
+      modulationEnvelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.2 },
+      harmonicity: 3.5,
+      modulationIndex: 5,
+      volume: -18
+    }).connect(reverb);
   } else {
     console.warn("Tone.js no se cargó. Los sonidos de los caracteres no funcionarán.");
   }
@@ -221,23 +211,15 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        // If the section contains a table, also make all tables visible
         const tables = entry.target.querySelectorAll('table');
         tables.forEach(table => {
           table.classList.add('visible');
         });
-      } else {
-        // Optional: remove visible class when out of view, if you want re-trigger
-        // entry.target.classList.remove('visible');
-        // const tables = entry.target.querySelectorAll('table');
-        // tables.forEach(table => {
-        //   table.classList.remove('visible');
-        // });
       }
     });
   }, {
-    threshold: 0.1, // Trigger when 10% of the section is visible
-    rootMargin: "0px 0px -50px 0px" // Slightly adjust trigger point
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
   });
 
   // Observe all sections, excluding the hero section which is always visible initially
@@ -255,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Theme toggle logic
-  // Check for saved theme preference or system preference
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme) {
     document.documentElement.classList.add(savedTheme);
@@ -267,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggle.textContent = 'Modo Oscuro';
   }
 
-  // Add event listener for theme toggle button
   themeToggle.addEventListener('click', () => {
     if (document.documentElement.classList.contains('dark-mode')) {
       document.documentElement.classList.remove('dark-mode');
@@ -282,31 +262,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add mouseover event listener to character cells for sound
   characterCells.forEach(cell => {
-    // Existing mouseover for sound
     cell.addEventListener('mouseover', () => {
-      // Ensure the audio context is active with the first user interaction
       if (Tone.context.state !== 'running') {
           Tone.start();
       }
-
       const currentTime = Tone.now();
-      // Only play the sound if the minimum time has passed since the last play
       if (currentTime - lastSoundPlayTime > minTimeBetweenSounds) {
         if (matchSoundPlayer) {
-          // Play G5 note for acute chime effect
-          matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime); // G5 note, 1.5 second duration
-          lastSoundPlayTime = currentTime; // Update last play time
+          matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime);
+          lastSoundPlayTime = currentTime;
         }
       }
     });
 
-    // New click event for pronunciation - uses the same matchSoundPlayer for consistency
     cell.addEventListener('click', () => {
-      // Ensure the audio context is active with the first user interaction
       if (Tone.context.state !== 'running') {
           Tone.start();
       }
-      // Play a specific note (e.g., C5) for any character click, as phonemes are not musical notes
       matchSoundPlayer.triggerAttackRelease("C5", "8n");
     });
   });
@@ -316,24 +288,35 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Botón 'Entrar al Mundo' encontrado. Añadiendo event listener.");
     enterWorldButton.addEventListener('click', (event) => {
       console.log("Botón 'Entrar al Mundo' clickeado.");
-      event.preventDefault(); // Prevents immediate navigation to play sound first
+      event.preventDefault();
 
       // Ensure Tone.js audio context is active with user interaction
       if (Tone.context.state !== 'running') {
         Tone.start().then(() => {
           console.log("Tone.js context started.");
-          playGameStartSoundAndNavigate(enterWorldButton.href);
+          handleEnterWorldInteraction(enterWorldButton.href);
         }).catch(e => console.error("Error al iniciar Tone.js:", e));
       } else {
-        playGameStartSoundAndNavigate(enterWorldButton.href);
+        handleEnterWorldInteraction(enterWorldButton.href);
       }
     });
   } else {
     console.warn("Botón 'Entrar al Mundo' no encontrado. Asegúrate de que tenga el ID 'enter-world-button'.");
   }
 
-  // Correction for Biné audio: "bine.mpuro3" to "bine.mp3"
-  // This part was already in the provided index.html snippet, but it's good to keep it here for completeness
+  // Initial play of the heroic intro audio (muted)
+  // This will try to play the audio as soon as possible, but muted,
+  // to help satisfy browser autoplay policies later.
+  if (heroicIntroAudioElement) {
+    heroicIntroAudioElement.play().catch(e => console.warn("Error al intentar reproducir intro heroica (música) silenciada:", e));
+  }
+  // Initial play of the voice intro audio (muted)
+  if (voiceIntroAudioElement) {
+    voiceIntroAudioElement.play().catch(e => console.warn("Error al intentar reproducir intro de voz silenciada:", e));
+  }
+
+
+  // Correction for Biné audio: "bine.mpuro3" to "bine.mp3" (from previous version)
   const bineAudioElement = document.getElementById('bine-audio');
   if (bineAudioElement && bineAudioElement.src.includes('bine.mpuro3')) {
     bineAudioElement.src = 'audios/bine.mp3';
@@ -341,28 +324,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Function to play the sound and then navigate
-function playGameStartSoundAndNavigate(targetHref) {
+// Function to handle the "Entrar al Mundo" interaction
+function handleEnterWorldInteraction(targetHref) {
+  // Unmute and play the heroic intro music
+  if (heroicIntroAudioElement) {
+    heroicIntroAudioElement.muted = false;
+    heroicIntroAudioElement.volume = 0.6; // Set a suitable background volume
+    heroicIntroAudioElement.currentTime = 0; // Ensure it starts from beginning
+    heroicIntroAudioElement.play().catch(e => console.warn("Error al intentar desmutear y reproducir intro heroica (música):", e));
+  }
+
+  // Unmute and play the heroic voice intro
+  if (voiceIntroAudioElement) {
+    voiceIntroAudioElement.muted = false;
+    voiceIntroAudioElement.volume = 1.0; // Full volume for voice
+    voiceIntroAudioElement.currentTime = 0; // Ensure it starts from beginning
+    voiceIntroAudioElement.play().catch(e => console.warn("Error al intentar desmutear y reproducir intro de voz:", e));
+  }
+
+  // Play the "Game Star.mp3" sound effect
   if (gameStartAudioElement) {
     console.log("Intento de reproducción de 'Game Star.mp3'. Estado del audio:", gameStartAudioElement.readyState, "Src:", gameStartAudioElement.src);
-    
-    // Ensure the audio context is active
-    if (Tone.context.state !== 'running') {
-      Tone.start().then(() => console.log("AudioContext reanudado al intentar reproducir Game Star.mp3")).catch(e => console.error("Error al reanudar AudioContext para Game Star.mp3:", e));
-    }
-
-    gameStartAudioElement.currentTime = 0; // Reset audio
+    gameStartAudioElement.currentTime = 0;
     gameStartAudioElement.play().then(() => {
       console.log("'Game Star.mp3' reproducido exitosamente. Navegando...");
-      // Navigate after a delay if audio has duration, or a fixed delay
-      const delay = gameStartAudioElement.duration > 0 ? gameStartAudioElement.duration * 1000 + 100 : 500; // 500ms if duration is 0 or NaN
+      // Determine the longest audio duration to ensure all play before navigating
+      let maxAudioDuration = gameStartAudioElement.duration;
+      // If heroic music is playing and has a longer duration, use its duration
+      if (heroicIntroAudioElement && !heroicIntroAudioElement.muted && heroicIntroAudioElement.duration > maxAudioDuration) {
+          maxAudioDuration = heroicIntroAudioElement.duration;
+      }
+      // If voice intro is playing and has a longer duration, use its duration
+      if (voiceIntroAudioElement && !voiceIntroAudioElement.muted && voiceIntroAudioElement.duration > maxAudioDuration) {
+          maxAudioDuration = voiceIntroAudioElement.duration;
+      }
+
+      // Add a small buffer to the longest audio duration before navigating
+      const delay = (maxAudioDuration > 0 ? maxAudioDuration * 1000 : 500) + 100;
+
       setTimeout(() => {
         window.location.href = targetHref;
       }, delay);
+      
     }).catch(e => {
       console.error("Error (Promise rejected) al intentar reproducir 'Game Star.mp3':", e);
-      // Navigate anyway if playback fails (autoplay policy, etc.)
-      console.warn("Navegando directamente debido a un error de reproducción de audio.");
+      // Fallback: navigate even if the game start audio fails to play
+      console.warn("Navegando directamente debido a un error de reproducción de audio del botón.");
       window.location.href = targetHref;
     });
   } else {
@@ -371,18 +378,18 @@ function playGameStartSoundAndNavigate(targetHref) {
   }
 }
 
-// Function to build the phrase based on selections
+// Function to build the phrase based on selections in the constructor
 function buildPhrase() {
   const selectedPronounKey = document.getElementById('pronoun-select').value;
   const selectedVerbKey = document.getElementById('verb-select').value;
-  let selectedTenseKey = document.getElementById('tense-select').value; // Changed to `let` for randomization
-  let selectedObjectKey = document.getElementById('object-select').value; // Changed to `let` for randomization
-  let selectedAffix = document.getElementById('affix-select').value; // Get selected affix
-  let selectedMood = document.getElementById('mood-select').value; // Get selected mood
-  let selectedEmotion = document.getElementById('emotion-select').value; // Get selected emotion
-  const randomize = document.getElementById('randomize-checkbox').checked; // Get randomize checkbox state
+  let selectedTenseKey = document.getElementById('tense-select').value;
+  let selectedObjectKey = document.getElementById('object-select').value;
+  let selectedAffix = document.getElementById('affix-select').value;
+  let selectedMood = document.getElementById('mood-select').value;
+  let selectedEmotion = document.getElementById('emotion-select').value;
+  const randomize = document.getElementById('randomize-checkbox').checked;
 
-  // If randomize is selected, choose random components
+  // If randomize is checked, randomly select values for all dropdowns
   if (randomize) {
     const pronounKeys = Object.keys(pronounsData);
     const verbKeys = Object.keys(verbsData);
@@ -395,7 +402,7 @@ function buildPhrase() {
     document.getElementById('mood-select').value = ["indicativo", "condicional"][Math.floor(Math.random() * 2)];
     document.getElementById('affix-select').value = ["", "ul", "ei", "an"][Math.floor(Math.random() * 4)];
     document.getElementById('emotion-select').value = ["", "poetico", "afectivo", "melancolico"][Math.floor(Math.random() * 4)];
-    // The function will continue and use the newly set values.
+    // The function will continue and use the newly set values after these assignments.
   }
 
   let pronoun = pronounsData[selectedPronounKey];
@@ -405,22 +412,19 @@ function buildPhrase() {
   let ipaPhrase = "";
   let meaningPhrase = "";
 
-  // Handle negation checkbox
   const negationCheckbox = document.getElementById('negation-checkbox');
   const isNegated = negationCheckbox && negationCheckbox.checked;
 
-  // Verb Conjugation
   let conjugatedVerb = "";
   let verbIpa = "";
   let verbMeaning = "";
 
-  // Pronoun
   kibotashiPhrase += pronoun.kibotashi;
   ipaPhrase += pronoun.ipa;
   meaningPhrase += pronoun.meaning;
 
-  // Determine conjugated verb and its IPA/meaning
-  if (verb.kibotashi === "Ta") { // Special conjugation for "Ta"
+  // Verb conjugation logic (specific for 'Ta', generic for others)
+  if (verb.kibotashi === "Ta") {
     if (isNegated) {
       conjugatedVerb = verb.negation[pronoun.kibotashi].kibotashi;
       verbIpa = verb.negation[pronoun.kibotashi].ipa;
@@ -441,7 +445,6 @@ function buildPhrase() {
   } else { // Regular conjugation for other verbs
     if (isNegated) {
       conjugatedVerb = verb.negation_prefix + verb.kibotashi;
-      // Simple IPA concatenation for regular verbs with negation prefix
       verbIpa = `/${verb.negation_prefix.toLowerCase()}${verb.ipa.replace(/\//g, '')}/`;
       verbMeaning = tensesData["Negación"].meaning + " " + verb.meaning;
     } else if (selectedTenseKey === "Presente") {
@@ -452,7 +455,7 @@ function buildPhrase() {
       conjugatedVerb = verb.kibotashi + verb.past_suffix;
       verbIpa = `${verb.ipa.slice(0, -1)}${verb.past_suffix}/`;
       let baseMeaning = verb.meaning;
-      if (baseMeaning.includes('/')) baseMeaning = baseMeaning.split('/')[0];
+      if (baseMeaning.includes('/')) baseMeaning = baseMeaning.split('/')[0]; // Take first meaning if multiple
       if (baseMeaning === 'be') verbMeaning = 'was/were';
       else if (baseMeaning === 'go') verbMeaning = 'went';
       else if (baseMeaning === 'have') verbMeaning = 'had';
@@ -480,7 +483,7 @@ function buildPhrase() {
 
     if (selectedAffix) {
       currentObjectKibotashi = `${object.kibotashi}${selectedAffix}`;
-      currentObjectIpa = `${object.ipa.slice(0, -1)}${selectedAffix}/`; // Assuming simple concatenation for IPA for now
+      currentObjectIpa = `${object.ipa.slice(0, -1)}${selectedAffix}/`;
       if (selectedAffix === "ul") currentObjectMeaning += " (gentle)";
       else if (selectedAffix === "ei") currentObjectMeaning += " (intimate)";
       else if (selectedAffix === "an") currentObjectMeaning += " (trustworthy)";
@@ -494,7 +497,7 @@ function buildPhrase() {
   if (selectedMood === "condicional") {
     kibotashiPhrase = `Ka ${kibotashiPhrase}`;
     ipaPhrase = `/ka/ ${ipaPhrase}`;
-    meaningPhrase = `If ${meaningPhrase}`; 
+    meaningPhrase = `If ${meaningPhrase}`;
   }
 
   // Apply emotional tone
@@ -507,11 +510,10 @@ function buildPhrase() {
   document.getElementById('ipa-phrase').textContent = ipaPhrase.trim();
   document.getElementById('meaning-phrase').textContent = meaningPhrase.trim();
   
-  // Set the class based on emotion
+  // Set the class based on emotion for styling
   const constructorOutputDiv = document.getElementById('constructor-output');
-  // Remove any previous emotion classes before adding the new one
   constructorOutputDiv.className = 'constructor-output'; // Reset to base class
-  if (selectedEmotion) { // Only add if an emotion is selected
+  if (selectedEmotion) {
       constructorOutputDiv.classList.add(selectedEmotion);
   }
   constructorOutputDiv.style.display = 'block';
@@ -520,10 +522,10 @@ function buildPhrase() {
   document.getElementById('constructor-output').dataset.kibotashiPhrase = kibotashiPhrase.trim();
   document.getElementById('constructor-output').dataset.kibotashiIpa = ipaPhrase.trim();
 
-  playMatchSound();
+  playMatchSound(); // Play sound effect for constructor output
 }
 
-// Function to speak the constructed phrase
+// Function to speak the constructed phrase using Web Speech API
 function speakConstructedPhrase() {
   const kibotashiPhrase = document.getElementById('constructor-output').dataset.kibotashiPhrase;
   if (kibotashiPhrase) {
@@ -582,12 +584,10 @@ function speakText(text) {
 // Function to play a subtle sound effect (for character cells)
 function playMatchSound() {
   const currentTime = Tone.now();
-  // Only play the sound if the minimum time has passed since the last play
   if (currentTime - lastSoundPlayTime > minTimeBetweenSounds) {
     if (matchSoundPlayer) {
-      // Play G5 note for acute chime effect
-      matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime); // G5 note, 1.5 second duration
-      lastSoundPlayTime = currentTime; // Update last play time
+      matchSoundPlayer.triggerAttackRelease("G5", "1.5", currentTime);
+      lastSoundPlayTime = currentTime;
     }
   }
 }
@@ -609,9 +609,6 @@ const sectionObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-    } else {
-      // Optional: remove visible class when out of view, if you want re-trigger
-      // entry.target.classList.remove('visible');
     }
   });
 }, observerOptions);
