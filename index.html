@@ -9,16 +9,18 @@
   <link rel="stylesheet" href="css/style.css">
   <!-- Incluye la librería Tone.js para la generación de sonido -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
-  <!-- NOTA: El CSS incrustado aquí ha sido ELIMINADO. Ahora solo se usa css/style.css -->
 </head>
 <body>
 <!-- Cinematic Hero Section -->
 <section id="hero">
   <h1>KIBOTASHI</h1>
   <p>El lenguaje donde cada carácter encierra intención</p>
-  <a href="#intro">
+  <!-- Botón "Entrar al Mundo" que ahora llama a una función JavaScript para reproducir sonido -->
+  <a href="#intro" id="enter-world-button">
     Entrar al Mundo
   </a>
+  <!-- Elemento de audio para el sonido del botón "Entrar al Mundo" -->
+  <audio id="game-start-audio" src="audios/Game Star.mp3" preload="auto"></audio>
 </section>
 
 <!-- Main content of the page -->
@@ -95,7 +97,7 @@
     <ul>
       <li><strong>Presente:</strong> raíz + terminación personal (Tao, Tua, Tai...)</li>
       <li><strong>Pasado:</strong> raíz + "or" (Taor = fui)</li>
-      <li><strong>Futuro:i> raíz + "el" (Tael = seré)</li>
+      <li><strong>Futuro:</strong> raíz + "el" (Tael = seré)</li>
       <li><strong>Negación:</strong> Ne + verbo conjugado (Netao = no soy)</li>
     </ul>
     <h3>Conjugación del verbo Ta (ser)</h3>
@@ -303,7 +305,7 @@
     <table>
       <tr><th>Palabra</th><th>Pronunciación IPA</th><th>Audio / Voz Sintética</th></tr>
       <tr><td data-pron="/ˈka.tun/">Katun</td><td>/ˈka.tun/</td><td><audio id="katun-audio" src="audios/katun.mp3"></audio><button class="play-button" onclick="document.getElementById('katun-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Katun')">🗣️ (Voz)</button></td></tr>
-      <tr><td data-pron="/ˈbi.ne/">Biné</td><td>/ˈbi.ne/</td><td><audio id="bine-audio" src="audios/bine.mpuro3"></audio><button class="play-button" onclick="document.getElementById('bine-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Biné')">🗣️ (Voz)</button></td></tr>
+      <tr><td data-pron="/ˈbi.ne/">Biné</td><td>/ˈbi.ne/</td><td><audio id="bine-audio" src="audios/bine.mp3"></audio><button class="play-button" onclick="document.getElementById('bine-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Biné')">🗣️ (Voz)</button></td></tr>
       <tr><td data-pron="/ˈza.lin/">Zalin</td><td>/ˈza.lin/</td><td><audio id="zalin-audio" src="audios/zalin.mp3"></audio><button class="play-button" onclick="document.getElementById('zalin-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Zalin')">🗣️ (Voz)</button></td></tr>
       <tr><td data-pron="/ta.o/">Tao</td><td>/ta.o/</td><td><audio id="tao-audio" src="audios/tao.mp3"></audio><button class="play-button" onclick="document.getElementById('tao-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Tao')">🗣️ (Voz)</button></td></tr>
       <!-- Puedes continuar añadiendo más palabras -->
