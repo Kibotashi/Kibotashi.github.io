@@ -331,7 +331,14 @@ function handleEnterWorldInteraction(targetHref) {
     heroicIntroAudioElement.muted = false;
     heroicIntroAudioElement.volume = 0.6; // Set a suitable background volume
     heroicIntroAudioElement.currentTime = 0; // Ensure it starts from beginning
-    heroicIntroAudioElement.play().catch(e => console.warn("Error al intentar desmutear y reproducir intro heroica (música):", e));
+    // Attempt to load the audio again before playing, to refresh sources if needed
+    heroicIntroAudioElement.load();
+    heroicIntroAudioElement.play().catch(e => {
+        console.error("Error al intentar desmutear y reproducir intro heroica (música):", e);
+        if (heroicIntroAudioElement.error) {
+            console.error("Detalles del error de audio heroico:", heroicIntroAudioElement.error.code, heroicIntroAudioElement.error.message);
+        }
+    });
   }
 
   // Unmute and play the heroic voice intro
@@ -339,7 +346,20 @@ function handleEnterWorldInteraction(targetHref) {
     voiceIntroAudioElement.muted = false;
     voiceIntroAudioElement.volume = 1.0; // Full volume for voice
     voiceIntroAudioElement.currentTime = 0; // Ensure it starts from beginning
-    voiceIntroAudioElement.play().catch(e => console.warn("Error al intentar desmutear y reproducir intro de voz:", e));
+    // Attempt to load the audio again before playing, to refresh sources if needed
+    voiceIntroAudioElement.load(); // Added .load() for robustness
+    voiceIntroAudioElement.play().then(() => {
+        console.log("voice-intro.wav reproducido exitosamente. Configurandose para fundir música...");
+        // Set up the fade-out for heroicIntroAudioElement 10 seconds after voice-intro.wav ends
+        // Ensure to remove previous listener to avoid multiple calls if button is clicked repeatedly
+        voiceIntroAudioElement.removeEventListener('ended', fadeHeroicMusicOnVoiceEnd);
+        voiceIntroAudioElement.addEventListener('ended', fadeHeroicMusicOnVoiceEnd);
+    }).catch(e => {
+        console.error("Error al intentar desmutear y reproducir intro de voz:", e);
+        if (voiceIntroAudioElement.error) {
+            console.error("Detalles del error de audio de voz:", voiceIntroAudioElement.error.code, voiceIntroAudioElement.error.message);
+        }
+    });
   }
 
   // Play the "Game Star.mp3" sound effect
@@ -348,34 +368,79 @@ function handleEnterWorldInteraction(targetHref) {
     gameStartAudioElement.currentTime = 0;
     gameStartAudioElement.play().then(() => {
       console.log("'Game Star.mp3' reproducido exitosamente. Navegando...");
-      // Determine the longest audio duration to ensure all play before navigating
-      let maxAudioDuration = gameStartAudioElement.duration;
-      // If heroic music is playing and has a longer duration, use its duration
-      if (heroicIntroAudioElement && !heroicIntroAudioElement.muted && heroicIntroAudioElement.duration > maxAudioDuration) {
-          maxAudioDuration = heroicIntroAudioElement.duration;
-      }
-      // If voice intro is playing and has a longer duration, use its duration
-      if (voiceIntroAudioElement && !voiceIntroAudioElement.muted && voiceIntroAudioElement.duration > maxAudioDuration) {
-          maxAudioDuration = voiceIntroAudioElement.duration;
+      // Determine the longest *initial* audio duration (Game Star or Voice Intro) for navigation delay
+      let maxInitialAudioDuration = gameStartAudioElement.duration;
+      if (voiceIntroAudioElement && !voiceIntroAudioElement.muted && voiceIntroAudioElement.duration > maxInitialAudioDuration) {
+          maxInitialAudioDuration = voiceIntroAudioElement.duration;
       }
 
-      // Add a small buffer to the longest audio duration before navigating
-      const delay = (maxAudioDuration > 0 ? maxAudioDuration * 1000 : 500) + 100;
+      // Add a small buffer to the longest initial audio duration before navigating
+      const delay = (maxInitialAudioDuration > 0 ? maxInitialAudioDuration * 1000 : 500) + 100;
 
       setTimeout(() => {
-        window.location.href = targetHref;
+        const targetElement = document.querySelector(targetHref);
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            // Fallback if element not found (should not happen with a valid ID)
+            window.location.href = targetHref;
+        }
       }, delay);
       
     }).catch(e => {
       console.error("Error (Promise rejected) al intentar reproducir 'Game Star.mp3':", e);
       // Fallback: navigate even if the game start audio fails to play
       console.warn("Navegando directamente debido a un error de reproducción de audio del botón.");
-      window.location.href = targetHref;
+      const targetElement = document.querySelector(targetHref);
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.location.href = targetHref;
+        }
     });
   } else {
     console.warn("Elemento de audio 'game-start-audio' no encontrado. Navegando directamente.");
-    window.location.href = targetHref;
+    const targetElement = document.querySelector(targetHref);
+    if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        window.location.href = targetHref;
+    }
   }
+}
+
+// New helper function to handle the music fade-out after voice intro ends
+function fadeHeroicMusicOnVoiceEnd() {
+    console.log("voice-intro.wav ha terminado. Iniciando temporizador para el fundido de música heroica.");
+    // Wait 10 seconds before starting the fade out
+    setTimeout(() => {
+        if (heroicIntroAudioElement && !heroicIntroAudioElement.paused) {
+            console.log("Iniciando fundido de la música heroica.");
+            let fadeInterval;
+            let currentVolume = heroicIntroAudioElement.volume;
+            const fadeDuration = 3000; // Total fade duration in milliseconds (e.g., 3 seconds for a smooth fade)
+            const intervalTime = 50; // Interval for each step in milliseconds
+
+            // Calculate the actual volume decrease per step to ensure it reaches 0 smoothly within fadeDuration
+            const numberOfSteps = fadeDuration / intervalTime;
+            const volumeDecreasePerStep = currentVolume / numberOfSteps;
+
+            fadeInterval = setInterval(() => {
+                if (currentVolume > volumeDecreasePerStep) {
+                    currentVolume -= volumeDecreasePerStep;
+                    heroicIntroAudioElement.volume = currentVolume;
+                } else {
+                    heroicIntroAudioElement.volume = 0;
+                    heroicIntroAudioElement.pause();
+                    heroicIntroAudioElement.currentTime = 0; // Reset for next play if needed
+                    clearInterval(fadeInterval);
+                    console.log("Música heroica fundida y detenida.");
+                }
+            }, intervalTime);
+        } else {
+            console.log("Música heroica ya pausada o no disponible, no se inicia el fundido.");
+        }
+    }, 10000); // 10 seconds after voice-intro.wav ends
 }
 
 // Function to build the phrase based on selections in the constructor
@@ -543,7 +608,7 @@ function speakText(text) {
     let latinFemaleVoice = voices.find(voice =>
       voice.lang.startsWith('es-') &&
       (voice.name.includes('Femenina') || voice.name.includes('Female')) &&
-      (voice.lang.includes('LA') || voice.lang.includes('MX') || voice.lang.includes('AR') || voice.lang.includes('ES-US'))
+      (voice.name.includes('América Latina') || voice.name.includes('Latinoamérica') || voice.lang.includes('LA') || voice.lang.includes('MX') || voice.lang.includes('AR') || voice.lang.includes('ES-US'))
     );
 
     // Fallback to any Spanish voice if specific Latin American female not found
