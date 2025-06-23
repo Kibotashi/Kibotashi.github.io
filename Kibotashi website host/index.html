@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kibotashi — Lengua Pura</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Enlace al archivo CSS externo -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Incluye la librería Tone.js para la generación de sonido -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+  <!-- NOTA: El CSS incrustado aquí ha sido ELIMINADO. Ahora solo se usa css/style.css -->
+</head>
+<body>
+<!-- Cinematic Hero Section -->
+<section id="hero">
+  <h1>KIBOTASHI</h1>
+  <p>El lenguaje donde cada carácter encierra intención</p>
+  <a href="#intro">
+    Entrar al Mundo
+  </a>
+</section>
+
+<!-- Main content of the page -->
+<div id="main-content">
+  <header>
+    <h1>KIBOTASHI</h1>
+    <p>Una lengua pura nacida del alma, la estructura y el símbolo</p>
+  </header>
+
+  <nav>
+    <a href="#intro">Inicio</a>
+    <a href="#pronombres">Pronombres</a>
+    <a href="#verbos">Verbos</a>
+    <a href="#conjugaciones">Conjugaciones</a>
+    <a href="#preguntas">Preguntas</a>
+    <a href="#emociones">Emociones</a>
+    <a href="#raices">Raíces</a>
+    <a href="#relaciones">Relaciones</a>
+    <a href="#afecto">Afecto</a>
+    <a href="#caracteres">Caracteres</a>
+    <a href="#guia-escritura">Escritura</a>
+    <a href="#estructura">Estructura</a>
+    <a href="#constructor">Constructor</a>
+    <a href="#audio">Audio</a>
+    <button id="theme-toggle" aria-label="Toggle theme">Modo Oscuro</button>
+  </nav>
+
+  <section id="intro">
+    <h2>¿Qué es Kibotashi?</h2>
+    <p>Kibotashi es un idioma construido con el propósito de expresar ideas profundas con belleza estética y claridad estructural. Inspirado en el Hangul, lenguas élficas y la intuición simbólica, Kibotashi combina armonía fonética, emocional y visual. Su sistema está basado en bloques CVC (consonante-vocal-consonante), raíces temáticas, sufijos afectivos y una fonología limpia y amable con la habla humana.</p>
+  </section>
+
+  <section id="pronombres">
+    <h2>🧍 Pronombres & Posesivos</h2>
+    <table>
+      <tr><th>Kibotashi</th><th>Español</th><th>Uso</th></tr>
+      <tr><td>Ena</td><td>Yo</td><td>Formal / neutro</td></tr>
+      <tr><td>Lun</td><td>Yo</td><td>Poético / íntimo</td></tr>
+      <tr><td>Bua</td><td>Tú</td><td>Singular / cercano</td></tr>
+      <tr><td>Sual</td><td>Él / Ella</td><td>3ª persona</td></tr>
+      <tr><td>Nual</td><td>Nosotros</td><td>Plural inclusivo</td></tr>
+    </table>
+    <h3 style="margin-top: 2rem;">🔗 Sufijos posesivos</h3>
+    <table>
+      <tr><th>Sufijo</th><th>Significado</th><th>Ejemplo</th></tr>
+      <tr><td>-en</td><td>Mi</td><td>Katen = mi amor</td></tr>
+      <tr><td>-ua</td><td>Tu</td><td>Katua = tu amor</td>
+      <tr><td>-sa</td><td>Su</td><td>Katsa = su amor</td>
+      <tr><td>-nal</td><td>Nuestro</td><td>Katnal = nuestro amor</td></tr>
+    </table>
+  </section>
+
+  <section id="verbos">
+    <h2>📘 Verbos esenciales</h2>
+    <p>Los verbos base de Kibotashi son simples y regulares. Representan acción, estado y emoción con raíz simbólica clara.</p>
+    <table>
+      <tr><th>Kibotashi</th><th>Español</th><th>Fonética (IPA)</th></tr>
+      <tr><td>Ta</td><td>Ser</td><td>/ta/</td></tr>
+      <tr><td>Ni</td><td>Estar</td><td>/ni/</td>
+      <tr><td>Kel</td><td>Tener</td><td>/kel/</td>
+      <tr><td>Mir</td><td>Hacer</td><td>/miʁ/</td>
+      <tr><td>Bin</td><td>Sentir</td><td>/bin/</td>
+      <tr><td>Jan</td><td>Ir</td><td>/ʒan/</td>
+      <tr><td>Vael</td><td>Decir</td><td>/ˈva.el/</td>
+      <tr><td>Zar</td><td>Saber</td><td>/zaʁ/</td>
+      <tr><td>Katun</td><td>Querer</td><td>/ˈka.tun/</td>
+      <tr><td>Solv</td><td>Poder</td><td>/solv/</td></tr>
+    </table>
+  </section>
+
+  <section id="conjugaciones">
+    <h2>🔧 Conjugaciones regulares</h2>
+    <p>Kibotashi usa sufijos de tiempo sencillos. Todos los verbos siguen esta lógica:</p>
+    <ul>
+      <li><strong>Presente:</strong> raíz + terminación personal (Tao, Tua, Tai...)</li>
+      <li><strong>Pasado:</strong> raíz + "or" (Taor = fui)</li>
+      <li><strong>Futuro:i> raíz + "el" (Tael = seré)</li>
+      <li><strong>Negación:</strong> Ne + verbo conjugado (Netao = no soy)</li>
+    </ul>
+    <h3>Conjugación del verbo Ta (ser)</h3>
+    <table>
+      <tr><th>Pronombre</th><th>Presente</th><th>Pasado</th><th>Futuro</th><th>Negativo</th></tr>
+      <tr><td>Ena</td><td>Tao</td><td>Taor</td><td>Tael</td><td>Netao</td></tr>
+      <tr><td>Bua</td><td>Tua</td><td>Tauor</td><td>Tuel</td><td>Netua</td></tr>
+      <tr><td>Sual</td><td>Tai</td><td>Tair</td><td>Taiel</td><td>Netai</td></tr>
+      <tr><td>Nual</td><td>Tanal</td><td>Tanor</td><td>Tanel</td><td>Netanal</td></tr>
+    </table>
+  </section>
+
+  <section id="preguntas">
+    <h2>❓ Preguntas y Partículas</h2>
+    <p>Las preguntas en Kibotashi se forman invirtiendo el orden o agregando la partícula final <strong>na</strong>.</p>
+    <table>
+      <tr><th>Interrogativo</th><th>Significado</th><th>Ejemplo</th></tr>
+      <tr><td>Na</td><td>¿Qué?</td><td>Na Tarenua? (¿Qué es familia?)</td></tr>
+      <tr><td>Né</td><td>¿Cómo?</td><td>Bua Binua Né? (¿Cómo te sientes?)</td>
+      <tr><td>Non</td><td>¿Dónde?</td><td>Janua Non? (¿Dónde vas?)</td></tr>
+      <tr><td>Nen</td><td>¿Cuándo?</td><td>Binor Nen? (¿Cuándo sentiste?)</td></tr>
+    </table>
+  </section>
+
+  <section id="emociones">
+    <h2>😊 Emociones y Estados</h2>
+    <p>Las emociones en Kibotashi son parte esencial de su raíz lingüística. Se expresan directamente o como parte de estructuras más grandes.</p>
+    <table>
+      <tr><th>Kibotashi</th><th>Español</th><th>Fonética (IPA)</th></tr>
+      <tr><td>Biné</td><td>Alegría</td><td>/ˈbi.ne/</td></tr>
+      <tr><td>Kol</td><td>Ternura</td><td>/kol/</td>
+      <tr><td>Tin</td><td>Ternura íntima</td><td>/tin/</td>
+      <tr><td>Mior</td><td>Calma interior</td><td>/ˈmjɔʁ/</td>
+      <tr><td>Harun</td><td>Dolor emocional</td><td>/ˈha.ʁun/</td>
+      <tr><td>Zinar</td><td>Esperanza</td><td>/ˈzi.naʁ/</td>
+      <tr><td>Brel</td><td>Coraje</td><td>/bʁel/</td>
+      <tr><td>Kéa</td><td>Bien / equilibrio</td><td>/ˈke.a/</td>
+      <tr><td>Ruom</td><td>Malestar</td><td>/ru.om/</td></tr>
+    </table>
+  </section>
+
+  <section id="raices">
+    <h2>🌱 Raíces temáticas</h2>
+    <h3>Naturaleza</h3>
+    <table>
+      <tr><th>Raíz</th><th>Español</th><th>Fonética (IPA)</th></tr>
+      <tr><td>Zarun</td><td>Agua</td><td>/ˈza.ʁun/</td></tr>
+      <tr><td>Feol</td><td>Tierra</td><td>/fe.ol/</td>
+      <tr><td>Vaar</td><td>Viento</td><td>/vaːʁ/</td>
+      <tr><td>Kuar</td><td>Sol</td><td>/ˈkuaʁ/</td>
+      <tr><td>Drin</td><td>Roca</td><td>/dʁin/</td></tr>
+    </table>
+    <h3 style="margin-top: 2rem;">Cuerpo y acción</h3>
+    <table>
+      <tr><th>Raíz</th><th>Español</th><th>Fonética</th></tr>
+      <tr><td>Barin</td><td>Corazón físico</td><td>/ˈba.ʁin/</td></tr>
+      <tr><td>Lerun</td><td>Mano / hacer</td><td>/ˈle.ʁun/</td>
+      <tr><td>Tovar</td><td>Boca / voz</td><td>/ˈto.vaʁ/</td>
+      <tr><td>Runel</td><td>Movimiento</td><td>/ˈʁu.nel/</td></tr>
+    </table>
+    <h3 style="margin-top: 2rem;">Mente y cognición</h3>
+    <table>
+      <tr><td>Néur</td><td>Pensar</td><td>/nøʁ/</td></tr>
+      <tr><td>Serin</td><td>Conocer profundamente</td><td>/ˈse.ʁin/</td>
+      <tr><td>Luem</td><td>Imaginar</td><td>/lu.em/</td>
+      <tr><td>Tivar</td><td>Decidir</td><td>/ˈti.vaʁ/</td>
+    </table>
+  </section>
+
+  <section id="relaciones">
+    <h2>👥 Relaciones humanas</h2>
+    <table>
+      <tr><th>Kibotashi</th><th>Español</th><th>Fonética</th></tr>
+      <tr><td>Nirel</td><td>Persona</td><td>/ˈni.ʁel/</td></tr>
+      <tr><td>Maran</td><td>Compañero/a</td><td>/ˈma.ʁan/</td>
+      <tr><td>Kuren</td><td>Amigo/a</td><td>/ˈku.ʁen/</td>
+      <tr><td>Naviir</td><td>Pareja</td><td>/ˈna.viːʁ/</td>
+      <tr><td>Tareni</td><td>Madre</td><td>/ˈta.ʁe.ni/</td>
+      <tr><td>Soren</td><td>Padre</td><td>/ˈso.ʁen/</td>
+      <tr><td>Mirat</td><td>Hijo/a</td><td>/ˈmi.ʁat/</td>
+      <tr><td>Tarenel</td><td>Familia</td><td>/ta.ʁeˈnel/</td></tr>
+    </table>
+  </section>
+
+  <section id="afecto">
+    <h2>💛 Verbos relacionales</h2>
+    <p>Estos verbos expresan vínculos profundos, afectivos y sociales:</p>
+    <table>
+      <tr><th>Kibotashi</th><th>Español</th><th>Fonética</th></tr>
+      <tr><td>Zalin</td><td>Cuidar</td><td>/ˈza.lin/</td></tr>
+      <tr><td>Relur</td><td>Extrañar</td><td>/ʁeˈluʁ/</td>
+      <tr><td>Mivar</td><td>Acompañar</td><td>/ˈmi.vaʁ/</td>
+      <tr><td>Folin</td><td>Confiar</td><td>/ˈfo.lin/</td>
+      <tr><td>Rener</td><td>Abrazar</td><td>/ʁeˈneʁ/</td>
+    </table>
+    <h3 style="margin-top: 2rem;">🎖️ Títulos y sufijos afectivos</h3>
+    <table>
+      <tr><th>Elemento</th><th>Uso / Matiz</th><th>Ejemplo</th></tr>
+      <tr><td>Tare</td><td>Sr. / Sra. — respeto formal</td><td>Tare Soren</td></tr>
+      <tr><td>Rilva</td><td>Guía / maestro espiritual</td><td>Rilva Marei</td></tr>
+      <tr><td>Kuni</td><td>Diminutivo tierno</td><td>Kuren Kuni</td>
+      <tr><td>-ei</td><td>Íntimo / vínculo afectivo</td><td>Marei Naviir</td>
+      <tr><td>-ul</td><td>Cariño suave</td><td>Tareniul</td>
+      <tr><td>-an</td><td>Confianza familiar</td><td>Maranan</td></tr>
+    </table>
+  </section>
+
+  <section id="caracteres">
+    <h2>🔤 Caracteres del Alfabeto Kibotashi</h2>
+    <p>El alfabeto de Kibotashi está compuesto por sonidos fonéticos básicos, cada uno con su carácter visual. Estos caracteres se combinan para formar bloques silábicos del tipo <strong>CVC</strong> (Consonante + Vocal + Consonante).</p>
+    <table>
+      <tr><th>Fonema</th><th>Letra</th><th><span class="character-header">Carácter</span></th><th>Pronunciación</th></tr>
+      <tr><td>/k/</td><td>K</td><td class="character-cell" data-phoneme="k">⧫</td><td>como “k” en kilómetro</td></tr>
+      <tr><td>/t/</td><td>T</td><td class="character-cell" data-phoneme="t">⦾</td><td>como “t” en tierra</td></tr>
+      <tr><td>/b/</td><td>B</td><td class="character-cell" data-phoneme="b">⬸</td><td>como “b” suave</td></tr>
+      <tr><td>/n/</td><td>N</td><td class="character-cell" data-phoneme="n">⏁</td><td>como “n” en nube</td></tr>
+      <tr><td>/m/</td><td>M</td><td class="character-cell" data-phoneme="m">⨊</td><td>como “m” en mano</td></tr>
+      <tr><td>/s/</td><td>S</td><td class="character-cell" data-phoneme="s">␊</td><td>como “s” suave</td></tr>
+      <tr><td>/l/</td><td>L</td><td class="character-cell" data-phoneme="l">⨅</td><td>como “l” clara</td></tr>
+      <tr><td>/a/</td><td>A</td><td class="character-cell" data-phoneme="a">◉</td><td>como “a” abierta</td></tr>
+      <tr><td>/e/</td><td>E</td><td class="character-cell" data-phoneme="e">◍</td><td>como “e” media</td>
+      <tr><td>/i/</td><td>I</td><td class="character-cell" data-phoneme="i">◯</td><td>como “i” tensa</td>
+      <tr><td>/o/</td><td>O</td><td class="character-cell" data-phoneme="o">◎</td><td>como “o” profunda</td>
+      <tr><td>/u/</td><td>U</td><td class="character-cell" data-phoneme="u">◌</td><td>como “u” redonda</td></tr>
+    </table>
+  </section>
+
+  <section id="guia-escritura">
+    <h2>✍️ Guía para escribir palabras</h2>
+    <p>Las palabras en Kibotashi se escriben combinando sonidos según la estructura CVC o CV. Cada sílaba puede formar un carácter visual.</p>
+    <ul style="margin-top: 1rem;">
+      <li><strong>Ejemplo 1:</strong> <code>Kat</code> (amor) = K + A + T → ⧫◉⦾</li>
+      <li><strong>Ejemplo 2:</strong> <code>Biné</code> (alegría) = B + I + N + Énfasis tonal → ⬸◯⏁</li>
+      <li><strong>Ejemplo 3:</strong> <code>Tin</code> (ternura) = T + I + N → ⦾◯⏁</li>
+    </ul>
+    <p>Si usas herramientas interactivas, puedes representar cada carácter con un SVG o imagen ilustrativa basada en estos bloques.</p>
+  </section>
+
+  <section id="estructura">
+    <h2>🏗️ Estructura de Oraciones</h2>
+    <p>Las oraciones en Kibotashi siguen una estructura sencilla para asegurar claridad y belleza.</p>
+    <h3>Orden de Palabras Básico (Sujeto-Verbo-Objeto)</h3>
+    <p>El orden más común en Kibotashi es <strong>Sujeto + Verbo + Objeto</strong>. Los adjetivos generalmente preceden a los sustantivos y los adverbios siguen a los verbos.</p>
+    <ul style="margin-top: 1rem;">
+      <li><strong>Ena Katun Katen.</strong> (Yo querer mi amor.) - *I want my love.*</li>
+      <li><strong>Bua Mir Tovar.</strong> (Tú hacer voz.) - *You make a sound/voice.*</li>
+      <li><strong>Sual Zalin Naviirsa.</strong> (Él/Ella cuidar su pareja.) - *He/She cares for their partner.*</li>
+    </ul>
+    <h3>Ejemplos de frases</h3>
+    <table>
+      <tr><th>Kibotashi</th><th>Traducción Literal</th><th>Significado</th></tr>
+      <tr><td data-pron="/e.na ˈta.o ˈku.ʁen/">Ena Tao Kuren.</td><td>Yo ser amigo.</td><td>Soy un amigo.</td></tr>
+      <tr><td data-pron="/ˈbua ˈjan.el ˈnon/">Bua Janel Non?</td><td>Tú irás dónde?</td><td>¿Adónde irás?</td></td></tr>
+      <tr><td data-pron="/ˈmi.var ˈma.ʁan.an/">Mivar Maranan.</td><td>Acompañar compañero familiar.</td><td>Acompañar al compañero de confianza.</td></tr>
+    </table>
+  </section>
+
+  <section id="constructor" class="constructor-container">
+    <h2>CONSTRUCTOR DE FRASES</h2>
+    <p>La mejor forma de aprender es haciendo. Utiliza esta herramienta para combinar pronombres, verbos y tiempos verbales. Observa cómo se forman las palabras y las frases en tiempo real y empieza a pensar en Kibotashi.</p>
+    <p>(Las pronunciaciones son simuladas.)</p>
+    <div class="constructor-inputs">
+      <select id="pronoun-select"></select>
+      <select id="verb-select"></select>
+      <select id="tense-select"></select>
+      <select id="object-select"></select>
+      <label for="negation-checkbox">
+        <input type="checkbox" id="negation-checkbox"> Negación
+      </label> <!-- Nuevo checkbox para negación -->
+      <select id="mood-select">
+        <option value="indicativo">Modo Indicativo</option>
+        <option value="condicional">Modo Condicional</option>
+      </select>
+      <select id="affix-select">
+        <option value="">Sin sufijo</option>
+        <option value="ul">Cariño suave (-ul)</option>
+        <option value="ei">Íntimo (-ei)</option>
+        <option value="an">Confianza (-an)</option>
+      </select>
+      <select id="emotion-select">
+        <option value="">Tono neutro</option>
+        <option value="poetico">Poético</option>
+        <option value="afectivo">Afectivo</option>
+        <option value="melancolico">Melancólico</option>
+      </select>
+      <label style="display:flex; align-items:center; gap:0.5rem;">
+        <input type="checkbox" id="randomize-checkbox" />
+        Frase aleatoria
+      </label>
+      <button onclick="buildPhrase()">Construir</button>
+    </div>
+    <p>Selecciona los componentes y haz clic en "Construir".</p>
+    <div id="constructor-output" class="constructor-output" style="display:none;">
+      <h3>Frase Construida:</h3>
+      <p id="kibotashi-phrase"></p>
+      <p class="ipa">IPA: <span id="ipa-phrase"></span></p>
+      <p class="meaning">Significado: <span id="meaning-phrase"></span></p>
+      <button class="play-output-button" onclick="speakConstructedPhrase()">🗣️ Escuchar Frase</button>
+    </div>
+  </section>
+
+  <section id="audio">
+    <h2>🔊 Pronunciaciones y Fonética</h2>
+    <p>Cada palabra tiene su transcripción en formato IPA y puede ir acompañada por su archivo de audio alojado en la carpeta <code>/audios/</code>. Además, se ha añadido una función de texto a voz para una pronunciación sintética, ideal para navegadores modernos.</p>
+    <table>
+      <tr><th>Palabra</th><th>Pronunciación IPA</th><th>Audio / Voz Sintética</th></tr>
+      <tr><td data-pron="/ˈka.tun/">Katun</td><td>/ˈka.tun/</td><td><audio id="katun-audio" src="audios/katun.mp3"></audio><button class="play-button" onclick="document.getElementById('katun-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Katun')">🗣️ (Voz)</button></td></tr>
+      <tr><td data-pron="/ˈbi.ne/">Biné</td><td>/ˈbi.ne/</td><td><audio id="bine-audio" src="audios/bine.mpuro3"></audio><button class="play-button" onclick="document.getElementById('bine-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Biné')">🗣️ (Voz)</button></td></tr>
+      <tr><td data-pron="/ˈza.lin/">Zalin</td><td>/ˈza.lin/</td><td><audio id="zalin-audio" src="audios/zalin.mp3"></audio><button class="play-button" onclick="document.getElementById('zalin-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Zalin')">🗣️ (Voz)</button></td></tr>
+      <tr><td data-pron="/ta.o/">Tao</td><td>/ta.o/</td><td><audio id="tao-audio" src="audios/tao.mp3"></audio><button class="play-button" onclick="document.getElementById('tao-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Tao')">🗣️ (Voz)</button></td></tr>
+      <!-- Puedes continuar añadiendo más palabras -->
+    </table>
+    <p style="margin-top: 1.5rem;">
+      📝 <strong>Nota:</strong> La función de "Voz Sintética" utiliza la API de voz del navegador y buscará una voz femenina en español latinoamericano. La disponibilidad y calidad de la voz pueden variar según tu navegador y sistema operativo.
+    </p>
+  </section>
+
+  <footer>
+    <p>Creado por Gabriel · Kibotashi · 2025 — Tama roku. ⨅␊⨉ ⬸⏁⦾</p>
+  </footer>
+</div>
+
+<!-- Botón para volver arriba -->
+<button onclick="scrollToTop()" id="btnTop" title="Ir arriba">⬆</button>
+
+<!-- Enlace al archivo JavaScript externo -->
+<script src="js/script.js"></script>
+</body>
+</html>
