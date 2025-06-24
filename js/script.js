@@ -295,6 +295,15 @@ document.addEventListener('DOMContentLoaded', function() {
         ipaPhraseOutput.textContent = ipaPronunciation;
         meaningPhraseOutput.textContent = fullMeaning;
         constructorOutputDiv.style.display = 'block';
+
+        // --- NEW: Trigger glossary search with the constructed phrase ---
+        // Set the glossary search input value
+        filtroPalabraInput.value = fullKibotashiPhrase;
+        // Reset current page and render the glossary to apply the search
+        currentPage = 1;
+        renderGlossary();
+        // Scroll to the glossary section for immediate feedback
+        document.getElementById('glosario').scrollIntoView({ behavior: 'smooth' });
     };
 
     window.speakConstructedPhrase = function() {
@@ -477,6 +486,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const glosarioBody = document.getElementById('glosario-body');
     const filtroPalabraInput = document.getElementById('filtro-palabra');
     const filtroCategoriaSelect = document.getElementById('filtro-categoria');
+    const buscarPalabraBtn = document.getElementById('buscar-palabra-btn'); // Nuevo botón de buscar
     const prevPageBtn = document.getElementById('prev-page');
     const nextPageBtn = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('page-info');
@@ -488,7 +498,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Apply filters
         filteredGlossary = allGlossaryData.filter(item => {
-            const matchesText = (item.espanol.toLowerCase().includes(textFilter) || item.kibotashi.toLowerCase().includes(textFilter));
+            const matchesText = (textFilter === "" || item.espanol.toLowerCase().includes(textFilter) || item.kibotashi.toLowerCase().includes(textFilter));
             const matchesCategory = (categoryFilter === "" || item.categoria === categoryFilter);
             return matchesText && matchesCategory;
         });
@@ -574,17 +584,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Event listeners for filtering (re-renders the glossary from page 1)
-    filtroPalabraInput.addEventListener('keyup', () => {
+    // Event listener for "Buscar" button click
+    buscarPalabraBtn.addEventListener('click', () => {
         currentPage = 1; // Reset to first page on filter change
         renderGlossary();
     });
+
+    // Event listener for category filter change (still triggers immediate render)
     filtroCategoriaSelect.addEventListener('change', () => {
         currentPage = 1; // Reset to first page on filter change
         renderGlossary();
     });
 
-    // Initial render of the glossary
+    // Initial render of the glossary (shows first 10 words by default)
     renderGlossary();
 
     // Event listener for the "Enter the World" button
