@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Niebla húmeda', kibotashi: 'Zarvai', category: 'Entorno', ipa: '/ˈzaɾ.vai/' },
             { spanish: 'Gota', kibotashi: 'Zari', category: 'Naturaleza', ipa: '/ˈza.ɾi/' },
             { spanish: 'Mar', kibotashi: 'Zaruai', category: 'Lugar', ipa: '/ˈza.ɾu.ai/' },
-            { spanish: 'Agua bendita', kibotashi: 'Zarael', category: 'Valor', ipa: '/ˈza.ɾa.el/' }
+            { spanish: 'Agua bendita', kibotashi: 'Zarael', category: 'Valor', ipa: '/ˈza.ɾa.el/' }, // <--- COMA AÑADIDA AQUÍ
             { spanish: 'Suelo fértil', kibotashi: 'Feolin', category: 'Naturaleza', ipa: '/ˈfe.o.lin/' },
             { spanish: 'Polvo', kibotashi: 'Feolar', category: 'Naturaleza', ipa: '/ˈfe.o.laɾ/' },
             { spanish: 'Terreno', kibotashi: 'Feoren', category: 'Lugar', ipa: '/ˈfe.o.ɾen/' },
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Lodo', kibotashi: 'Zarfeol', category: 'Combinado', ipa: '/ˈzaɾ.fe.ol/' },
             { spanish: 'Caverna', kibotashi: 'Feolur', category: 'Lugar', ipa: '/ˈfe.o.luɾ/' },
             { spanish: 'Raíz', kibotashi: 'Feomir', category: 'Naturaleza', ipa: '/ˈfe.o.miɾ/' },
-            { spanish: 'Semilla', kibotashi: 'Feonel', category: 'Naturaleza', ipa: '/ˈfe.o.nel/' }
+            { spanish: 'Semilla', kibotashi: 'Feonel', category: 'Naturaleza', ipa: '/ˈfe.o.nel/' },
             { spanish: 'Tormenta', kibotashi: 'Vaareth', category: 'Naturaleza', ipa: '/ˈva.a.ɾeθ/' },
             { spanish: 'Brisa', kibotashi: 'Vaarel', category: 'Entorno', ipa: '/ˈva.a.ɾel/' },
             { spanish: 'Susurro de aire', kibotashi: 'Vaarin', category: 'Entorno', ipa: '/ˈva.a.ɾin/' },
@@ -124,8 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Viento cálido', kibotashi: 'Vaarun', category: 'Entorno', ipa: '/ˈva.a.ɾun/' },
             { spanish: 'Eco del viento', kibotashi: 'Vaelei', category: 'Entorno', ipa: '/ˈva.e.lei/' },
             { spanish: 'Vuelo', kibotashi: 'Vaelen', category: 'Acción', ipa: '/ˈva.e.len/' },
-            { spanish: 'Aire puro', kibotashi: 'Vaerel', category: 'Valor', ipa: '/ˈva.e.ɾel/' }
-            { spanish: 'Amor', kibotashi: 'Kat', category: 'Emoción', ipa: '/kat/' },
+            { spanish: 'Aire puro', kibotashi: 'Vaerel', category: 'Valor', ipa: '/ˈva.e.ɾel/' },
+            { spanish: 'Amor', kibotashi: 'Kat', category: 'Emociones', ipa: '/kat/' },
             { spanish: 'Alegría', kibotashi: 'Biné', category: 'Emociones', ipa: '/ˈbi.ne/' },
             { spanish: 'Ternura', kibotashi: 'Kol', category: 'Emociones', ipa: '/kol/' },
             { spanish: 'Ternura íntima', kibotashi: 'Tin', category: 'Emociones', ipa: '/tin/' },
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Saber', kibotashi: 'Zar', category: 'Verbo', ipa: '/zaʁ/' },
             { spanish: 'Querer', kibotashi: 'Katun', category: 'Verbo', ipa: '/ˈka.tun/' },
             { spanish: 'Poder', kibotashi: 'Solv', category: 'Verbo', ipa: '/solv/' }
-         ].sort((a, b) => a.spanish.localeCompare(b.spanish)) // Sort glossary alphabetically by Spanish word
+        ].sort((a, b) => a.spanish.localeCompare(b.spanish)) // Sort glossary alphabetically by Spanish word
     };
 
     let currentPage = 1;
