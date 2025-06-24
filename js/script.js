@@ -46,6 +46,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextPageBtn = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('page-info');
 
+    // --- Interactive Character Builder Elements ---
+    const characterCells = document.querySelectorAll('.character-cell');
+    const dropZoneC1 = document.getElementById('drop-zone-c1');
+    const dropZoneV = document.getElementById('drop-zone-v');
+    const dropZoneC2 = document.getElementById('drop-zone-c2');
+    const formWordBtn = document.getElementById('form-word-btn');
+    const formedWordOutput = document.getElementById('formed-word-output');
+    const formedKibotashiWord = document.getElementById('formed-kibotashi-word');
+    const formedIpaWord = document.getElementById('formed-ipa-word');
+    const formedMeaningWord = document.getElementById('formed-meaning-word');
+    const speakFormedWordBtn = document.getElementById('speak-formed-word-btn');
+
+    // Store current characters in drop zones
+    let currentC1 = { phoneme: '', char: '' };
+    let currentV = { phoneme: '', char: '' };
+    let currentC2 = { phoneme: '', char: '' };
+
+
     // --- Data for Phrase Constructor and Glossary ---
     const data = {
         pronouns: [
@@ -104,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Niebla húmeda', kibotashi: 'Zarvai', category: 'Entorno', ipa: '/ˈzaɾ.vai/' },
             { spanish: 'Gota', kibotashi: 'Zari', category: 'Naturaleza', ipa: '/ˈza.ɾi/' },
             { spanish: 'Mar', kibotashi: 'Zaruai', category: 'Lugar', ipa: '/ˈza.ɾu.ai/' },
-            { spanish: 'Agua bendita', kibotashi: 'Zarael', category: 'Valor', ipa: '/ˈza.ɾa.el/' }, // <--- COMA AÑADIDA AQUÍ
+            { spanish: 'Agua bendita', kibotashi: 'Zarael', category: 'Valor', ipa: '/ˈza.ɾa.el/' },
             { spanish: 'Suelo fértil', kibotashi: 'Feolin', category: 'Naturaleza', ipa: '/ˈfe.o.lin/' },
             { spanish: 'Polvo', kibotashi: 'Feolar', category: 'Naturaleza', ipa: '/ˈfe.o.laɾ/' },
             { spanish: 'Terreno', kibotashi: 'Feoren', category: 'Lugar', ipa: '/ˈfe.o.ɾen/' },
@@ -309,15 +327,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Character Cell Audio Playback ---
-    const characterCells = document.querySelectorAll('.character-cell');
+    // --- Character Cell Audio Playback (Individual) ---
+    // Make character cells draggable
     characterCells.forEach(cell => {
+        cell.setAttribute('draggable', true); // Make characters draggable
         cell.addEventListener('click', () => {
             const phoneme = cell.dataset.phoneme;
             if (phoneme) {
                 try {
-                    // Create a simple synth using Tone.js for demonstration
-                    // In a real scenario, you'd map phonemes to specific frequencies or samples
                     const synth = new Tone.Synth().toDestination();
                     let frequency;
                     switch (phoneme) {
@@ -343,6 +360,132 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // --- Interactive Character Builder Logic ---
+    let draggedCharData = null; // To store data of the dragged character
+
+    characterCells.forEach(cell => {
+        cell.addEventListener('dragstart', (e) => {
+            draggedCharData = {
+                phoneme: cell.dataset.phoneme,
+                char: cell.dataset.char,
+                type: (cell.dataset.phoneme === 'a' || cell.dataset.phoneme === 'e' || cell.dataset.phoneme === 'i' || cell.dataset.phoneme === 'o' || cell.dataset.phoneme === 'u') ? 'vowel' : 'consonant'
+            };
+            e.dataTransfer.effectAllowed = 'copy'; // Visual feedback for copying
+        });
+    });
+
+    [dropZoneC1, dropZoneV, dropZoneC2].forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Necessary to allow dropping
+            e.dataTransfer.dropEffect = 'copy'; // Visual feedback for copying
+            zone.classList.add('hover'); // Add hover effect
+        });
+
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('hover'); // Remove hover effect
+        });
+
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('hover'); // Remove hover effect
+            zone.classList.add('filled'); // Indicate it's filled
+
+            if (draggedCharData) {
+                // Check if the dropped character type matches the drop zone type
+                const zoneType = zone.dataset.type;
+                if (
+                    (zoneType === 'consonant' && draggedCharData.type === 'consonant') ||
+                    (zoneType === 'vowel' && draggedCharData.type === 'vowel')
+                ) {
+                    zone.innerHTML = `<span class="dropped-char">${draggedCharData.char}</span>`;
+                    zone.dataset.phoneme = draggedCharData.phoneme; // Store phoneme in dataset
+
+                    // Update internal state for word building
+                    if (zone.id === 'drop-zone-c1') {
+                        currentC1 = draggedCharData;
+                    } else if (zone.id === 'drop-zone-v') {
+                        currentV = draggedCharData;
+                    } else if (zone.id === 'drop-zone-c2') {
+                        currentC2 = draggedCharData;
+                    }
+                } else {
+                    showCustomModal(`¡Error! No puedes soltar una ${draggedCharData.type === 'vowel' ? 'vocal' : 'consonante'} en una zona de ${zoneType === 'vowel' ? 'vocal' : 'consonante'}.`, 'alert');
+                }
+            }
+            draggedCharData = null; // Reset dragged data
+        });
+
+        // Allow clicking on a filled drop zone to clear it
+        zone.addEventListener('click', () => {
+            if (zone.classList.contains('filled')) {
+                zone.innerHTML = zone.dataset.type === 'consonant' ? 'C' + (zone.id.includes('c1') ? '1' : '2') : 'V';
+                zone.classList.remove('filled');
+                zone.dataset.phoneme = ''; // Clear stored phoneme
+
+                if (zone.id === 'drop-zone-c1') {
+                    currentC1 = { phoneme: '', char: '' };
+                } else if (zone.id === 'drop-zone-v') {
+                    currentV = { phoneme: '', char: '' };
+                } else if (zone.id === 'drop-zone-c2') {
+                    currentC2 = { phoneme: '', char: '' };
+                }
+            }
+        });
+    });
+
+    formWordBtn.addEventListener('click', () => {
+        let kibotashiWord = '';
+        let ipaWord = '';
+        let meaningWord = 'Combinación de sonidos: ';
+
+        // Check for CVC structure and build the word
+        if (currentC1.phoneme && currentV.phoneme && currentC2.phoneme) {
+            kibotashiWord = currentC1.char + currentV.char + currentC2.char;
+            ipaWord = `/${currentC1.phoneme}.${currentV.phoneme}.${currentC2.phoneme}/`;
+            meaningWord += `${currentC1.phoneme}-${currentV.phoneme}-${currentC2.phoneme}`;
+        } else if (currentC1.phoneme && currentV.phoneme && !currentC2.phoneme) { // Simple CV combination
+            kibotashiWord = currentC1.char + currentV.char;
+            ipaWord = `/${currentC1.phoneme}.${currentV.phoneme}/`;
+            meaningWord += `${currentC1.phoneme}-${currentV.phoneme}`;
+        } else if (!currentC1.phoneme && currentV.phoneme && currentC2.phoneme) { // Simple VC combination
+            kibotashiWord = currentV.char + currentC2.char;
+            ipaWord = `/${currentV.phoneme}.${currentC2.phoneme}/`;
+            meaningWord += `${currentV.phoneme}-${currentC2.phoneme}`;
+        } else if (currentC1.phoneme && !currentV.phoneme && !currentC2.phoneme) { // Single consonant
+            kibotashiWord = currentC1.char;
+            ipaWord = `/${currentC1.phoneme}/`;
+            meaningWord += `${currentC1.phoneme}`;
+        } else if (!currentC1.phoneme && currentV.phoneme && !currentC2.phoneme) { // Single vowel
+            kibotashiWord = currentV.char;
+            ipaWord = `/${currentV.phoneme}/`;
+            meaningWord += `${currentV.phoneme}`;
+        } else if (!currentC1.phoneme && !currentV.phoneme && currentC2.phoneme) { // Single consonant (C2)
+            kibotashiWord = currentC2.char;
+            ipaWord = `/${currentC2.phoneme}/`;
+            meaningWord += `${currentC2.phoneme}`;
+        }
+        else {
+            showCustomModal("Por favor, arrastra al menos un carácter válido para formar una palabra.", "alert");
+            formedWordOutput.style.display = 'none';
+            return;
+        }
+
+        formedKibotashiWord.textContent = kibotashiWord;
+        formedIpaWord.textContent = ipaWord;
+        formedMeaningWord.textContent = meaningWord;
+        formedWordOutput.style.display = 'block';
+    });
+
+    speakFormedWordBtn.addEventListener('click', () => {
+        const textToSpeak = formedKibotashiWord.textContent;
+        if (textToSpeak) {
+            speakText(textToSpeak);
+        } else {
+            showCustomModal("No hay palabra para escuchar. Forma una palabra primero.", "alert");
+        }
+    });
+
 
     // --- Phrase Constructor Logic ---
 
@@ -610,6 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchesSearch && matchesCategory;
         });
 
+        filteredGlossary.sort((a, b) => a.spanish.localeCompare(b.spanish)); // Re-sort after filtering
         currentPage = 1; // Reset to first page after filtering
         displayGlossary(currentPage);
     }
