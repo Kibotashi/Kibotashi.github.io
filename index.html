@@ -140,19 +140,36 @@
         <p>El alfabeto de Kibotashi está compuesto por sonidos fonéticos básicos, cada uno con su carácter visual. Estos caracteres se combinan para formar bloques silábicos del tipo <strong>CVC</strong> (Consonante + Vocal + Consonante).</p>
         <table>
             <tr><th>Fonema</th><th>Letra</th><th><span class="character-header">Carácter</span></th><th>Pronunciación</th></tr>
-            <tr><td>/k/</td><td>K</td><td class="character-cell" data-phoneme="k">⧫</td><td>como “k” en kilómetro</td></tr>
-            <tr><td>/t/</td><td>T</td><td class="character-cell" data-phoneme="t">⦾</td><td>como “t” en tierra</td></tr>
-            <tr><td>/b/</td><td>B</td><td class="character-cell" data-phoneme="b">⬸</td><td>como “b” suave</td></tr>
-            <tr><td>/n/</td><td>N</td><td class="character-cell" data-phoneme="n">⏁</td><td>como “n” en nube</td></tr>
-            <tr><td>/m/</td><td>M</td><td class="character-cell" data-phoneme="m">⨊</td><td>como “m” en mano</td></tr>
-            <tr><td>/s/</td><td>S</td><td class="character-cell" data-phoneme="s">␊</td><td>como “s” suave</td></tr>
-            <tr><td>/l/</td><td>L</td><td class="character-cell" data-phoneme="l">⨅</td><td>como “l” clara</td></tr>
-            <tr><td>/a/</td><td>A</td><td class="character-cell" data-phoneme="a">◉</td><td>como “a” abierta</td></tr>
-            <tr><td>/e/</td><td>E</td><td class="character-cell" data-phoneme="e">◍</td><td>como “e” media</td></tr>
-            <tr><td>/i/</td><td>I</td><td class="character-cell" data-phoneme="i">◯</td><td>como “i” tensa</td></tr>
-            <tr><td>/o/</td><td>O</td><td class="character-cell" data-phoneme="o">◎</td><td>como “o” profunda</td></tr>
-            <tr><td>/u/</td><td>U</td><td class="character-cell" data-phoneme="u">◌</td><td>como “u” redonda</td></tr>
+            <tr><td>/k/</td><td>K</td><td class="character-cell" data-phoneme="k" data-char="⧫">⧫</td><td>como “k” en kilómetro</td></tr>
+            <tr><td>/t/</td><td>T</td><td class="character-cell" data-phoneme="t" data-char="⦾">⦾</td><td>como “t” en tierra</td></tr>
+            <tr><td>/b/</td><td>B</td><td class="character-cell" data-phoneme="b" data-char="⬸">⬸</td><td>como “b” suave</td></tr>
+            <tr><td>/n/</td><td>N</td><td class="character-cell" data-phoneme="n" data-char="⏁">⏁</td><td>como “n” en nube</td></tr>
+            <tr><td>/m/</td><td>M</td><td class="character-cell" data-phoneme="m" data-char="⨊">⨊</td><td>como “m” en mano</td></tr>
+            <tr><td>/s/</td><td>S</td><td class="character-cell" data-phoneme="s" data-char="␊">␊</td><td>como “s” suave</td></tr>
+            <tr><td>/l/</td><td>L</td><td class="character-cell" data-phoneme="l" data-char="⨅">⨅</td><td>como “l” clara</td></tr>
+            <tr><td>/a/</td><td>A</td><td class="character-cell" data-phoneme="a" data-char="◉">◉</td><td>como “a” abierta</td></tr>
+            <tr><td>/e/</td><td>E</td><td class="character-cell" data-phoneme="e" data-char="◍">◍</td><td>como “e” media</td></tr>
+            <tr><td>/i/</td><td>I</td><td class="character-cell" data-phoneme="i" data-char="◯">◯</td><td>como “i” tensa</td></tr>
+            <tr><td>/o/</td><td>O</td><td class="character-cell" data-phoneme="o" data-char="◎">◎</td><td>como “o” profunda</td></tr>
+            <tr><td>/u/</td><td>U</td><td class="character-cell" data-phoneme="u" data-char="◌">◌</td><td>como “u” redonda</td></tr>
         </table>
+
+        <h3 style="margin-top: 2rem;">🛠️ Constructor de Caracteres Interactivo</h3>
+        <p>Arrastra y suelta caracteres (Consonante, Vocal, Consonante) en las zonas para formar una palabra. Haz clic en "Formar Palabra" para ver el resultado y escucharlo.</p>
+        <div class="character-builder-area">
+            <div class="drop-zone" id="drop-zone-c1" data-type="consonant">C1</div>
+            <div class="drop-zone" id="drop-zone-v" data-type="vowel">V</div>
+            <div class="drop-zone" id="drop-zone-c2" data-type="consonant">C2</div>
+        </div>
+        <button id="form-word-btn" class="play-button" style="margin-top: 1rem;">Formar Palabra</button>
+
+        <div id="formed-word-output" class="constructor-output" style="display:none; margin-top: 2rem;">
+            <h3>Palabra Formada:</h3>
+            <p id="formed-kibotashi-word"></p>
+            <p class="ipa">IPA: <span id="formed-ipa-word"></span></p>
+            <p class="meaning">Significado: <span id="formed-meaning-word"></span></p>
+            <button id="speak-formed-word-btn" class="play-output-button">🗣️ Escuchar Palabra</button>
+        </div>
     </section>
 
     <section id="guia-escritura">
@@ -161,7 +178,7 @@
         <ul style="margin-top: 1rem;">
             <li><strong>Ejemplo 1:</strong> <code>Kat</code> (amor) = K + A + T → ⧫◉⦾</li>
             <li><strong>Ejemplo 2:</strong> <code>Biné</code> (alegría) = B + I + N + Énfasis tonal → ⬸◯⏁</li>
-            <li><strong>Ejemplo 3:</strong> <code>Tin</code> (ternura) = T + I + N → ⦾◯⏁</li>
+            <li><strong>Ejemplo 3:</b> <code>Tin</code> (ternura) = T + I + N → ⦾◯⏁</li>
         </ul>
         <p>Si usas herramientas interactivas, puedes representar cada carácter con un SVG o imagen ilustrativa basada en estos bloques.</p>
     </section>
