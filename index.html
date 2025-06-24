@@ -49,6 +49,7 @@
     <a href="#estructura">Estructura</a>
     <a href="#constructor">Constructor</a>
     <a href="#audio">Audio</a>
+    <a href="#glosario">Glosario</a> <!-- NUEVO: Enlace al glosario -->
     <button id="theme-toggle" aria-label="Toggle theme">Modo Oscuro</button>
   </nav>
 
@@ -319,6 +320,50 @@
     <p style="margin-top: 1.5rem;">
       📝 <strong>Nota:</strong> La función de "Voz Sintética" utiliza la API de voz del navegador y buscará una voz femenina en español latinoamericano. La disponibilidad y calidad de la voz pueden variar según tu navegador y sistema operativo.
     </p>
+  </section>
+
+  <section id="glosario"> <!-- NUEVA SECCIÓN: Glosario Kibotashi -->
+    <h2>📘 Glosario Kibotashi</h2>
+
+    <input type="text" id="filtro-palabra" placeholder="🔍 Buscar palabra..." onkeyup="filtrarTabla()">
+    <select id="filtro-categoria" onchange="filtrarTabla()">
+      <option value="">Todas las categorías</option>
+      <option>Hogar</option>
+      <option>Salud</option>
+      <option>Comida</option>
+      <option>Utensilio</option>
+      <option>Acción</option>
+      <option>Acción mental</option>
+      <option>Comunicación</option>
+      <option>Tiempo</option>
+      <option>Lugar</option>
+      <option>Valor</option>
+      <option>Mente</option>
+      <option>Voluntad</option>
+      <option>Espacio</option>
+      <option>Movimiento</option>
+      <option>Ubicación</option>
+    </select>
+
+    <div class="table-wrapper">
+      <table id="tabla-glosario">
+        <thead>
+          <tr>
+            <th>Español</th>
+            <th>Kibotashi</th>
+            <th>Categoría</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Aquí puedes añadir tus filas de vocabulario. Ejemplo: -->
+          <tr><td>Amor</td><td>Kat</td><td>Emoción</td></tr>
+          <tr><td>Casa</td><td>Hana</td><td>Hogar</td></tr>
+          <tr><td>Comer</td><td>Men</td><td>Acción</td></tr>
+          <tr><td>Agua</td><td>Zarun</td><td>Naturaleza</td></tr>
+          <!-- Continúa añadiendo más palabras aquí -->
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <footer>
