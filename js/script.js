@@ -1,635 +1,833 @@
-/* Variables de color para modo claro */
-:root {
-    --fondo: #ffffff; /* Color de fondo principal */
-    --texto: #111111; /* Color de texto principal */
-    --acento: #d2b48c; /* Color de acento (sepia claro) */
-    --gris: #f5f5f5; /* Gris claro para encabezados y pies de página */
-    --borde: #e0e0e0; /* Color de borde */
-    --oscuro: #2a2a2a; /* Fondo oscuro para el constructor */
-    --texto-claro: #f0f0f0; /* Texto claro para el constructor */
-    --constructor-bg-output: #3a3a3a; /* Fondo del área de salida del constructor */
-    --gris-rgb: 245, 245, 245; /* RGB para #f5f5f5 */
-    --acento-rgb: 210, 180, 140; /* RGB para #d2b48c (necesario para rgba) */
-}
-/* Variables de color para modo oscuro */
-html.dark-mode {
-    --fondo: #1a1a1a;
-    --texto: #e0e0e0;
-    --acento: #f0c080; /* Un acento más brillante para el modo oscuro */
-    --gris: #222222;
-    --borde: #444444;
-    --oscuro: #111111;
-    --texto-claro: #ffffff;
-    --constructor-bg-output: #2b2b2b;
-    --gris-rgb: 34, 34, 34; /* RGB para #222222 */
-    --acento-rgb: 240, 192, 128; /* RGB para #f0c080 */
-}
-/* Estilos base del cuerpo */
-body {
-    margin: 0;
-    font-family: 'Outfit', sans-serif;
-    background-color: var(--fondo);
-    color: var(--texto);
-    line-height: 1.7;
-    overflow-x: hidden; /* Evita el scroll horizontal */
-    scroll-behavior: smooth; /* Habilita el scroll suave para los enlaces ancla */
-    padding-top: 80px; /* Espacio para el header fijo */
-}
-/* Cinematic Hero Section Styles */
-#hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* Ruta de la imagen de fondo: se recomienda usar la versión .webp y optimizar su tamaño */
-    background-image: url('../images/montanas-flotantes.webp'); /* CORREGIDO: Ruta relativa */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    color: var(--texto-claro); /* Adjusted for dark background */
-    background-blend-mode: multiply; /* Darkens the image slightly */
-    background-color: rgba(0, 0, 0, 0.4); /* Add a subtle dark overlay */
-}
-#hero h1 {
-    font-size: 4rem;
-    font-weight: 700;
-    letter-spacing: 6px;
-    color: #fff; /* White text for contrast on dark background */
-    /* Painterly text effect */
-    text-shadow:
-        2px 2px 4px rgba(0, 0, 0, 0.7),
-        -2px -2px 4px rgba(0, 0, 0, 0.7),
-        4px 4px 8px rgba(0, 0, 0, 0.5),
-        -4px -4px 8px rgba(0, 0, 0, 0.5),
-        6px 6px 12px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 1.5s ease-out;
-}
-#hero p {
-    font-size: 1.2rem;
-    color: #ccc; /* Lighter gray for contrast */
-    margin-top: 1rem;
-    animation: fadeIn 2s ease-out 0.5s forwards;
-    opacity: 0; /* Starts hidden for animation */
-}
-#hero a {
-    margin-top: 2.5rem;
-    padding: 1rem 2rem;
-    border: 2px solid var(--acento);
-    color: #fff; /* White text for button */
-    background-color: rgba(0,0,0,0.3); /* Semi-transparent background for the button */
-    font-weight: bold;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover */
-    border-radius: 8px; /* Rounded corners for the button */
-}
-#hero a:hover {
-    background-color: var(--acento);
-    color: var(--oscuro); /* Dark text on accent background for contrast */
-}
-/* Keyframes for fade-in animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Global Elements ---
+    const htmlElement = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const sections = document.querySelectorAll('section');
+    const btnTop = document.getElementById('btnTop');
+    const fixedNav = document.querySelector('nav'); // Reference to the fixed navigation bar
 
-/* Estilos del encabezado */
-header {
-    padding: 4rem 2rem;
-    text-align: center;
-    background-color: transparent; /* Changed to transparent */
-    border-bottom: 4px solid var(--acento);
-    max-width: 1000px;
-    margin: auto;
-    margin-top: 2rem; /* Give some space below the fixed nav */
-}
-/* Estilos del título del encabezado */
-header h1 {
-    font-size: 3rem;
-    letter-spacing: 2px;
-    margin: 0;
-}
-/* Estilos de la barra de navegación */
-nav {
-    display: flex;
-    justify-content: space-between; /* Distribute items with space between them */
-    align-items: center; /* Vertically align items */
-    padding: 1rem 2rem; /* More padding, especially horizontal */
-    /* --- NEW/UPDATED FOR VALORANT STYLE --- */
-    position: fixed; /* Make it stick to the top */
-    width: 100%; /* Take full width */
-    top: 0;
-    left: 0;
-    z-index: 100; /* Ensure it stays on top of other content */
-    background-color: rgba(var(--gris-rgb), 0.95); /* Slightly transparent background */
-    backdrop-filter: blur(5px); /* Optional: add a blur effect */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
-}
+    // --- Hero Section Audio ---
+    const enterWorldButton = document.getElementById('enter-world-button');
+    const gameStartAudio = document.getElementById('game-start-audio');
+    const heroicIntroAudio = document.getElementById('heroic-intro-audio');
+    const voiceIntroAudio = document.getElementById('voice-intro-audio');
 
-.nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; /* Ensure it spans the container */
-    max-width: 1400px; /* Aumentado para dar más espacio a los enlaces */
-    margin: 0 auto; /* Center the content */
-}
+    // --- Navigation ---
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+    const navLinks = navMenu.querySelectorAll('a, button'); // All clickable elements in menu
 
-.logo {
-    font-size: 1.8rem; /* Slightly larger logo */
-    font-weight: 700;
-    color: var(--acento); /* Use accent color for the logo */
-    letter-spacing: 1px;
-}
+    // --- Phrase Constructor Elements ---
+    const pronounSelect = document.getElementById('pronoun-select');
+    const verbSelect = document.getElementById('verb-select');
+    const tenseSelect = document.getElementById('tense-select');
+    const objectSelect = document.getElementById('object-select');
+    const negationCheckbox = document.getElementById('negation-checkbox');
+    const moodSelect = document.getElementById('mood-select');
+    const affixSelect = document.getElementById('affix-select');
+    const emotionSelect = document.getElementById('emotion-select');
+    const randomizeCheckbox = document.getElementById('randomize-checkbox');
+    const buildPhraseBtn = document.getElementById('build-phrase-btn');
+    const constructorOutput = document.getElementById('constructor-output');
+    const kibotashiPhraseSpan = document.getElementById('kibotashi-phrase');
+    const ipaPhraseSpan = document.getElementById('ipa-phrase');
+    const meaningPhraseSpan = document.getElementById('meaning-phrase');
+    const speakConstructedPhraseBtn = document.getElementById('speak-constructed-phrase-btn');
 
-/* Estilos de la barra de navegación */
-.nav-menu {
-    list-style: none; /* Remove bullet points */
-    margin: 0;
-    padding: 0;
-    display: flex; /* Display horizontally by default */
-    gap: 1.5rem; /* Space between links */
-}
+    // --- Audio Section Elements ---
+    const playButtons = document.querySelectorAll('.play-button');
 
-.nav-menu li {
-    margin: 0; /* Remove default list item margin */
-}
+    // --- Glossary Elements ---
+    const filtroPalabra = document.getElementById('filtro-palabra');
+    const buscarPalabraBtn = document.getElementById('buscar-palabra-btn');
+    const filtroCategoria = document.getElementById('filtro-categoria');
+    const glosarioBody = document.getElementById('glosario-body');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('page-info');
 
-/* Estilos de los enlaces de navegación */
-nav a {
-    text-decoration: none;
-    color: var(--texto);
-    font-weight: 700;
-    font-size: 0.95rem;
-    transition: color 0.3s ease, transform 0.2s ease; /* Transición suave para el hover */
-    position: relative; /* For underline effect */
-    padding-bottom: 5px; /* Space for underline */
-}
-/* Efecto hover de los enlaces de navegación */
-nav a:hover {
-    color: var(--acento);
-    transform: translateY(-2px); /* Pequeño efecto de elevación */
-}
+    // --- Interactive Character Builder Elements ---
+    const characterCells = document.querySelectorAll('.character-cell');
+    const dropZoneC1 = document.getElementById('drop-zone-c1');
+    const dropZoneV = document.getElementById('drop-zone-v'); // Corrected assignment here
+    const dropZoneC2 = document.getElementById('drop-zone-c2');
+    const formWordBtn = document.getElementById('form-word-btn');
+    const formedWordOutput = document.getElementById('formed-word-output'); // Corrected assignment here
+    const formedKibotashiWord = document.getElementById('formed-kibotashi-word');
+    const formedIpaWord = document.getElementById('formed-ipa-word');
+    const formedMeaningWord = document.getElementById('formed-meaning-word');
+    const speakFormedWordBtn = document.getElementById('speak-formed-word-btn');
+    const wordExistsStatus = document.getElementById('word-exists-status');
 
-/* Underline effect on hover */
-nav a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background-color: var(--acento);
-    left: 0;
-    bottom: 0;
-    transition: width 0.3s ease;
-}
 
-nav a:hover::after {
-    width: 100%;
-}
+    // Store current characters in drop zones
+    let currentC1 = { phoneme: '', char: '' };
+    let currentV = { phoneme: '', char: '' };
+    let currentC2 = { phoneme: '', char: '' };
 
-/* Botón de cambio de tema */
-#theme-toggle {
-    background-color: var(--acento);
-    color: var(--texto-claro);
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700; /* Añadido para consistencia */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-left: 20px; /* Espacio para el botón */
-}
-#theme-toggle:hover {
-    background-color: #c0a07c;
-    transform: translateY(-2px);
-}
 
-/* Hamburger icon styles */
-.hamburger {
-    display: none; /* Hidden by default on desktop */
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: var(--texto);
-    cursor: pointer;
-    z-index: 101; /* Ensure it's above the menu when open */
-    line-height: 1; /* Adjust vertical alignment of the icon */
-    padding: 0.5rem; /* Add some padding for easier clicking */
-}
+    // --- Data for Phrase Constructor and Glossary ---
+    const data = {
+        pronouns: [
+            { kibotashi: 'Ena', spanish: 'Yo', ipa: '/e.na/' },
+            { kibotashi: 'Lun', spanish: 'Yo (poético)', ipa: '/lun/' },
+            { kibotashi: 'Bua', spanish: 'Tú', ipa: '/bua/' },
+            { kibotashi: 'Sual', spanish: 'Él/Ella', ipa: '/su.al/' },
+            { kibotashi: 'Nual', spanish: 'Nosotros', ipa: '/nu.al/' }
+        ],
+        verbs: [
+            { kibotashi: 'Ta', spanish: 'Ser', ipa: '/ta/' },
+            { kibotashi: 'Ni', spanish: 'Estar', ipa: '/ni/' },
+            { kibotashi: 'Kel', spanish: 'Tener', ipa: '/kel/' },
+            { kibotashi: 'Mir', spanish: 'Hacer', ipa: '/miʁ/' },
+            { kibotashi: 'Bin', spanish: 'Sentir', ipa: '/bin/' },
+            { kibotashi: 'Jan', spanish: 'Ir', ipa: '/ʒan/' },
+            { kibotashi: 'Vael', spanish: 'Decir', ipa: '/ˈva.el/' },
+            { kibotashi: 'Zar', spanish: 'Saber', ipa: '/zaʁ/' },
+            { kibotashi: 'Katun', spanish: 'Querer', ipa: '/ˈka.tun/' },
+            { kibotashi: 'Solv', spanish: 'Poder', ipa: '/solv/' }
+        ],
+        tenses: [
+            { name: 'Presente', suffix: '', spanish: 'Presente' },
+            { name: 'Pasado', suffix: 'or', spanish: 'Pasado' },
+            { name: 'Futuro', suffix: 'el', spanish: 'Futuro' }
+        ],
+        conjugations: {
+            // Base verb 'Ta' (ser) conjugation examples. Add more if needed.
+            'Ta': {
+                'Ena': { presente: 'Tao', pasado: 'Taor', futuro: 'Tael' },
+                'Bua': { presente: 'Tua', pasado: 'Tauor', futuro: 'Tuel' },
+                'Sual': { presente: 'Tai', pasado: 'Tair', futuro: 'Taiel' },
+                'Nual': { presente: 'Tanal', pasado: 'Tanor', futuro: 'Tanel' }
+            }
+        },
+        objects: [
+            { kibotashi: 'Katen', spanish: 'mi amor', ipa: '/ˈka.ten/' },
+            { kibotashi: 'Kuren', spanish: 'amigo', ipa: '/ˈku.ʁen/' },
+            { kibotashi: 'Tovar', spanish: 'voz', ipa: '/ˈto.var/' },
+            { kibotashi: 'Naviirsa', spanish: 'su pareja', ipa: '/na.ˈviʁ.sa/' },
+            { kibotashi: 'Alma', spanish: 'alma', ipa: '/ˈal.ma/' }
+        ],
+        affixes: [
+            { value: 'ul', meaning: 'cariño suave', applyTo: 'noun', kibotashi: '-ul' },
+            { value: 'ei', meaning: 'íntimo', applyTo: 'noun', kibotashi: '-ei' },
+            { value: 'an', meaning: 'confianza', applyTo: 'noun', kibotashi: '-an' }
+        ],
+        // Example Glossary Data (Expanded for demonstration)
+        glossary: [
+            { spanish: 'Lluvia suave', kibotashi: 'Zariel', category: 'Naturaleza', ipa: '/ˈza.ɾjel/' },
+            { spanish: 'Lluvia intensa', kibotashi: 'Zarunel', category: 'Naturaleza', ipa: '/ˈza.ɾu.nel/' },
+            { spanish: 'Corriente', kibotashi: 'Zareth', category: 'Naturaleza', ipa: '/ˈza.ɾeθ/' },
+            { spanish: 'Charco', kibotashi: 'Zaril', category: 'Naturaleza', ipa: '/ˈza.ɾil/' },
+            { spanish: 'Río', kibotashi: 'Zarunor', category: 'Naturaleza', ipa: '/ˈza.ɾu.noɾ/' },
+            { spanish: 'Humedad', kibotashi: 'Zarim', category: 'Entorno', ipa: '/ˈza.ɾim/' },
+            { spanish: 'Niebla húmeda', kibotashi: 'Zarvai', category: 'Entorno', ipa: '/ˈzaɾ.vai/' },
+            { spanish: 'Gota', kibotashi: 'Zari', category: 'Naturaleza', ipa: '/ˈza.ɾi/' },
+            { spanish: 'Mar', kibotashi: 'Zaruai', category: 'Lugar', ipa: '/ˈza.ɾu.ai/' },
+            { spanish: 'Agua bendita', kibotashi: 'Zarael', category: 'Valor', ipa: '/ˈza.ɾa.el/' },
+            { spanish: 'Suelo fértil', kibotashi: 'Feolin', category: 'Naturaleza', ipa: '/ˈfe.o.lin/' },
+            { spanish: 'Polvo', kibotashi: 'Feolar', category: 'Naturaleza', ipa: '/ˈfe.o.laɾ/' },
+            { spanish: 'Terreno', kibotashi: 'Feoren', category: 'Lugar', ipa: '/ˈfe.o.ɾen/' },
+            { spanish: 'Piedra', kibotashi: 'Feorun', category: 'Naturaleza', ipa: '/ˈfe.o.ɾun/' },
+            { spanish: 'Montículo', kibotashi: 'Feolai', category: 'Lugar', ipa: '/ˈfe.o.lai/' },
+            { spanish: 'Ceniza', kibotashi: 'Feolun', category: 'Naturaleza', ipa: '/ˈfe.o.lun/' },
+            { spanish: 'Lodo', kibotashi: 'Zarfeol', category: 'Combinado', ipa: '/ˈzaɾ.fe.ol/' },
+            { spanish: 'Caverna', kibotashi: 'Feolur', category: 'Lugar', ipa: '/ˈfe.o.luɾ/' },
+            { spanish: 'Raíz', kibotashi: 'Feomir', category: 'Naturaleza', ipa: '/ˈfe.o.miɾ/' },
+            { spanish: 'Semilla', kibotashi: 'Feonel', category: 'Naturaleza', ipa: '/ˈfe.o.nel/' },
+            { spanish: 'Tormenta', kibotashi: 'Vaareth', category: 'Naturaleza', ipa: '/ˈva.a.ɾeθ/' },
+            { spanish: 'Brisa', kibotashi: 'Vaarel', category: 'Entorno', ipa: '/ˈva.a.ɾel/' },
+            { spanish: 'Susurro de aire', kibotashi: 'Vaarin', category: 'Entorno', ipa: '/ˈva.a.ɾin/' },
+            { spanish: 'Remolino', kibotashi: 'Vaalur', category: 'Naturaleza', ipa: '/ˈva.a.luɾ/' },
+            { spanish: 'Aliento', kibotashi: 'Vaor', category: 'Cuerpo', ipa: '/ˈva.oɾ/' },
+            { spanish: 'Norte', kibotashi: 'Vaaron', category: 'Ubicación', ipa: '/ˈva.a.ɾon/' },
+            { spanish: 'Viento cálido', kibotashi: 'Vaarun', category: 'Entorno', ipa: '/ˈva.a.ɾun/' },
+            { spanish: 'Eco del viento', kibotashi: 'Vaelei', category: 'Entorno', ipa: '/ˈva.e.lei/' },
+            { spanish: 'Vuelo', kibotashi: 'Vaelen', category: 'Acción', ipa: '/ˈva.e.len/' },
+            { spanish: 'Aire puro', kibotashi: 'Vaerel', category: 'Valor', ipa: '/ˈva.e.ɾel/' },
+            { spanish: 'Amor', kibotashi: 'Kat', category: 'Emociones', ipa: '/kat/' },
+            { spanish: 'Alegría', kibotashi: 'Biné', category: 'Emociones', ipa: '/ˈbi.ne/' },
+            { spanish: 'Ternura', kibotashi: 'Kol', category: 'Emociones', ipa: '/kol/' },
+            { spanish: 'Ternura íntima', kibotashi: 'Tin', category: 'Emociones', ipa: '/tin/' },
+            { spanish: 'Calma interior', kibotashi: 'Mior', category: 'Emociones', ipa: '/ˈmjɔʁ/' },
+            { spanish: 'Dolor emocional', kibotashi: 'Harun', category: 'Emociones', ipa: '/ˈha.ʁun/' },
+            { spanish: 'Esperanza', kibotashi: 'Zinar', category: 'Emociones', ipa: '/ˈzi.naʁ/' },
+            { spanish: 'Coraje', kibotashi: 'Brel', category: 'Emociones', ipa: '/bʁel/' },
+            { spanish: 'Bien / equilibrio', kibotashi: 'Kéa', category: 'Emociones', ipa: '/ˈke.a/' },
+            { spanish: 'Malestar', kibotashi: 'Ruom', category: 'Emociones', ipa: '/ʁu.om/' },
+            { spanish: 'Agua', kibotashi: 'Zarun', category: 'Naturaleza', ipa: '/ˈza.ʁun/' },
+            { spanish: 'Tierra', kibotashi: 'Feol', category: 'Naturaleza', ipa: '/fe.ol/' },
+            { spanish: 'Viento', kibotashi: 'Vaar', category: 'Naturaleza', ipa: '/vaːʁ/' },
+            { spanish: 'Sol', kibotashi: 'Kuar', category: 'Naturaleza', ipa: '/ˈkuaʁ/' },
+            { spanish: 'Roca', kibotashi: 'Drin', category: 'Naturaleza', ipa: '/dʁin/' },
+            { spanish: 'Mañana', kibotashi: 'Rinar', category: 'Tiempo', ipa: '/ˈʁi.naʁ/' },
+            { spanish: 'Tarde', kibotashi: 'Taren', category: 'Tiempo', ipa: '/ˈta.ʁen/' },
+            { spanish: 'Yo', kibotashi: 'Ena', category: 'Pronombre', ipa: '/ˈe.na/' },
+            { spanish: 'Tú', kibotashi: 'Bua', category: 'Pronombre', ipa: '/ˈbu.a/' },
+            { spanish: 'Él / Ella', kibotashi: 'Sual', category: 'Pronombre', ipa: '/ˈsu.al/' },
+            { spanish: 'Nosotros', kibotashi: 'Nual', category: 'Pronombre', ipa: '/ˈnu.al/' },
+            { spanish: 'Ser', kibotashi: 'Ta', category: 'Verbo', ipa: '/ta/' },
+            { spanish: 'Estar', kibotashi: 'Ni', category: 'Verbo', ipa: '/ni/' },
+            { spanish: 'Tener', kibotashi: 'Kel', category: 'Verbo', ipa: '/kel/' },
+            { spanish: 'Hacer', kibotashi: 'Mir', category: 'Verbo', ipa: '/miʁ/' },
+            { spanish: 'Sentir', kibotashi: 'Bin', category: 'Verbo', ipa: '/bin/' },
+            { spanish: 'Ir', kibotashi: 'Jan', category: 'Verbo', ipa: '/ʒan/' },
+            { spanish: 'Decir', kibotashi: 'Vael', category: 'Verbo', ipa: '/ˈva.el/' },
+            { spanish: 'Saber', kibotashi: 'Zar', category: 'Verbo', ipa: '/zaʁ/' },
+            { spanish: 'Querer', kibotashi: 'Katun', category: 'Verbo', ipa: '/ˈka.tun/' },
+            { spanish: 'Poder', kibotashi: 'Solv', category: 'Verbo', ipa: '/solv/' }
+        ].sort((a, b) => (a.spanish || '').localeCompare(b.spanish || '')) // Sort glossary alphabetically by Spanish word, with undefined check
+    };
 
-/* Styles for hamburger icon animation (optional) */
-.hamburger.is-active::before {
-    content: '\2715'; /* 'X' character */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+    let currentPage = 1;
+    const rowsPerPage = 10;
+    let filteredGlossary = data.glossary; // Initialize with full glossary
 
-.hamburger.is-active {
-    font-size: 1.8rem; /* Smaller 'X' */
-    transform: rotate(0deg); /* No rotation needed if using 'X' char */
-}
+    // --- Functions ---
 
-/* Media query for smaller screens (e.g., mobile) */
-@media (max-width: 992px) { /* Adjust breakpoint as needed */
-    .nav-menu {
-        flex-direction: column; /* Stack links vertically */
-        position: fixed; /* Use fixed for full screen overlay */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh; /* Full height when open */
-        background-color: rgba(var(--gris-rgb), 0.95); /* Background for mobile menu */
-        justify-content: center;
-        align-items: center;
-        transform: translateX(100%); /* Hide off-screen by default */
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        opacity: 0; /* Start hidden */
-        pointer-events: none; /* Disable interaction when hidden */
-        display: flex; /* Ensure it's flex when active, even if hidden initially */
+    // Function to show a custom modal (replaces alert/confirm)
+    function showCustomModal(message, type = 'alert') {
+        const existingModal = document.querySelector('.custom-modal');
+        if (existingModal) existingModal.remove();
+
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'custom-modal';
+        modalDiv.innerHTML = `<p>${message}</p><button>Cerrar</button>`;
+        document.body.appendChild(modalDiv);
+
+        modalDiv.querySelector('button').addEventListener('click', () => {
+            modalDiv.remove();
+        });
     }
 
-    .nav-menu.active {
-        transform: translateX(0); /* Slide in */
-        opacity: 1;
-        pointer-events: all; /* Enable interaction when active */
+    // Function to handle smooth scrolling with fixed header offset
+    function scrollToSection(event) {
+        event.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            const headerOffset = fixedNav.offsetHeight; // Get height of your fixed nav
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // -20 for a little extra space
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
     }
 
-    .nav-menu li {
-        margin: 1rem 0; /* Space out vertical links */
+    // Function for "Scroll to Top" button
+    window.scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
+
+    // --- Hero Section Audio Logic ---
+    enterWorldButton.addEventListener('click', async (event) => { // Added 'async' keyword
+        // Prevent default anchor link behavior for now, as we handle scroll manually
+        event.preventDefault();
+
+        // Start Tone.js AudioContext after user gesture
+        try {
+            await Tone.start(); // This line is crucial for browser autoplay policies
+            console.log('AudioContext started!');
+        } catch (e) {
+            console.error('Failed to start AudioContext:', e);
+            showCustomModal("No se pudo iniciar el audio. Por favor, asegúrate de haber interactuado con la página.", 'alert');
+        }
+
+        // Play game start audio
+        gameStartAudio.currentTime = 0;
+        gameStartAudio.play();
+
+        // After a short delay, start heroic intro and voice intro
+        setTimeout(() => {
+            heroicIntroAudio.muted = false;
+            heroicIntroAudio.volume = 0.6; // Set a reasonable volume
+            heroicIntroAudio.play();
+        }, 500); // Start 0.5 seconds after button click sound
+
+        setTimeout(() => {
+            voiceIntroAudio.muted = false;
+            voiceIntroAudio.volume = 0.8; // Set a reasonable volume
+            voiceIntroAudio.play();
+        }, 1500); // Start 1.5 seconds after button click sound
+
+        // Scroll to the intro section after a delay to allow audio to start
+        const targetElement = document.querySelector('#intro');
+        if (targetElement) {
+            const headerOffset = fixedNav.offsetHeight;
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
+
+            setTimeout(() => {
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }, 2000); // Scroll after 2 seconds
+        }
+    });
+
+    // --- Theme Toggle Logic ---
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        htmlElement.classList.add(currentTheme);
+        themeToggle.textContent = currentTheme === 'dark-mode' ? 'Modo Claro' : 'Modo Oscuro';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark-mode');
+        themeToggle.textContent = 'Modo Claro';
+    } else {
+        themeToggle.textContent = 'Modo Oscuro';
     }
 
-    .nav-menu a {
-        font-size: 1.5rem; /* Larger links for touch */
-        padding-bottom: 8px; /* More space for underline on mobile */
+    themeToggle.addEventListener('click', () => {
+        if (htmlElement.classList.contains('dark-mode')) {
+            htmlElement.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light-mode');
+            themeToggle.textContent = 'Modo Oscuro';
+        } else {
+            htmlElement.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark-mode');
+            themeToggle.textContent = 'Modo Claro';
+        }
+    });
+
+    // --- Section Visibility Animation (Intersection Observer) ---
+    const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // When 10% of the section is visible
+    };
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Optional: Stop observing once visible if animation only plays once
+                // observer.unobserve(entry.target);
+            } else {
+                // Optional: Remove 'visible' class if you want animation to re-trigger on scroll back
+                // entry.target.classList.remove('visible');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // --- Navigation (Hamburger Menu) Logic ---
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('is-active'); // For potential animation of the icon
+    });
+
+    // Close menu when a link is clicked (for smooth scrolling and mobile UX)
+    navLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('is-active');
+            }
+            // Use the custom smooth scrolling function
+            scrollToSection.call(link, event);
+        });
+    });
+
+    // --- Character Cell Audio Playback (Individual) ---
+    // Make character cells draggable
+    characterCells.forEach(cell => {
+        cell.setAttribute('draggable', true); // Make characters draggable
+        cell.addEventListener('click', () => {
+            const phoneme = cell.dataset.phoneme;
+            if (phoneme) {
+                try {
+                    const synth = new Tone.Synth().toDestination();
+                    let frequency;
+                    switch (phoneme) {
+                        case 'k': frequency = 'C4'; break;
+                        case 't': frequency = 'D4'; break;
+                        case 'b': frequency = 'E4'; break;
+                        case 'n': frequency = 'F4'; break;
+                        case 'm': frequency = 'G4'; break;
+                        case 's': frequency = 'A4'; break;
+                        case 'l': frequency = 'B4'; break;
+                        case 'a': frequency = 'C5'; break;
+                        case 'e': frequency = 'D5'; break;
+                        case 'i': frequency = 'E5'; break;
+                        case 'o': frequency = 'F5'; break;
+                        case 'u': frequency = 'G5'; break;
+                        default: frequency = 'C4';
+                    }
+                    synth.triggerAttackRelease(frequency, '8n');
+                } catch (e) {
+                    console.error("Error playing phoneme with Tone.js:", e);
+                    showCustomModal("Error al reproducir el sonido. Asegúrate de que el audio esté habilitado y de que Tone.js esté cargado correctamente.", 'alert');
+                }
+            }
+        });
+    });
+
+    // --- Interactive Character Builder Logic ---
+    let draggedCharData = null; // To store data of the dragged character
+
+    characterCells.forEach(cell => {
+        cell.addEventListener('dragstart', (e) => {
+            draggedCharData = {
+                phoneme: cell.dataset.phoneme,
+                char: cell.dataset.char,
+                type: (cell.dataset.phoneme === 'a' || cell.dataset.phoneme === 'e' || cell.dataset.phoneme === 'i' || cell.dataset.phoneme === 'o' || cell.dataset.phoneme === 'u') ? 'vowel' : 'consonant'
+            };
+            e.dataTransfer.effectAllowed = 'copy'; // Visual feedback for copying
+        });
+    });
+
+    [dropZoneC1, dropZoneV, dropZoneC2].forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Necessary to allow dropping
+            e.dataTransfer.dropEffect = 'copy'; // Visual feedback for copying
+            zone.classList.add('hover'); // Add hover effect
+        });
+
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('hover'); // Remove hover effect
+        });
+
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('hover'); // Remove hover effect
+            zone.classList.add('filled'); // Indicate it's filled
+
+            if (draggedCharData) {
+                // Check if the dropped character type matches the drop zone type
+                const zoneType = zone.dataset.type;
+                if (
+                    (zoneType === 'consonant' && draggedCharData.type === 'consonant') ||
+                    (zoneType === 'vowel' && draggedCharData.type === 'vowel')
+                ) {
+                    zone.innerHTML = `<span class="dropped-char">${draggedCharData.char}</span>`;
+                    zone.dataset.phoneme = draggedCharData.phoneme; // Store phoneme in dataset
+
+                    // Update internal state for word building
+                    if (zone.id === 'drop-zone-c1') {
+                        currentC1 = draggedCharData;
+                    } else if (zone.id === 'drop-zone-v') {
+                        currentV = draggedCharData;
+                    } else if (zone.id === 'drop-zone-c2') {
+                        currentC2 = draggedCharData;
+                    }
+                } else {
+                    showCustomModal(`¡Error! No puedes soltar una ${draggedCharData.type === 'vowel' ? 'vocal' : 'consonante'} en una zona de ${zoneType === 'vowel' ? 'vocal' : 'consonante'}.`, 'alert');
+                }
+            }
+            draggedCharData = null; // Reset dragged data
+        });
+
+        // Allow clicking on a filled drop zone to clear it
+        zone.addEventListener('click', () => {
+            if (zone.classList.contains('filled')) {
+                zone.innerHTML = zone.dataset.type === 'consonant' ? 'C' + (zone.id.includes('c1') ? '1' : '2') : 'V';
+                zone.classList.remove('filled');
+                zone.dataset.phoneme = ''; // Clear stored phoneme
+
+                if (zone.id === 'drop-zone-c1') {
+                    currentC1 = { phoneme: '', char: '' };
+                } else if (zone.id === 'drop-zone-v') {
+                    currentV = { phoneme: '', char: '' };
+                } else if (zone.id === 'drop-zone-c2') {
+                    currentC2 = { phoneme: '', char: '' };
+                }
+            }
+        });
+    });
+
+    formWordBtn.addEventListener('click', () => {
+        let kibotashiWord = '';
+        let ipaWord = '';
+        let meaningDescription = 'Combinación de sonidos: '; // Descripción por defecto
+
+        // Lógica para construir la palabra Kibotashi e IPA
+        // Se asegura de que al menos un carácter válido esté presente
+        if (currentC1.phoneme || currentV.phoneme || currentC2.phoneme) {
+            // Construir la palabra concatenando los caracteres
+            // Solo si un fonema está presente, se agrega su carácter.
+            // Esto evita que "undefine" o "null" se concatenen si una zona está vacía.
+            kibotashiWord = `${currentC1.char || ''}${currentV.char || ''}${currentC2.char || ''}`;
+            ipaWord = `/${currentC1.phoneme || ''}${currentV.phoneme || ''}${currentC2.phoneme || ''}/`;
+
+            // Eliminar barras diagonales dobles si se forman, para IPA limpio.
+            ipaWord = ipaWord.replace(/\/\//g, '/');
+            // Eliminar la barra inicial si la palabra está vacía (ej. //)
+            if (ipaWord === '//') ipaWord = '';
+            // Si termina con una barra doble (ej. /abc//), quitar una.
+            ipaWord = ipaWord.replace(/\/$/, '');
+
+
+            // Actualiza la descripción de significado basada en la combinación de fonemas
+            let phonemeCombination = [];
+            if (currentC1.phoneme) phonemeCombination.push(currentC1.phoneme);
+            if (currentV.phoneme) phonemeCombination.push(currentV.phoneme);
+            if (currentC2.phoneme) phonemeCombination.push(currentC2.phoneme);
+            meaningDescription = `Combinación de sonidos: ${phonemeCombination.join('-')}`;
+        } else {
+            showCustomModal("Por favor, arrastra al menos un carácter válido para formar una palabra.", "alert");
+            formedWordOutput.style.display = 'none';
+            return;
+        }
+
+        // Eliminar los caracteres de símbolos de Kibotashi del kibotashiWord
+        kibotashiWord = kibotashiWord.replace(/[⧫⦾⬸⏁⨊␊⨅◉◍◯◎◌]/g, '');
+
+        // Establece el texto para la palabra Kibotashi y IPA formadas
+        formedKibotashiWord.textContent = kibotashiWord;
+        formedIpaWord.textContent = ipaWord;
+
+        // Reinicia y oculta el mensaje de estado de existencia
+        wordExistsStatus.textContent = '';
+        wordExistsStatus.style.display = 'none';
+
+        // Busca la palabra formada en el glosario
+        const foundWord = data.glossary.find(item => item.kibotashi.toLowerCase() === kibotashiWord.toLowerCase());
+
+        if (foundWord) {
+            formedMeaningWord.textContent = foundWord.spanish; // Usa el significado real del glosario
+            wordExistsStatus.textContent = "¡Esta palabra ya existe en el glosario!";
+            wordExistsStatus.style.display = 'block'; // Muestra el mensaje
+        } else {
+            formedMeaningWord.textContent = meaningDescription; // Usa la descripción de combinación fonética
+        }
+
+        formedWordOutput.style.display = 'block'; // Muestra el área de resultados
+    });
+
+
+    speakFormedWordBtn.addEventListener('click', () => {
+        const textToSpeak = formedKibotashiWord.textContent;
+        if (textToSpeak) {
+            speakText(textToSpeak);
+        } else {
+            showCustomModal("No hay palabra para escuchar. Forma una palabra primero.", "alert");
+        }
+    });
+
+
+    // --- Phrase Constructor Logic ---
+
+    // Populate selects
+    function populateSelect(selectElement, options, textKey, valueKey) {
+        selectElement.innerHTML = ''; // Clear previous options
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.textContent = option[textKey];
+            opt.value = option[valueKey];
+            selectElement.appendChild(opt);
+        });
     }
 
-    #theme-toggle {
-        margin-top: 1.5rem; /* Space toggle button from links */
-        display: block; /* Explicitly ensure it's a block element in mobile menu */
+    populateSelect(pronounSelect, data.pronouns, 'spanish', 'kibotashi');
+    populateSelect(verbSelect, data.verbs, 'spanish', 'kibotashi');
+    populateSelect(tenseSelect, data.tenses, 'name', 'name');
+    populateSelect(objectSelect, data.objects, 'spanish', 'kibotashi');
+
+    // Add "Sin objeto" option to object select
+    const noObjectOpt = document.createElement('option');
+    noObjectOpt.textContent = 'Sin objeto';
+    noObjectOpt.value = '';
+    objectSelect.prepend(noObjectOpt); // Add it at the beginning
+
+    // Function to get IPA for a given Kibotashi word
+    function getIpa(word, type = 'word') {
+        let ipa = '';
+        if (type === 'pronoun') {
+            const pronoun = data.pronouns.find(p => p.kibotashi === word);
+            if (pronoun) ipa = pronoun.ipa;
+        } else if (type === 'verb') {
+            const verb = data.verbs.find(v => v.kibotashi === word);
+            if (verb) ipa = verb.ipa;
+        } else if (type === 'object') {
+            const object = data.objects.find(o => o.kibotashi === word);
+            if (object) ipa = object.ipa;
+        } else if (type === 'affix') {
+             const affix = data.affixes.find(a => a.value === word);
+             if (affix) ipa = affix.ipa || word; // Return affix itself if no specific IPA
+        }
+        return ipa.replace(/\//g, ''); // Remove slashes for concatenation
     }
 
-    .hamburger {
-        display: block; /* Show hamburger icon on mobile */
+    // Function to build the phrase
+    function buildPhrase() {
+        let selectedPronoun = pronounSelect.value;
+        let selectedVerb = verbSelect.value;
+        let selectedTense = tenseSelect.value;
+        let selectedObject = objectSelect.value;
+        let isNegated = negationCheckbox.checked;
+        let selectedMood = moodSelect.value;
+        let selectedAffix = affixSelect.value;
+        let selectedEmotion = emotionSelect.value;
+
+        // Handle randomize option
+        if (randomizeCheckbox.checked) {
+            selectedPronoun = data.pronouns[Math.floor(Math.random() * data.pronouns.length)].kibotashi;
+            selectedVerb = data.verbs[Math.floor(Math.random() * data.verbs.length)].kibotashi;
+            selectedTense = data.tenses[Math.floor(Math.random() * data.tenses.length)].name;
+            selectedObject = Math.random() < 0.5 ? '' : data.objects[Math.floor(Math.random() * data.objects.length)].kibotashi; // Randomly include/exclude object
+            isNegated = Math.random() < 0.3; // 30% chance of negation
+            selectedMood = Math.random() < 0.5 ? 'indicativo' : 'condicional';
+            selectedAffix = Math.random() < 0.4 ? (data.affixes[Math.floor(Math.random() * data.affixes.length)].value) : '';
+            selectedEmotion = ['neutro', 'poetico', 'afectivo', 'melancolico'][Math.floor(Math.random() * 4)];
+
+            // Update selects to reflect randomized choice
+            pronounSelect.value = selectedPronoun;
+            verbSelect.value = selectedVerb;
+            tenseSelect.value = selectedTense;
+            objectSelect.value = selectedObject;
+            negationCheckbox.checked = isNegated;
+            moodSelect.value = selectedMood;
+            affixSelect.value = selectedAffix;
+            emotionSelect.value = selectedEmotion;
+        }
+
+        let kibotashiSentence = selectedPronoun;
+        let ipaSentence = getIpa(selectedPronoun, 'pronoun');
+        let meaningSentence = data.pronouns.find(p => p.kibotashi === selectedPronoun)?.spanish || selectedPronoun;
+
+        let conjugatedVerb = selectedVerb;
+        let verbMeaning = data.verbs.find(v => v.kibotashi === selectedVerb)?.spanish;
+        let verbIpa = getIpa(selectedVerb, 'verb');
+
+        // Apply conjugation based on selected verb and tense (using 'Ta' as example for now)
+        if (selectedVerb === 'Ta' && data.conjugations.Ta) {
+            const verbConjugations = data.conjugations.Ta[selectedPronoun];
+            if (verbConjugations) {
+                conjugatedVerb = verbConjugations[selectedTense.toLowerCase()];
+                // Update IPA based on specific conjugation if needed, otherwise use base verb IPA
+                // For simplicity, we'll append tense suffix IPA for now
+                if (selectedTense === 'Pasado') verbIpa = '/ta.oɾ/'; // Example for 'Taor'
+                else if (selectedTense === 'Futuro') verbIpa = '/ta.el/'; // Example for 'Tael'
+                else verbIpa = getIpa(selectedVerb, 'verb');
+            }
+        } else {
+             // For other verbs, just append the tense suffix for now (simple model)
+             let suffix = data.tenses.find(t => t.name === selectedTense)?.suffix || '';
+             conjugatedVerb = selectedVerb + suffix;
+             // Simple IPA concatenation for other verbs (needs more complex phonological rules for accuracy)
+             verbIpa = getIpa(selectedVerb, 'verb') + (suffix ? `.${suffix.toLowerCase()}` : '');
+        }
+
+        // Apply mood (simplified)
+        if (selectedMood === 'condicional') {
+            conjugatedVerb += 'r'; // Simple conditional suffix
+            verbMeaning += ' (condicional)';
+            verbIpa += 'ɾ'; // Add conditional IPA suffix
+        }
+
+        // Apply negation
+        if (isNegated) {
+            kibotashiSentence += ' Ne';
+            ipaSentence += ' /ne/';
+            meaningSentence += ' no';
+        }
+
+        kibotashiSentence += ' ' + conjugatedVerb;
+        ipaSentence += ' ' + verbIpa;
+        meaningSentence += ' ' + verbMeaning;
+
+        if (selectedObject) {
+            const objectMeaning = data.objects.find(o => o.kibotashi === selectedObject)?.spanish;
+            kibotashiSentence += ' ' + selectedObject;
+            ipaSentence += ' ' + getIpa(selectedObject, 'object');
+            meaningSentence += ' ' + objectMeaning;
+        }
+
+        // Apply affix
+        if (selectedAffix) {
+            // This is a simplified application for demonstration.
+            // In a real conlang, affixes attach to specific parts of speech.
+            // For now, append to the last word.
+            const affixData = data.affixes.find(a => a.value === selectedAffix);
+            if (affixData) {
+                const lastWord = kibotashiSentence.split(' ').pop();
+                kibotashiSentence = kibotashiSentence.replace(lastWord, lastWord + affixData.kibotashi);
+                ipaSentence += affixData.ipa ? ` ${affixData.ipa}` : ` ${affixData.kibotashi}`;
+                meaningSentence += ` (${affixData.meaning})`;
+            }
+        }
+
+        // Display results
+        kibotashiPhraseSpan.textContent = kibotashiSentence.trim() + '.'; // Add period
+        ipaPhraseSpan.textContent = ipaSentence.trim() + '/'; // Add trailing slash for IPA
+        meaningPhraseSpan.textContent = meaningSentence.trim() + '.'; // Add period
+
+        // Add emotion class to constructor output
+        constructorOutput.className = 'constructor-output'; // Reset classes
+        if (selectedEmotion && selectedEmotion !== 'neutro') {
+            constructorOutput.classList.add(selectedEmotion);
+        }
+
+        constructorOutput.style.display = 'block'; // Show output
     }
 
-    /* Hide the default hamburger icon when .is-active for 'X' effect */
-    .hamburger.is-active {
-        content: ''; /* Hide default hamburger bars */
+    buildPhraseBtn.addEventListener('click', buildPhrase);
+
+    // Initial phrase build on load
+    buildPhrase();
+
+
+    // Text-to-Speech (TTS) for constructed phrases
+    speakConstructedPhraseBtn.addEventListener('click', () => {
+        const textToSpeak = kibotashiPhraseSpan.textContent;
+        if (textToSpeak) {
+            speakText(textToSpeak);
+        } else {
+            showCustomModal("No hay frase para escuchar. Construye una frase primero.", "alert");
+        }
+    });
+
+    // --- Audio Section Play Buttons Logic ---
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-LA'; // Spanish (Latin America)
+            utterance.rate = 0.9; // Slightly slower
+            utterance.pitch = 1.0; // Normal pitch
+
+            // Try to find a female voice
+            let femaleVoice = null;
+            const voices = speechSynthesis.getVoices();
+            for (let i = 0; i < voices.length; i++) {
+                // Look for a Spanish voice, preferably female, though 'female' isn't standard in all voice objects
+                if (voices[i].lang === 'es-LA' || voices[i].lang === 'es-US') {
+                     // Check for names that might imply female, or just pick the first good Spanish voice
+                    if (voices[i].name.includes('Femenino') || voices[i].name.includes('Female')) {
+                        femaleVoice = voices[i];
+                        break;
+                    }
+                    if (!femaleVoice) femaleVoice = voices[i]; // Take first Spanish voice if no female found yet
+                }
+            }
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            } else {
+                console.warn("No se encontró una voz femenina en español-LA/US. Usando la voz predeterminada.");
+            }
+
+            speechSynthesis.speak(utterance);
+        } else {
+            showCustomModal("Tu navegador no soporta la API de SpeechSynthesis (Texto a Voz).", 'alert');
+        }
     }
-}
 
-/* NEW: Adjustments for navigation menu on medium screens */
-@media (min-width: 993px) and (max-width: 1200px) {
-    .nav-menu {
-        gap: 0.8rem; /* Reduce gap between menu items */
+    playButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const audioSrc = button.dataset.audio;
+            const textToSpeak = button.dataset.text;
+
+            if (audioSrc) {
+                const audio = new Audio(audioSrc);
+                audio.play().catch(e => {
+                    console.error("Error playing audio:", e);
+                    showCustomModal("Error al reproducir el archivo de audio. Asegúrate de que la ruta sea correcta y el archivo exista.", 'alert');
+                });
+            } else if (textToSpeak) {
+                speakText(textToSpeak);
+            }
+        });
+    });
+
+
+    // --- Glossary Filtering and Pagination ---
+    function displayGlossary(page) {
+        glosarioBody.innerHTML = ''; // Clear current table body
+
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedItems = filteredGlossary.slice(start, end);
+
+        paginatedItems.forEach(word => {
+            const row = document.createElement('tr');
+            const audioPath = `audios/${word.kibotashi.toLowerCase().replace(/\s/g, '-')}.mp3`; // Standardize filename
+
+            row.innerHTML = `
+                <td>${word.spanish}</td>
+                <td>${word.kibotashi}</td>
+                <td>${word.category}</td>
+                <td>
+                    <button class="play-button" data-audio="${audioPath}" onerror="this.style.display='none'; showCustomModal('Audio file not found for ${word.kibotashi}', 'alert');">▶️ (Archivo)</button>
+                    <button class="play-button" data-text="${word.kibotashi}">🗣️ (Voz)</button>
+                </td>
+            `;
+            glosarioBody.appendChild(row);
+        });
+
+        // Update pagination controls
+        const totalPages = Math.ceil(filteredGlossary.length / rowsPerPage);
+        pageInfoSpan.textContent = `Página ${page} de ${totalPages}`;
+        prevPageBtn.disabled = page === 1;
+        nextPageBtn.disabled = page === totalPages || totalPages === 0; // Disable if no pages
     }
-    nav a {
-        font-size: 0.9rem; /* Slightly smaller font size for links */
-        padding: 0 5px; /* Reduce horizontal padding */
+
+    function filterAndDisplayGlossary() {
+        const searchTerm = filtroPalabra.value.toLowerCase().trim();
+        const categoryFilter = filtroCategoria.value;
+
+        filteredGlossary = data.glossary.filter(word => {
+            const matchesSearch = searchTerm === '' ||
+                                  word.spanish.toLowerCase().includes(searchTerm) ||
+                                  word.kibotashi.toLowerCase().includes(searchTerm);
+
+            const matchesCategory = categoryFilter === '' ||
+                                    word.category === categoryFilter;
+
+            return matchesSearch && matchesCategory;
+        });
+
+        filteredGlossary.sort((a, b) => (a.spanish || '').localeCompare(b.spanish || '')); // Re-sort after filtering, with undefined check
+        currentPage = 1; // Reset to first page after filtering
+        displayGlossary(currentPage);
     }
-    #theme-toggle {
-        margin-left: 10px; /* Reduce margin for theme toggle */
-        padding: 0.4rem 0.8rem; /* Slightly smaller padding */
-    }
-}
 
+    // Event Listeners for Glossary Filters
+    buscarPalabraBtn.addEventListener('click', filterAndDisplayGlossary);
+    filtroPalabra.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+            filterAndDisplayGlossary();
+        } else {
+            // Optional: Filter as user types (can be performance intensive for very large datasets)
+            // filterAndDisplayGlossary();
+        }
+    });
+    filtroCategoria.addEventListener('change', filterAndDisplayGlossary);
 
-/* Estilos de las secciones */
-section {
-    max-width: 1000px;
-    margin: auto;
-    padding: 3rem 2rem;
-    border-bottom: 1px solid var(--borde);
-    /* Animación de fade-in para secciones */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-section.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-/* Estilos de las tablas */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1.5rem;
-    /* Eliminado opacity: 0 y transform: translateY(10px) aquí para que sean visibles por defecto */
-    /* La animación de fade-in se aplicará cuando la sección sea visible */
-    transition: opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s;
-}
-/* Clase visible para tablas, si se desea animar individualmente al aparecer con la sección */
-table.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-/* Estilos del encabezado y celdas de tabla */
-th, td {
-    padding: 1rem;
-    border-bottom: 1px solid var(--borde); /* Usar --borde para consistencia */
-    text-align: left;
-}
-/* Estilos específicos del encabezado de tabla */
-th {
-    color: var(--acento);
-    text-transform: uppercase;
-    font-size: 0.9rem;
-}
-/* Estilos del pie de página */
-footer {
-    background-color: var(--gris);
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.9rem;
-    color: #666;
-}
-/* Estilo para el botón de reproducción de audio */
-.play-button, .play-output-button {
-    background-color: var(--acento);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700; /* Añadido para consistencia */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.play-button:hover, .play-output-button:hover {
-    background-color: #c0a07c; /* Acennto ligeramente más oscuro */
-    transform: translateY(-2px); /* Pequeño efecto de elevación */
-}
-/* Estilos para la sección del constructor de frases */
-.constructor-container {
-    background-color: var(--oscuro);
-    color: var(--texto-claro);
-    padding: 3rem 2rem;
-    text-align: center;
-    border-bottom: 1px solid var(--borde);
-}
-.constructor-container h2 {
-    color: var(--texto-claro);
-    border-left-color: var(--acento);
-}
-.constructor-container p {
-    color: var(--texto-claro);
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-}
-.constructor-inputs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-.constructor-inputs select {
-    padding: 0.75rem 1rem;
-    border-radius: 5px;
-    border: 1px solid var(--borde);
-    background-color: var(--fondo);
-    color: var(--texto);
-    font-family: 'Outfit', sans-serif;
-    font-size: 1rem;
-    cursor: pointer;
-    min-width: 180px;
-}
-.constructor-inputs button {
-    background-color: var(--acento);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 0.75rem 1.5rem;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700;
-    transition: background-color 0.3s ease;
-}
-.constructor-inputs button:hover {
-    background-color: #c0a07c;
-}
-.constructor-output {
-    background-color: var(--constructor-bg-output); /* Usar variable para consistencia */
-    border-radius: 8px;
-    padding: 2rem;
-    margin-top: 2rem;
-    color: var(--texto-claro);
-    border: 1px solid #555;
-}
-.constructor-output h3 {
-    color: var(--acento);
-    margin-top: 0;
-    font-size: 1.5rem;
-}
-.constructor-output p {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-}
-.constructor-output .ipa {
-    font-family: monospace;
-    color: #aaa;
-    font-size: 1.1rem;
-}
-.constructor-output .meaning {
-    font-style: italic;
-    color: #ccc;
-    margin-bottom: 1rem;
-}
-/* NUEVO: Estilo para el mensaje de estado de palabra existente */
-.word-status {
-    font-weight: bold;
-    color: var(--acento); /* Usa el color de acento para que resalte */
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    display: none; /* Oculto por defecto, se muestra con JS */
-}
+    // Event Listeners for Pagination
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            displayGlossary(currentPage);
+        }
+    });
 
-/* Nuevos estilos para los tonos emocionales */
-.constructor-output.poetico {
-    background: #3a3040;
-    box-shadow: 0 0 15px rgba(180, 100, 200, 0.5); /* Sombra púrpura suave */
-}
-.constructor-output.afectivo {
-    background: #41302f;
-    box-shadow: 0 0 15px rgba(255, 100, 100, 0.5); /* Sombra rojiza suave */
-}
-.constructor-output.melancolico {
-    background: #2a2f38;
-    box-shadow: 0 0 15px rgba(100, 150, 255, 0.5); /* Sombra azul suave */
-}
+    nextPageBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredGlossary.length / rowsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayGlossary(currentPage);
+        }
+    });
 
-/* Estilos para la animación de caracteres */
-.character-cell {
-    cursor: grab; /* Cambiado a grab para indicar que es arrastrable */
-    transition: transform 0.3s ease, text-shadow 0.3s ease;
-    font-size: 2rem; /* Aumenta el tamaño para que el efecto sea visible */
-    padding: 0.5rem;
-    border: 1px solid var(--borde);
-    border-radius: 5px;
-    background-color: var(--fondo);
-    color: var(--texto);
-    display: inline-block; /* Para que ocupen el espacio justo */
-    margin: 5px; /* Pequeño margen */
-}
-.character-cell:hover {
-    transform: scale(1.1); /* Ligeramente más grande al pasar el ratón */
-    text-shadow: 0 0 10px var(--acento); /* Efecto de brillo */
-    background-color: var(--gris);
-}
-.character-cell:active {
-    cursor: grabbing; /* Cambia a grabbing al arrastrar */
-}
+    // Initial display of glossary
+    filterAndDisplayGlossary(); // Call once on load
 
+    // --- Scroll to Top Button Visibility ---
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) { // Show button after scrolling 300px
+            btnTop.style.display = 'block';
+        } else {
+            btnTop.style.display = 'none';
+        }
+    });
 
-/* Estilos para el constructor de caracteres interactivo */
-.character-builder-area {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 2rem;
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
-}
-
-.drop-zone {
-    width: 100px;
-    height: 100px;
-    border: 2px dashed var(--acento);
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    color: var(--texto);
-    background-color: rgba(var(--gris-rgb), 0.2); /* Fondo semi-transparente */
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    flex-shrink: 0; /* Evita que se encojan en flexbox */
-}
-
-.drop-zone.hover {
-    background-color: rgba(var(--acento-rgb), 0.2); /* Usa el acento con opacidad */
-    border-color: var(--acento);
-}
-
-.drop-zone.filled {
-    background-color: var(--constructor-bg-output);
-    border-style: solid;
-}
-
-.drop-zone span.dropped-char {
-    font-size: 3rem; /* Carácter grande dentro de la zona de caída */
-    color: var(--texto-claro);
-}
-
-/* Estilos para el modal personalizado */
-.custom-modal {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background-color: var(--fondo); color: var(--texto);
-    padding: 20px; border: 1px solid var(--borde); border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000;
-    text-align: center; font-family: 'Outfit', sans-serif;
-}
-.custom-modal button {
-    background-color: var(--acento); color: white; border: none; border-radius: 5px;
-    padding: 8px 15px; cursor: pointer; margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-.custom-modal button:hover {
-    background-color: #c0a07c;
-}
-/* Styles for the "Scroll to Top" button */
-#btnTop {
-    position: fixed;
-    bottom: 40px;
-    right: 30px;
-    z-index: 99;
-    background-color: var(--acento); /* Use accent color */
-    color: var(--fondo); /* Use background color for contrast */
-    border: none;
-    padding: 12px 18px;
-    border-radius: 50%;
-    font-size: 18px;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: background 0.3s, transform 0.3s, opacity 0.3s;
-    display: none; /* Hidden by default, shown on scroll */
-}
-#btnTop:hover {
-    background-color: #c0a07c; /* Slightly darker accent for hover */
-    transform: scale(1.1);
-}
-
-/* Styles for glossary search and filter inputs */
-#filtro-palabra, #filtro-categoria {
-    padding: 0.75rem 1rem;
-    border-radius: 5px;
-    border: 1px solid var(--borde);
-    background-color: var(--fondo);
-    color: var(--texto);
-    font-family: 'Outfit', sans-serif;
-    font-size: 1rem;
-    margin-right: 10px;
-    margin-bottom: 1rem; /* Spacing for responsiveness */
-    max-width: 300px;
-}
-
-#filtro-categoria {
-    min-width: 200px;
-}
-
-/* Responsive adjustments for glossary controls */
-@media (max-width: 768px) {
-    #filtro-palabra, #filtro-categoria, #buscar-palabra-btn {
-        width: calc(100% - 20px); /* Adjust for padding/margin */
-        margin-right: 0;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    #buscar-palabra-btn {
-        margin-top: 10px;
-        margin-bottom: 1rem;
-    }
-}
-
-/* Table wrapper for horizontal scrolling on small screens */
-.table-wrapper {
-    overflow-x: auto;
-    width: 100%;
-}
-
-/* Pagination controls */
-.pagination-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.pagination-controls button {
-    background-color: var(--acento);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 0.75rem 1.5rem;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700;
-    transition: background-color 0.3s ease;
-}
-
-.pagination-controls button:hover {
-    background-color: #c0a07c;
-}
-
-.pagination-controls span {
-    font-size: 1rem;
-    color: var(--texto);
-}
+});
