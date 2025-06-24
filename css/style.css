@@ -231,7 +231,8 @@ td audio {
   align-items: center;
   text-align: center;
   color: white;
-  background: url('../montanas-flotantes.jpg') no-repeat center center/cover;
+  /* CORRECCIÓN: Usar la imagen montanas-flotantes.jpg de la carpeta images */
+  background: url('../images/montanas-flotantes.jpg') no-repeat center center/cover;
   position: relative;
   overflow: hidden;
 }
