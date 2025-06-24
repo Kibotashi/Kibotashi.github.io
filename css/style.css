@@ -135,7 +135,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     width: 100%; /* Ensure it spans the container */
-    max-width: 1200px; /* Limit width for larger screens */
+    max-width: 1400px; /* Aumentado para dar más espacio a los enlaces */
     margin: 0 auto; /* Center the content */
 }
 
@@ -285,6 +285,21 @@ nav a:hover::after {
     }
 }
 
+/* NEW: Adjustments for navigation menu on medium screens */
+@media (min-width: 993px) and (max-width: 1200px) {
+    .nav-menu {
+        gap: 0.8rem; /* Reduce gap between menu items */
+    }
+    nav a {
+        font-size: 0.9rem; /* Slightly smaller font size for links */
+        padding: 0 5px; /* Reduce horizontal padding */
+    }
+    #theme-toggle {
+        margin-left: 10px; /* Reduce margin for theme toggle */
+        padding: 0.4rem 0.8rem; /* Slightly smaller padding */
+    }
+}
+
 
 /* Estilos de las secciones */
 section {
@@ -427,6 +442,15 @@ footer {
     color: #ccc;
     margin-bottom: 1rem;
 }
+/* NUEVO: Estilo para el mensaje de estado de palabra existente */
+.word-status {
+    font-weight: bold;
+    color: var(--acento); /* Usa el color de acento para que resalte */
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    display: none; /* Oculto por defecto, se muestra con JS */
+}
+
 /* Nuevos estilos para los tonos emocionales */
 .constructor-output.poetico {
     background: #3a3040;
@@ -537,7 +561,7 @@ footer {
     display: none; /* Hidden by default, shown on scroll */
 }
 #btnTop:hover {
-    background-color: #bfa07c; /* Slightly darker accent for hover */
+    background-color: #c0a07c; /* Slightly darker accent for hover */
     transform: scale(1.1);
 }
 
