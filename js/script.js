@@ -80,9 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Audio Playback for .play-button elements
-    const playButtons = document.querySelectorAll('.play-button');
-    playButtons.forEach(button => {
+    // Audio Playback for .play-button elements (for specific audio files like from audio section)
+    document.querySelectorAll('button.play-button[data-audio]').forEach(button => {
         button.addEventListener('click', function() {
             const audioSrc = this.dataset.audio;
             if (audioSrc) {
@@ -90,6 +89,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 audio.play().catch(e => console.error("Error playing audio:", e));
             } else {
                 console.warn("No audio source defined for this button.");
+            }
+        });
+    });
+
+    // Audio Playback for .play-button elements that use text-to-speech
+    document.querySelectorAll('button.play-button[data-text]').forEach(button => {
+        button.addEventListener('click', function() {
+            const textToSpeak = this.dataset.text;
+            if (textToSpeak) {
+                window.speakText(textToSpeak);
+            } else {
+                console.warn("No text defined for this button to speak.");
             }
         });
     });
@@ -114,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
             synth.speak(utterance);
         } else {
             console.warn("Speech Synthesis not supported in this browser.");
-            // Removed alert() as per instructions.
         }
     };
 
@@ -161,15 +171,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const negationCheckbox = document.getElementById('negation-checkbox');
     const moodSelect = document.getElementById('mood-select');
     const affixSelect = document.getElementById('affix-select');
-    const emotionSelect = document.getElementById('emotion-select');
+    const emotionSelect = document.getElementById('emotion-select'); // AHORA EXISTE EN EL HTML
     const randomizeCheckbox = document.getElementById('randomize-checkbox');
+    const buildPhraseBtn = document.getElementById('build-phrase-btn'); // Nuevo ID del botón Construir
+    const speakConstructedPhraseBtn = document.getElementById('speak-constructed-phrase-btn'); // Nuevo ID del botón Escuchar Frase
+
     const kibotashiPhraseOutput = document.getElementById('kibotashi-phrase');
     const ipaPhraseOutput = document.getElementById('ipa-phrase');
     const meaningPhraseOutput = document.getElementById('meaning-phrase');
     const constructorOutputDiv = document.getElementById('constructor-output');
 
+
     // Populate selects
     function populateSelect(selectElement, data, addEmptyOption = true) {
+        if (!selectElement) {
+            console.error("populateSelect: selectElement is null for data", data);
+            return;
+        }
         selectElement.innerHTML = '';
         if (addEmptyOption) {
             const option = document.createElement('option');
@@ -193,49 +211,68 @@ document.addEventListener('DOMContentLoaded', function() {
     populateSelect(objectSelect, objects);
 
     // Manually populate tense select as it has different structure
-    tenseSelect.innerHTML = `
-        <option value="">Selecciona un tiempo</option>
-        <option value="presente">Presente</option>
-        <option value="pasado">Pasado</option>
-        <option value="futuro">Futuro</option>
-    `;
+    if (tenseSelect) {
+        tenseSelect.innerHTML = `
+            <option value="">Selecciona un tiempo</option>
+            <option value="presente">Presente</option>
+            <option value="pasado">Pasado</option>
+            <option value="futuro">Futuro</option>
+        `;
+    } else {
+        console.error("tenseSelect is null");
+    }
 
-    // Event listeners for changes in constructor selects
-    [pronounSelect, verbSelect, tenseSelect, objectSelect, negationCheckbox, moodSelect, affixSelect, emotionSelect, randomizeCheckbox].forEach(element => {
-        element.addEventListener('change', window.buildPhrase); // Use window.buildPhrase
-    });
+    // Manually populate emotion select
+    if (emotionSelect) {
+        emotionSelect.innerHTML = `
+            <option value="tono neutro">Tono Neutro</option>
+            <option value="alegre">Alegre</option>
+            <option value="triste">Triste</option>
+            <option value="enojado">Enojado</option>
+            <option value="sorprendido">Sorprendido</option>
+        `;
+    } else {
+        console.error("emotionSelect is null");
+    }
+
 
     window.buildPhrase = function() {
-        if (randomizeCheckbox.checked) {
+        if (randomizeCheckbox && randomizeCheckbox.checked) {
             const randomPronounKey = Object.keys(pronouns)[Math.floor(Math.random() * Object.keys(pronouns).length)];
             const randomVerbKey = Object.keys(verbs)[Math.floor(Math.random() * Object.keys(verbs).length)];
             const randomTenseKey = Object.keys(tenses)[Math.floor(Math.random() * Object.keys(tenses).length)];
             const randomObjectKey = Object.keys(objects)[Math.floor(Math.random() * Object.keys(objects).length)];
 
-            pronounSelect.value = randomPronounKey;
-            verbSelect.value = randomVerbKey;
-            tenseSelect.value = randomTenseKey;
-            objectSelect.value = randomObjectKey;
-            negationCheckbox.checked = Math.random() > 0.5; // Random true/false
-            moodSelect.value = Math.random() > 0.5 ? 'indicativo' : 'condicional';
-            affixSelect.value = Object.keys(affixSelect.options)[Math.floor(Math.random() * Object.keys(affixSelect.options).length)].value;
-            emotionSelect.value = Object.keys(emotionSelect.options)[Math.floor(Math.random() * Object.keys(emotionSelect.options).length)].value;
+            if (pronounSelect) pronounSelect.value = randomPronounKey;
+            if (verbSelect) verbSelect.value = randomVerbKey;
+            if (tenseSelect) tenseSelect.value = randomTenseKey;
+            if (objectSelect) objectSelect.value = randomObjectKey;
+            if (negationCheckbox) negationCheckbox.checked = Math.random() > 0.5; // Random true/false
+            if (moodSelect) moodSelect.value = Math.random() > 0.5 ? 'indicativo' : 'condicional';
+            // Ensure affixSelect and emotionSelect have options before randomizing
+            if (affixSelect && affixSelect.options.length > 0) {
+                 affixSelect.value = affixSelect.options[Math.floor(Math.random() * affixSelect.options.length)].value;
+            }
+            if (emotionSelect && emotionSelect.options.length > 0) {
+                emotionSelect.value = emotionSelect.options[Math.floor(Math.random() * emotionSelect.options.length)].value;
+            }
         }
 
-        const selectedPronoun = pronounSelect.value;
-        const selectedVerb = verbSelect.value;
-        const selectedTense = tenseSelect.value;
-        const selectedObject = objectSelect.value;
-        const isNegated = negationCheckbox.checked;
-        const selectedMood = moodSelect.value;
-        const selectedAffix = affixSelect.value;
-        const selectedEmotion = emotionSelect.value;
+        const selectedPronoun = pronounSelect ? pronounSelect.value : '';
+        const selectedVerb = verbSelect ? verbSelect.value : '';
+        const selectedTense = tenseSelect ? tenseSelect.value : '';
+        const selectedObject = objectSelect ? objectSelect.value : '';
+        const isNegated = negationCheckbox ? negationCheckbox.checked : false;
+        const selectedMood = moodSelect ? moodSelect.value : '';
+        const selectedAffix = affixSelect ? affixSelect.value : '';
+        const selectedEmotion = emotionSelect ? emotionSelect.value : '';
+
 
         if (!selectedPronoun || !selectedVerb || !selectedTense) {
-            kibotashiPhraseOutput.textContent = "Por favor, selecciona un pronombre, verbo y tiempo.";
-            ipaPhraseOutput.textContent = "";
-            meaningPhraseOutput.textContent = "";
-            constructorOutputDiv.style.display = 'block';
+            if(kibotashiPhraseOutput) kibotashiPhraseOutput.textContent = "Por favor, selecciona un pronombre, verbo y tiempo.";
+            if(ipaPhraseOutput) ipaPhraseOutput.textContent = "";
+            if(meaningPhraseOutput) meaningPhraseOutput.textContent = "";
+            if(constructorOutputDiv) constructorOutputDiv.style.display = 'block';
             return;
         }
 
@@ -291,19 +328,24 @@ document.addEventListener('DOMContentLoaded', function() {
         // Placeholder IPA (you'd need a more complex system to generate real IPA)
         ipaPronunciation = `/${fullKibotashiPhrase.toLowerCase().replace(/[^a-z]/g, '')}/`;
 
-        kibotashiPhraseOutput.textContent = fullKibotashiPhrase;
-        ipaPhraseOutput.textContent = ipaPronunciation;
-        meaningPhraseOutput.textContent = fullMeaning;
-        constructorOutputDiv.style.display = 'block';
+        if(kibotashiPhraseOutput) kibotashiPhraseOutput.textContent = fullKibotashiPhrase;
+        if(ipaPhraseOutput) ipaPhraseOutput.textContent = ipaPronunciation;
+        if(meaningPhraseOutput) meaningPhraseOutput.textContent = fullMeaning;
+        if(constructorOutputDiv) constructorOutputDiv.style.display = 'block';
 
         // --- NEW: Trigger glossary search with the constructed phrase ---
         // Set the glossary search input value
-        filtroPalabraInput.value = fullKibotashiPhrase;
+        if (filtroPalabraInput) {
+            filtroPalabraInput.value = fullKibotashiPhrase;
+        }
         // Reset current page and render the glossary to apply the search
         currentPage = 1;
         renderGlossary();
         // Scroll to the glossary section for immediate feedback
-        document.getElementById('glosario').scrollIntoView({ behavior: 'smooth' });
+        const glosarioSection = document.getElementById('glosario');
+        if (glosarioSection) {
+            glosarioSection.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     window.speakConstructedPhrase = function() {
@@ -313,6 +355,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    // Event listeners for changes in constructor selects (moved here)
+    if (pronounSelect) pronounSelect.addEventListener('change', window.buildPhrase);
+    if (verbSelect) verbSelect.addEventListener('change', window.buildPhrase);
+    if (tenseSelect) tenseSelect.addEventListener('change', window.buildPhrase);
+    if (objectSelect) objectSelect.addEventListener('change', window.buildPhrase);
+    if (negationCheckbox) negationCheckbox.addEventListener('change', window.buildPhrase);
+    if (moodSelect) moodSelect.addEventListener('change', window.buildPhrase);
+    if (affixSelect) affixSelect.addEventListener('change', window.buildPhrase);
+    if (emotionSelect) emotionSelect.addEventListener('change', window.buildPhrase);
+    if (randomizeCheckbox) randomizeCheckbox.addEventListener('change', window.buildPhrase);
+
+    // Event listeners for Constructor buttons (added here)
+    if (buildPhraseBtn) {
+        buildPhraseBtn.addEventListener('click', window.buildPhrase);
+    }
+    if (speakConstructedPhraseBtn) {
+        speakConstructedPhraseBtn.addEventListener('click', window.speakConstructedPhrase);
+    }
 
     // Function to scroll to top
     window.scrollToTop = function() {
@@ -325,10 +385,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show/hide scroll to top button
     window.onscroll = function() {
         const btnTop = document.getElementById("btnTop");
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            btnTop.style.display = "block";
-        } else {
-            btnTop.style.display = "none";
+        if (btnTop) {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btnTop.style.display = "block";
+            } else {
+                btnTop.style.display = "none";
+            }
         }
     };
 
@@ -479,6 +541,8 @@ document.addEventListener('DOMContentLoaded', function() {
         { espanol: "claridad", kibotashi: "kuanev", categoria: "Valor" }
     ];
 
+    console.log("Longitud de allGlossaryData al inicio:", allGlossaryData.length); // NEW LOG
+
     const itemsPerPage = 10;
     let currentPage = 1;
     let filteredGlossary = [];
@@ -486,15 +550,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const glosarioBody = document.getElementById('glosario-body');
     const filtroPalabraInput = document.getElementById('filtro-palabra');
     const filtroCategoriaSelect = document.getElementById('filtro-categoria');
-    const buscarPalabraBtn = document.getElementById('buscar-palabra-btn'); // Nuevo botón de buscar
+    const buscarPalabraBtn = document.getElementById('buscar-palabra-btn');
     const prevPageBtn = document.getElementById('prev-page');
     const nextPageBtn = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('page-info');
 
     // Function to render the glossary table with pagination and filters
     function renderGlossary() {
-        const textFilter = filtroPalabraInput.value.toLowerCase();
-        const categoryFilter = filtroCategoriaSelect.value;
+        console.log("renderGlossary called.");
+        const textFilter = filtroPalabraInput ? filtroPalabraInput.value.toLowerCase() : '';
+        const categoryFilter = filtroCategoriaSelect ? filtroCategoriaSelect.value : '';
+
+        console.log("Text Filter (actual value):", textFilter); // NEW LOG
+        console.log("Category Filter (actual value):", categoryFilter); // NEW LOG
+
 
         // Apply filters
         filteredGlossary = allGlossaryData.filter(item => {
@@ -514,6 +583,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalPages = Math.ceil(filteredGlossary.length / itemsPerPage);
 
+        console.log("Filtered Glossary Length:", filteredGlossary.length);
+        console.log("Items Per Page:", itemsPerPage);
+        console.log("Total Pages:", totalPages);
+        console.log("Current Page (before adjustment):", currentPage);
+
+
         // Adjust current page if it's out of bounds after filtering
         if (currentPage > totalPages && totalPages > 0) {
             currentPage = totalPages;
@@ -523,44 +598,53 @@ document.addEventListener('DOMContentLoaded', function() {
             currentPage = 1; // Reset to first page if no page selected but results exist
         }
 
+        console.log("Current Page (after adjustment):", currentPage);
+
 
         // Get items for the current page
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const itemsToDisplay = filteredGlossary.slice(startIndex, endIndex);
 
+        console.log("Items to Display (slice):", itemsToDisplay);
+
+
         // Clear existing rows
-        glosarioBody.innerHTML = '';
+        if(glosarioBody) glosarioBody.innerHTML = '';
 
         // Populate table with itemsToDisplay
         if (itemsToDisplay.length === 0) {
-            const noResultsRow = glosarioBody.insertRow();
-            const cell = noResultsRow.insertCell(0);
-            cell.colSpan = 4;
-            cell.textContent = "No se encontraron resultados.";
-            cell.style.textAlign = "center";
-            cell.style.padding = "20px";
+            if (glosarioBody) {
+                const noResultsRow = glosarioBody.insertRow();
+                const cell = noResultsRow.insertCell(0);
+                cell.colSpan = 4;
+                cell.textContent = "No se encontraron resultados.";
+                cell.style.textAlign = "center";
+                cell.style.padding = "20px";
+            }
         } else {
             itemsToDisplay.forEach(item => {
-                const row = glosarioBody.insertRow();
-                row.innerHTML = `
-                    <td>${item.espanol}</td>
-                    <td>${item.kibotashi}</td>
-                    <td>${item.categoria}</td>
-                    <td><audio src="audios/placeholder.mp3" preload="auto"></audio><button class="play-button" data-audio="audios/placeholder.mp3">Reproducir</button></td>
-                `;
+                if (glosarioBody) {
+                    const row = glosarioBody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.espanol}</td>
+                        <td>${item.kibotashi}</td>
+                        <td>${item.categoria}</td>
+                        <td><audio src="audios/placeholder.mp3" preload="auto"></audio><button class="play-button" data-audio="audios/placeholder.mp3">Reproducir</button></td>
+                    `;
+                }
             });
         }
 
         // Update pagination info
-        pageInfoSpan.textContent = `Página ${currentPage || 0} de ${totalPages || 0}`;
+        if(pageInfoSpan) pageInfoSpan.textContent = `Página ${currentPage || 0} de ${totalPages || 0}`;
 
         // Enable/disable pagination buttons
-        prevPageBtn.disabled = currentPage <= 1;
-        nextPageBtn.disabled = currentPage >= totalPages;
+        if(prevPageBtn) prevPageBtn.disabled = currentPage <= 1;
+        if(nextPageBtn) nextPageBtn.disabled = currentPage >= totalPages;
 
         // Re-attach play button event listeners for newly created buttons
-        glosarioBody.querySelectorAll('.play-button').forEach(button => {
+        glosarioBody.querySelectorAll('button.play-button[data-audio]').forEach(button => {
             button.addEventListener('click', function() {
                 const audio = this.previousElementSibling; // Get the audio tag
                 audio.play().catch(e => console.error("Error playing audio:", e));
@@ -569,32 +653,41 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Event listeners for pagination
-    prevPageBtn.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderGlossary();
-        }
-    });
+    if(prevPageBtn) {
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderGlossary();
+            }
+        });
+    }
 
-    nextPageBtn.addEventListener('click', () => {
-        const totalPages = Math.ceil(filteredGlossary.length / itemsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderGlossary();
-        }
-    });
+    if(nextPageBtn) {
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredGlossary.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderGlossary();
+            }
+        });
+    }
 
     // Event listener for "Buscar" button click
-    buscarPalabraBtn.addEventListener('click', () => {
-        currentPage = 1; // Reset to first page on filter change
-        renderGlossary();
-    });
+    if(buscarPalabraBtn) {
+        buscarPalabraBtn.addEventListener('click', () => {
+            currentPage = 1; // Reset to first page on filter change
+            renderGlossary();
+        });
+    }
+
 
     // Event listener for category filter change (still triggers immediate render)
-    filtroCategoriaSelect.addEventListener('change', () => {
-        currentPage = 1; // Reset to first page on filter change
-        renderGlossary();
-    });
+    if(filtroCategoriaSelect) {
+        filtroCategoriaSelect.addEventListener('change', () => {
+            currentPage = 1; // Reset to first page on filter change
+            renderGlossary();
+        });
+    }
 
     // Initial render of the glossary (shows first 10 words by default)
     renderGlossary();
@@ -611,7 +704,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
 
             // Play the game start audio
-            gameStartAudio.play();
+            gameStartAudio.play().catch(e => console.error("Error playing game start audio:", e)); // Added catch
 
             // After a short delay, start the heroic intro music and voice
             setTimeout(() => {
