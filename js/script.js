@@ -747,11 +747,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Esto es una medida de seguridad, ya que la reproducción y los eventos pueden ser complejos en diferentes navegadores.
             setTimeout(() => {
                 if (!voiceIntroAudio.paused && !voiceIntroAudio.ended) { // Si la voz sigue sonando (o nunca terminó)
-                    console.warn("Fallback: La voz de la intro no terminó. Pausando música heroica después de 15 segundos.");
+                    console.warn("Fallback: La voz de la intro no terminó. Pausando música heroica después de 44 segundos.");
                     heroicIntroAudio.pause();
                     heroicIntroAudio.currentTime = 0;
                 }
-            }, 15000); // Ajusta este tiempo si tu 'voice-intro.wav' dura más de 15 segundos.
+            }, 44000); // Ajusta este tiempo si tu 'voice-intro.wav' dura más de 15 segundos.
         });
     }
 
