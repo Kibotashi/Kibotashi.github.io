@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const formedIpaWord = document.getElementById('formed-ipa-word');
     const formedMeaningWord = document.getElementById('formed-meaning-word');
     const speakFormedWordBtn = document.getElementById('speak-formed-word-btn');
+    const wordExistsStatus = document.getElementById('word-exists-status'); // NUEVO ELEMENTO
+
 
     // Store current characters in drop zones
     let currentC1 = { phoneme: '', char: '' };
@@ -166,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Nosotros', kibotashi: 'Nual', category: 'Pronombre', ipa: '/ˈnu.al/' },
             { spanish: 'Ser', kibotashi: 'Ta', category: 'Verbo', ipa: '/ta/' },
             { spanish: 'Estar', kibotashi: 'Ni', category: 'Verbo', ipa: '/ni/' },
-            { spanish: 'Tener', kibotashi: 'Kel', category: 'Verbo', ipa: '/kel/' },
+            { kibotashi: 'Kel', category: 'Verbo', ipa: '/kel/' },
             { spanish: 'Hacer', kibotashi: 'Mir', category: 'Verbo', ipa: '/miʁ/' },
             { spanish: 'Sentir', kibotashi: 'Bin', category: 'Verbo', ipa: '/bin/' },
             { spanish: 'Ir', kibotashi: 'Jan', category: 'Verbo', ipa: '/ʒan/' },
@@ -437,45 +439,62 @@ document.addEventListener('DOMContentLoaded', () => {
     formWordBtn.addEventListener('click', () => {
         let kibotashiWord = '';
         let ipaWord = '';
-        let meaningWord = 'Combinación de sonidos: ';
+        let meaningDescription = 'Combinación de sonidos: '; // Descripción por defecto
 
-        // Check for CVC structure and build the word
-        if (currentC1.phoneme && currentV.phoneme && currentC2.phoneme) {
-            kibotashiWord = currentC1.char + currentV.char + currentC2.char;
-            ipaWord = `/${currentC1.phoneme}.${currentV.phoneme}.${currentC2.phoneme}/`;
-            meaningWord += `${currentC1.phoneme}-${currentV.phoneme}-${currentC2.phoneme}`;
-        } else if (currentC1.phoneme && currentV.phoneme && !currentC2.phoneme) { // Simple CV combination
-            kibotashiWord = currentC1.char + currentV.char;
-            ipaWord = `/${currentC1.phoneme}.${currentV.phoneme}/`;
-            meaningWord += `${currentC1.phoneme}-${currentV.phoneme}`;
-        } else if (!currentC1.phoneme && currentV.phoneme && currentC2.phoneme) { // Simple VC combination
-            kibotashiWord = currentV.char + currentC2.char;
-            ipaWord = `/${currentV.phoneme}.${currentC2.phoneme}/`;
-            meaningWord += `${currentV.phoneme}-${currentC2.phoneme}`;
-        } else if (currentC1.phoneme && !currentV.phoneme && !currentC2.phoneme) { // Single consonant
-            kibotashiWord = currentC1.char;
-            ipaWord = `/${currentC1.phoneme}/`;
-            meaningWord += `${currentC1.phoneme}`;
-        } else if (!currentC1.phoneme && currentV.phoneme && !currentC2.phoneme) { // Single vowel
-            kibotashiWord = currentV.char;
-            ipaWord = `/${currentV.phoneme}/`;
-            meaningWord += `${currentV.phoneme}`;
-        } else if (!currentC1.phoneme && !currentV.phoneme && currentC2.phoneme) { // Single consonant (C2)
-            kibotashiWord = currentC2.char;
-            ipaWord = `/${currentC2.phoneme}/`;
-            meaningWord += `${currentC2.phoneme}`;
-        }
-        else {
+        // Lógica para construir la palabra Kibotashi e IPA
+        // Se asegura de que al menos un carácter válido esté presente
+        if (currentC1.phoneme || currentV.phoneme || currentC2.phoneme) {
+            // Construir la palabra concatenando los caracteres
+            // Solo si un fonema está presente, se agrega su carácter.
+            // Esto evita que "undefine" o "null" se concatenen si una zona está vacía.
+            kibotashiWord = `${currentC1.char || ''}${currentV.char || ''}${currentC2.char || ''}`;
+            ipaWord = `/${currentC1.phoneme || ''}${currentV.phoneme || ''}${currentC2.phoneme || ''}/`;
+
+            // Eliminar barras diagonales dobles si se forman, para IPA limpio.
+            ipaWord = ipaWord.replace(/\/\//g, '/');
+            // Eliminar la barra inicial si la palabra está vacía (ej. //)
+            if (ipaWord === '//') ipaWord = '';
+            // Si termina con una barra doble (ej. /abc//), quitar una.
+            ipaWord = ipaWord.replace(/\/$/, '');
+
+
+            // Actualiza la descripción de significado basada en la combinación de fonemas
+            let phonemeCombination = [];
+            if (currentC1.phoneme) phonemeCombination.push(currentC1.phoneme);
+            if (currentV.phoneme) phonemeCombination.push(currentV.phoneme);
+            if (currentC2.phoneme) phonemeCombination.push(currentC2.phoneme);
+            meaningDescription = `Combinación de sonidos: ${phonemeCombination.join('-')}`;
+        } else {
             showCustomModal("Por favor, arrastra al menos un carácter válido para formar una palabra.", "alert");
             formedWordOutput.style.display = 'none';
             return;
         }
 
+        // Eliminar los caracteres '⧫', '⦾', '⬸', '⏁', '⨊', '␊', '⨅', '◉', '◍', '◯', '◎', '◌' del kibotashiWord
+        kibotashiWord = kibotashiWord.replace(/[⧫⦾⬸⏁⨊␊⨅◉◍◯◎◌]/g, '');
+
+        // Establece el texto para la palabra Kibotashi y IPA formadas
         formedKibotashiWord.textContent = kibotashiWord;
         formedIpaWord.textContent = ipaWord;
-        formedMeaningWord.textContent = meaningWord;
-        formedWordOutput.style.display = 'block';
+
+        // Reinicia y oculta el mensaje de estado de existencia
+        wordExistsStatus.textContent = '';
+        wordExistsStatus.style.display = 'none';
+
+        // Busca la palabra formada en el glosario
+        const foundWord = data.glossary.find(item => item.kibotashi.toLowerCase() === kibotashiWord.toLowerCase());
+
+        if (foundWord) {
+            formedMeaningWord.textContent = foundWord.spanish; // Usa el significado real del glosario
+            wordExistsStatus.textContent = "¡Esta palabra ya existe en el glosario!";
+            wordExistsStatus.style.display = 'block'; // Muestra el mensaje
+        } else {
+            formedMeaningWord.textContent = meaningDescription; // Usa la descripción de combinación fonética
+        }
+
+        formedWordOutput.style.display = 'block'; // Muestra el área de resultados
     });
+
 
     speakFormedWordBtn.addEventListener('click', () => {
         const textToSpeak = formedKibotashiWord.textContent;
@@ -652,7 +671,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Text-to-Speech (TTS) for constructed phrases
     speakConstructedPhraseBtn.addEventListener('click', () => {
         const textToSpeak = kibotashiPhraseSpan.textContent;
-        speakText(textToSpeak);
+        if (textToSpeak) {
+            speakText(textToSpeak);
+        } else {
+            showCustomModal("No hay frase para escuchar. Construye una frase primero.", "alert");
+        }
     });
 
     // --- Audio Section Play Buttons Logic ---
