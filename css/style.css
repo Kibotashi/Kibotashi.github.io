@@ -38,7 +38,7 @@ body {
   justify-content: center;
   align-items: center;
   /* Ruta de la imagen de fondo corregida para usar el archivo subido */
-  background-image: url('../images/image_3f04d8.png'); /* ¡Ruta corregida! */
+  background-image: url('../images/montanas-flotantes.jpg'); /* ¡Ruta corregida! */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
