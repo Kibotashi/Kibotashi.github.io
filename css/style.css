@@ -91,6 +91,7 @@ header p {
   max-width: 1200px;
   margin: auto;
   padding: 0.8rem 1rem;
+  flex-wrap: wrap; /* Asegura que el contenedor de navegación pueda envolver */
 }
 
 .logo {
@@ -111,11 +112,14 @@ header p {
 
 .nav-menu {
   display: flex;
+  flex-wrap: wrap; /* NUEVO: Permite que los elementos del menú se envuelvan en escritorio */
+  justify-content: flex-end; /* Alinea los elementos del menú a la derecha */
   gap: 1.2rem;
   list-style: none; /* Elimina los puntos de la lista */
   margin: 0;
   padding: 0;
   align-items: center; /* Centra verticalmente los elementos */
+  /* Eliminadas las propiedades overflow-x y scrollbar-width aquí, ya que queremos wrapping */
 }
 
 .nav-menu li a {
@@ -124,7 +128,7 @@ header p {
   padding: 0.6rem 1rem;
   border-radius: 5px;
   transition: background-color 0.3s ease, color 0.3s ease;
-  white-space: nowrap; /* Evita que los enlaces se rompan */
+  white-space: nowrap; /* Evita que los enlaces se rompan, pero ahora con flex-wrap, se envolverán */
 }
 
 .nav-menu li a:hover {
@@ -542,7 +546,7 @@ footer {
     font-size: 1.2rem;
   }
 
-  /* NUEVO: Navbar responsive con animación de hamburguesa */
+  /* Navbar responsive con animación de hamburguesa */
   .nav-container {
     padding: 0.5rem 1rem;
   }
