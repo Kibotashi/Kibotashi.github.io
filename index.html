@@ -34,23 +34,31 @@
     <p>Una lengua pura nacida del alma, la estructura y el símbolo</p>
   </header>
 
-  <nav>
-    <a href="#intro">Inicio</a>
-    <a href="#pronombres">Pronombres</a>
-    <a href="#verbos">Verbos</a>
-    <a href="#conjugaciones">Conjugaciones</a>
-    <a href="#preguntas">Preguntas</a>
-    <a href="#emociones">Emociones</a>
-    <a href="#raices">Raíces</a>
-    <a href="#relaciones">Relaciones</a>
-    <a href="#afecto">Afecto</a>
-    <a href="#caracteres">Caracteres</a>
-    <a href="#guia-escritura">Escritura</a>
-    <a href="#estructura">Estructura</a>
-    <a href="#constructor">Constructor</a>
-    <a href="#audio">Audio</a>
-    <a href="#glosario">Glosario</a> <!-- NUEVO: Enlace al glosario -->
-    <button id="theme-toggle" aria-label="Toggle theme">Modo Oscuro</button>
+  <!-- Nueva barra de navegación con hamburguesa -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">Kibotashi</div>
+      <button class="hamburger" id="hamburger">&#9776;</button>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="#intro">Inicio</a></li>
+        <li><a href="#pronombres">Pronombres</a></li>
+        <li><a href="#verbos">Verbos</a></li>
+        <li><a href="#conjugaciones">Conjugaciones</a></li>
+        <li><a href="#preguntas">Preguntas</a></li>
+        <li><a href="#emociones">Emociones</a></li>
+        <li><a href="#raices">Raíces</a></li>
+        <li><a href="#relaciones">Relaciones</a></li>
+        <li><a href="#afecto">Afecto</a></li>
+        <li><a href="#caracteres">Caracteres</a></li>
+        <li><a href="#guia-escritura">Escritura</a></li>
+        <li><a href="#estructura">Estructura</a></li>
+        <li><a href="#constructor">Constructor</a></li>
+        <li><a href="#audio">Audio</a></li>
+        <li><a href="#glosario">Glosario</a></li>
+        <li><a href="#contacto">Contacto</a></li> <!-- Añadido un enlace de contacto de ejemplo -->
+        <li><button id="theme-toggle" aria-label="Toggle theme">Modo Oscuro</button></li>
+      </ul>
+    </div>
   </nav>
 
   <section id="intro">
@@ -322,7 +330,7 @@
     </p>
   </section>
 
-  <section id="glosario"> <!-- NUEVA SECCIÓN: Glosario Kibotashi -->
+  <section id="glosario"> <!-- Glosario Kibotashi -->
     <h2>📘 Glosario Kibotashi</h2>
 
     <input type="text" id="filtro-palabra" placeholder="🔍 Buscar palabra..." onkeyup="filtrarTabla()">
@@ -364,6 +372,27 @@
         </tbody>
       </table>
     </div>
+  </section>
+
+  <!-- Sección de Contacto (Ejemplo) -->
+  <section id="contacto">
+    <h2>✉️ Contacto</h2>
+    <p>Si tienes preguntas o comentarios sobre la lengua Kibotashi, no dudes en contactarnos.</p>
+    <form action="#" method="POST">
+      <div style="margin-bottom: 1rem;">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid var(--borde); background-color: var(--fondo); color: var(--texto);">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid var(--borde); background-color: var(--fondo); color: var(--texto);">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label for="mensaje">Mensaje:</label><br>
+        <textarea id="mensaje" name="mensaje" rows="5" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid var(--borde); background-color: var(--fondo); color: var(--texto);"></textarea>
+      </div>
+      <button type="submit" style="background-color: var(--acento); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">Enviar Mensaje</button>
+    </form>
   </section>
 
   <footer>
