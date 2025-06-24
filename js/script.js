@@ -119,6 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const characterCells = document.querySelectorAll('.character-cell');
   const enterWorldButton = document.getElementById('enter-world-button');
 
+  // Elementos del menú de hamburguesa
+  const hamburgerButton = document.getElementById('hamburger');
+  const navMenu = document.getElementById('nav-menu');
+
   gameStartAudioElement = document.getElementById('game-start-audio');
   heroicIntroAudioElement = document.getElementById('heroic-intro-audio');
   voiceIntroAudioElement = document.getElementById('voice-intro-audio'); // Get the voice intro audio element
@@ -321,6 +325,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (bineAudioElement && bineAudioElement.src.includes('bine.mpuro3')) {
     bineAudioElement.src = 'audios/bine.mp3';
     console.log("Ruta de audio 'bine-audio' corregida.");
+  }
+
+  // NUEVO: Funcionalidad del menú de hamburguesa
+  if (hamburgerButton && navMenu) {
+    hamburgerButton.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+
+    // Cierra el menú cuando se hace clic en un enlace (en móvil)
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (navMenu.classList.contains('active')) {
+          navMenu.classList.remove('active');
+        }
+      });
+    });
+
+    // También cierra el menú si se hace clic en el botón de alternar tema
+    themeToggle.addEventListener('click', () => {
+      if (navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+      }
+    });
   }
 });
 
@@ -571,21 +598,31 @@ function buildPhrase() {
   }
 
   // Update the output display
-  document.getElementById('kibotashi-phrase').textContent = kibotashiPhrase.trim();
-  document.getElementById('ipa-phrase').textContent = ipaPhrase.trim();
-  document.getElementById('meaning-phrase').textContent = meaningPhrase.trim();
+  const kibotashiPhraseElement = document.getElementById('kibotashi-phrase');
+  const ipaPhraseElement = document.getElementById('ipa-phrase');
+  const meaningPhraseElement = document.getElementById('meaning-phrase');
+  const constructorOutputDiv = document.getElementById('constructor-output');
+
+  kibotashiPhraseElement.textContent = kibotashiPhrase.trim();
+  ipaPhraseElement.textContent = ipaPhrase.trim();
+  meaningPhraseElement.textContent = meaningPhrase.trim();
   
   // Set the class based on emotion for styling
-  const constructorOutputDiv = document.getElementById('constructor-output');
   constructorOutputDiv.className = 'constructor-output'; // Reset to base class
   if (selectedEmotion) {
       constructorOutputDiv.classList.add(selectedEmotion);
   }
   constructorOutputDiv.style.display = 'block';
 
+  // NUEVO: Activar la animación de aparición
+  // Pequeño retardo para asegurar que la propiedad display se ha aplicado antes de la transición
+  setTimeout(() => {
+      constructorOutputDiv.classList.add('active');
+  }, 10);
+
   // Store for TTS
-  document.getElementById('constructor-output').dataset.kibotashiPhrase = kibotashiPhrase.trim();
-  document.getElementById('constructor-output').dataset.kibotashiIpa = ipaPhrase.trim();
+  constructorOutputDiv.dataset.kibotashiPhrase = kibotashiPhrase.trim();
+  constructorOutputDiv.dataset.kibotashiIpa = ipaPhrase.trim();
 
   playMatchSound(); // Play sound effect for constructor output
 }
@@ -682,7 +719,7 @@ sections.forEach(section => {
   sectionObserver.observe(section);
 });
 
-// NUEVA FUNCIÓN: Filtrar tabla del glosario
+// FUNCIÓN: Filtrar tabla del glosario
 function filtrarTabla() {
   const input = document.getElementById("filtro-palabra").value.toLowerCase();
   const categoria = document.getElementById("filtro-categoria").value;
