@@ -383,6 +383,51 @@ footer {
     margin-bottom: 2rem;
     font-size: 1.1rem;
 }
+
+/* Estilos para el encabezado plegable */
+.collapsible-header {
+    display: flex;
+    justify-content: center; /* Centrar el contenido horizontalmente */
+    align-items: center;
+    background-color: var(--gris); /* Un fondo para el encabezado */
+    color: var(--texto);
+    padding: 1rem 2rem;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 1.5rem; /* Espacio debajo del encabezado */
+    transition: background-color 0.3s ease;
+}
+
+.collapsible-header:hover {
+    background-color: var(--borde); /* Color más claro al pasar el ratón */
+}
+
+.collapsible-header h3 {
+    margin: 0; /* Eliminar el margen predeterminado del h3 */
+    color: var(--texto); /* Asegurar que el color del texto sea el correcto */
+}
+
+.collapsible-header #toggle-icon {
+    margin-left: 1rem; /* Espacio entre el texto y el icono */
+    transition: transform 0.3s ease; /* Transición para la rotación del icono */
+}
+
+.collapsible-header.collapsed #toggle-icon {
+    transform: rotate(-90deg); /* Gira el icono hacia arriba cuando está colapsado */
+}
+
+/* Estilos para el contenido plegable */
+.collapsible-content {
+    max-height: 1000px; /* Valor grande para permitir la expansión */
+    overflow: hidden;
+    transition: max-height 0.5s ease-out; /* Transición suave para la altura */
+}
+
+.collapsible-content.collapsed {
+    max-height: 0; /* Colapsar el contenido */
+}
+
+
 .constructor-inputs {
     display: flex;
     flex-wrap: wrap;
