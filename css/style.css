@@ -33,6 +33,7 @@ html.dark-mode {
 /* Añadido: Desplazamiento suave para toda la página */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 70px; /* NUEVO: Compensación para la barra de navegación fija */
 }
 
 /* Estilos base del cuerpo */
@@ -443,6 +444,7 @@ footer {
     margin-right: 5px;
 }
 
+/* Constructor output animation */
 .constructor-output {
     background-color: var(--constructor-bg-output);
     padding: 1.5rem;
@@ -452,8 +454,18 @@ footer {
     box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
     color: var(--texto-claro);
     text-align: left;
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    /* Animación de aparición */
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
+
+/* Clase para activar la animación del constructor */
+.constructor-output.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
 
 .constructor-output h3 {
     color: var(--acento);
@@ -530,7 +542,7 @@ footer {
     font-size: 1.2rem;
   }
 
-  /* NUEVO: Navbar responsive */
+  /* NUEVO: Navbar responsive con animación de hamburguesa */
   .nav-container {
     padding: 0.5rem 1rem;
   }
@@ -548,13 +560,15 @@ footer {
     background-color: var(--navbar-bg);
     border-top: 1px solid var(--borde);
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    display: none; /* Oculto por defecto */
-    transition: all 0.3s ease-out;
-    padding: 1rem 0;
+    overflow: hidden; /* Importante para la animación de max-height */
+    max-height: 0; /* Inicialmente oculto */
+    transition: max-height 0.4s ease-in-out; /* Animación de despliegue */
+    padding: 0; /* Eliminar padding inicial para la animación */
   }
 
   .nav-menu.active {
-    display: flex; /* Muestra el menú cuando está activo */
+    max-height: 500px; /* Altura suficiente para mostrar todos los elementos */
+    padding: 1rem 0; /* Añadir padding cuando está activo */
   }
 
   .nav-menu li {
