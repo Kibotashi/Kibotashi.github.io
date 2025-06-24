@@ -751,7 +751,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     heroicIntroAudio.pause();
                     heroicIntroAudio.currentTime = 0;
                 }
-            }, 44000); // Ajusta este tiempo si tu 'voice-intro.wav' dura más de 15 segundos.
+            }, 50000); // Ajusta este tiempo si tu 'voice-intro.wav' dura más de 15 segundos.
         });
     }
 
