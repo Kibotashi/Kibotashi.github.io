@@ -43,7 +43,7 @@ body {
     justify-content: center;
     align-items: center;
     /* Ruta de la imagen de fondo: se recomienda usar la versión .webp y optimizar su tamaño */
-    background-image: url('images/montanas-flotantes.webp'); /* Usando la imagen WebP optimizada */
+    background-image: url('../images/montanas-flotantes.webp'); /* CORREGIDO: Ruta relativa */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
