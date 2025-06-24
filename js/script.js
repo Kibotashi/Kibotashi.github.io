@@ -30,7 +30,7 @@ const verbsData = {
       "Lun": { kibotashi: "Tael", ipa: "/ta.el/", meaning: "will be" },
       "Bua": { kibotashi: "Tuel", ipa: "/tu.el/", meaning: "will be" },
       "Sual": { kibotashi: "Taiel", ipa: "/tai.el/", meaning: "will be" },
-      "Nual": { kibotashi: "Tanel", ipa: "/ta.nel/", meaning: "were" }
+      "Nual": { kibotashi: "Tanel", ipa: "/ta.nel/", meaning: "will be" }
     },
     negation: { // Specific negation forms for Ta from user's table
       "Ena": { kibotashi: "Netao", ipa: "/ne.ta.o/", meaning: "am not" },
@@ -681,3 +681,21 @@ const sectionObserver = new IntersectionObserver((entries, observer) => {
 sections.forEach(section => {
   sectionObserver.observe(section);
 });
+
+// NUEVA FUNCIÓN: Filtrar tabla del glosario
+function filtrarTabla() {
+  const input = document.getElementById("filtro-palabra").value.toLowerCase();
+  const categoria = document.getElementById("filtro-categoria").value;
+  const filas = document.querySelectorAll("#tabla-glosario tbody tr");
+
+  filas.forEach(fila => {
+    const palabraEspañol = fila.children[0].textContent.toLowerCase();
+    const palabraKibotashi = fila.children[1].textContent.toLowerCase(); // También buscar en Kibotashi
+    const cat = fila.children[2].textContent;
+
+    const coincideBusqueda = palabraEspañol.includes(input) || palabraKibotashi.includes(input);
+    const coincideCategoria = (categoria === "" || categoria === cat);
+    
+    fila.style.display = (coincideBusqueda && coincideCategoria) ? "" : "none";
+  });
+}
