@@ -8,12 +8,7 @@
   --oscuro: #2a2a2a; /* Fondo oscuro para el constructor */
   --texto-claro: #f0f0f0; /* Texto claro para el constructor */
   --constructor-bg-output: #3a3a3a; /* Fondo del área de salida del constructor */
-
-  /* Nuevas variables para la navegación */
-  --navbar-bg: #2a2a2a; /* Fondo de la barra de navegación */
-  --navbar-text: #e0e0e0; /* Color de texto de la barra de navegación */
 }
-
 /* Variables de color para modo oscuro */
 html.dark-mode {
   --fondo: #1a1a1a;
@@ -24,662 +19,326 @@ html.dark-mode {
   --oscuro: #111111;
   --texto-claro: #ffffff;
   --constructor-bg-output: #2b2b2b;
-
-  /* Nuevas variables para la navegación en modo oscuro */
-  --navbar-bg: #111111;
-  --navbar-text: #ffffff;
 }
-
-/* Añadido: Desplazamiento suave para toda la página */
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 70px; /* NUEVO: Compensación para la barra de navegación fija */
-}
-
 /* Estilos base del cuerpo */
 body {
   margin: 0;
   font-family: 'Outfit', sans-serif;
-  line-height: 1.6;
-  color: var(--texto);
   background-color: var(--fondo);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  color: var(--texto);
+  line-height: 1.7;
   overflow-x: hidden; /* Evita el scroll horizontal */
-  padding-top: 60px; /* Espacio para la barra de navegación fija */
+  scroll-behavior: smooth; /* Habilita el scroll suave para los enlaces ancla */
 }
-
-/* Estilos del encabezado principal (ahora debajo de la navbar fija) */
-header {
-  background-color: var(--gris);
-  color: var(--texto);
-  text-align: center;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-  margin-top: -60px; /* Compensar el padding-top del body para la barra fija */
-}
-
-header h1 {
-  margin: 0;
-  font-size: 2.5rem;
-  color: var(--acento); /* Color de acento para el título principal */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-header p {
-  margin: 0.5rem 0 0;
-  font-size: 1.1rem;
-}
-
-/* 🌙 Estilo menú hamburguesa */
-.navbar {
-  width: 100%;
-  background-color: var(--navbar-bg); /* Usa la nueva variable de fondo para la navbar */
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999; /* Asegura que esté por encima de otros elementos */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.nav-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: auto;
-  padding: 0.8rem 1rem;
-  flex-wrap: wrap; /* Asegura que el contenedor de navegación pueda envolver */
-}
-
-.logo {
-  color: var(--acento); /* Color del logo Kibotashi */
-  font-size: 1.8rem;
-  font-weight: bold;
-}
-
-.hamburger {
-  display: none; /* Oculto por defecto en desktop */
-  font-size: 2rem;
-  color: var(--navbar-text);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
-
-.nav-menu {
-  display: flex;
-  flex-wrap: wrap; /* NUEVO: Permite que los elementos del menú se envuelvan en escritorio */
-  justify-content: flex-end; /* Alinea los elementos del menú a la derecha */
-  gap: 1.2rem;
-  list-style: none; /* Elimina los puntos de la lista */
-  margin: 0;
-  padding: 0;
-  align-items: center; /* Centra verticalmente los elementos */
-  /* Eliminadas las propiedades overflow-x y scrollbar-width aquí, ya que queremos wrapping */
-}
-
-.nav-menu li a {
-  color: var(--navbar-text); /* Color de los enlaces del menú */
-  text-decoration: none;
-  padding: 0.6rem 1rem;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  white-space: nowrap; /* Evita que los enlaces se rompan, pero ahora con flex-wrap, se envolverán */
-}
-
-.nav-menu li a:hover {
-  background-color: var(--acento);
-  color: #fff;
-}
-
-/* Botón de alternar tema dentro del nav-menu */
-#theme-toggle {
-  background-color: var(--acento);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
-  white-space: nowrap; /* Evita que el texto del botón se rompa */
-}
-
-#theme-toggle:hover {
-  background-color: darken(var(--acento), 10%); /* Efecto de oscurecimiento al pasar el ratón */
-}
-
-
-/* Estilos de las secciones de contenido */
-section {
-  padding: 2rem 5%; /* Padding responsivo */
-  margin: 1rem auto;
-  max-width: 900px;
-  background-color: var(--fondo);
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-  opacity: 0; /* Inicialmente invisible */
-  transform: translateY(20px); /* Ligeramente desplazado hacia abajo */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out, background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-section h2 {
-  color: var(--acento);
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--borde);
-  padding-bottom: 0.5rem;
-  transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-section h3 {
-  color: var(--texto);
-  font-size: 1.5rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  text-align: center;
-  transition: color 0.3s ease;
-}
-
-section p, section ul {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  text-align: justify;
-}
-
-section ul {
-  list-style-type: disc;
-  margin-left: 2rem;
-}
-
-section li {
-  margin-bottom: 0.5rem;
-}
-
-/* Estilos de tabla generales */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5rem 0;
-  background-color: var(--fondo);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  overflow: hidden; /* Asegura que las esquinas redondeadas se apliquen */
-  opacity: 0; /* Inicialmente invisible */
-  transform: translateY(20px); /* Ligeramente desplazado hacia abajo */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out, background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-table.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-table th, table td {
-  border: 1px solid var(--borde);
-  padding: 12px 15px;
-  text-align: left;
-  transition: border-color 0.3s ease;
-}
-
-table th {
-  background-color: var(--gris);
-  color: var(--acento);
-  font-weight: bold;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-table tr:nth-child(even) {
-  background-color: var(--gris); /* Fila par con color de fondo */
-}
-
-table tr:hover {
-  background-color: var(--borde); /* Resaltar fila al pasar el ratón */
-}
-
-/* Estilos para audio y botones de reproducción */
-td audio {
-  display: none; /* Oculta el reproductor de audio nativo */
-}
-
-.play-button {
-  background-color: var(--acento);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 12px;
-  margin-left: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-}
-
-.play-button:hover {
-  background-color: darken(var(--acento), 10%);
-}
-
-/* Cinematic Hero Section */
+/* Cinematic Hero Section Styles */
 #hero {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  color: white;
-  /* CORRECCIÓN: Usar la imagen montanas-flotantes.jpg de la carpeta images */
-  background: url('../images/montanas-flotantes.jpg') no-repeat center center/cover;
+  /* Ruta de la imagen de fondo corregida para usar el archivo subido */
+  background-image: url('../images/image_3f04d8.png'); /* ¡Ruta corregida! */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   position: relative;
   overflow: hidden;
+  text-align: center;
+  color: var(--texto-claro); /* Adjusted for dark background */
 }
-
-#hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Oscurece la imagen de fondo */
-  z-index: 1;
-}
-
 #hero h1 {
-  font-size: 5rem;
-  margin-bottom: 0.5rem;
-  z-index: 2;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #fff; /* White text for contrast on dark background */
+  /* Painterly text effect */
+  text-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.7),
+    -2px -2px 4px rgba(0, 0, 0, 0.7),
+    4px 4px 8px rgba(0, 0, 0, 0.5),
+    -4px -4px 8px rgba(0, 0, 0, 0.5),
+    6px 6px 12px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1.5s ease-out;
 }
-
 #hero p {
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-  z-index: 2;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  font-size: 1.2rem;
+  color: #ccc; /* Lighter gray for contrast */
+  margin-top: 1rem;
+  animation: fadeIn 2s ease-out 0.5s forwards;
+  opacity: 0; /* Starts hidden for animation */
+}
+#hero a {
+  margin-top: 2.5rem;
+  padding: 1rem 2rem;
+  border: 2px solid var(--acento);
+  color: #fff; /* White text for button */
+  background-color: rgba(0,0,0,0.3); /* Semi-transparent background for the button */
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover */
+  border-radius: 8px; /* Rounded corners for the button */
+}
+#hero a:hover {
+  background-color: var(--acento);
+  color: var(--oscuro); /* Dark text on accent background for contrast */
+}
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-#hero a {
+/* Estilos del encabezado */
+header {
+  padding: 4rem 2rem;
+  text-align: center;
+  background-color: transparent; /* Changed to transparent */
+  border-bottom: 4px solid var(--acento);
+}
+/* Estilos del título del encabezado */
+header h1 {
+  font-size: 3rem;
+  letter-spacing: 2px;
+  margin: 0;
+}
+/* Estilos de la barra de navegación */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  background-color: var(--gris); /* Usar --gris para consistencia */
+  border-bottom: 1px solid var(--borde);
+  position: relative; /* Para posicionar el botón de tema */
+}
+/* Estilos de los enlaces de navegación */
+nav a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: color 0.3s ease; /* Transición suave para el hover */
+}
+/* Efecto hover de los enlaces de navegación */
+nav a:hover {
+  color: var(--acento);
+}
+/* Botón de cambio de tema */
+#theme-toggle {
+  background-color: var(--acento);
+  color: var(--texto-claro);
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 20px; /* Espacio para el botón */
+}
+#theme-toggle:hover {
+  background-color: #c0a07c;
+  transform: translateY(-2px);
+}
+/* Estilos de las secciones */
+section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 3rem 2rem;
+  border-bottom: 1px solid var(--borde);
+  /* Animación de fade-in para secciones */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Estilos de las tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  /* Eliminado opacity: 0 y transform: translateY(10px) aquí para que sean visibles por defecto */
+  /* La animación de fade-in se aplicará cuando la sección sea visible */
+  transition: opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s;
+}
+/* Clase visible para tablas, si se desea animar individualmente al aparecer con la sección */
+table.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Estilos del encabezado y celdas de tabla */
+th, td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--borde); /* Usar --borde para consistencia */
+  text-align: left;
+}
+/* Estilos específicos del encabezado de tabla */
+th {
+  color: var(--acento);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+/* Estilos del pie de página */
+footer {
+  background-color: var(--gris);
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+/* Estilo para el botón de reproducción de audio */
+.play-button, .play-output-button {
   background-color: var(--acento);
   color: white;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  z-index: 2;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-#hero a:hover {
-  background-color: darken(var(--acento), 15%);
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
-/* Main content adjustments */
-#main-content {
-  padding-top: 0; /* Elimina el padding superior para que las secciones empiecen justo después de la nav */
-}
-
-/* Footer styles */
-footer {
-  text-align: center;
-  padding: 1.5rem;
-  background-color: var(--gris);
-  color: var(--texto);
-  margin-top: 2rem;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Styles for the "Scroll to Top" button */
-#btnTop {
-  display: none; /* Hidden by default */
-  position: fixed; /* Fixed position */
-  bottom: 20px; /* Place the button at the bottom of the page */
-  right: 30px; /* Place the button 30px from the right */
-  z-index: 99; /* Make sure it does not overlap */
-  border: none; /* Remove borders */
-  outline: none; /* Remove outline */
-  background-color: var(--acento); /* Set a background color */
-  color: white; /* Text color */
-  cursor: pointer; /* Add a mouse pointer on hover */
-  padding: 15px; /* Some padding */
-  border-radius: 10px; /* Rounded corners */
-  font-size: 18px; /* Increase font size */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-#btnTop:hover {
-  background-color: darken(var(--acento), 10%); /* Darker background on hover */
-  transform: translateY(-3px);
-}
-
-/* Constructor Section Styles */
-.constructor-container {
-    background-color: var(--oscuro); /* Fondo oscuro para el constructor */
-    color: var(--texto-claro); /* Texto claro */
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    text-align: center;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.constructor-container h2 {
-    color: var(--acento);
-    border-bottom: 2px solid var(--texto-claro);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-    font-size: 2.2rem;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-.constructor-container p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-    text-align: center; /* Centrar el texto en el constructor */
-}
-
-.constructor-inputs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 2rem;
-}
-
-.constructor-inputs select,
-.constructor-inputs button {
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid var(--borde);
-    background-color: var(--fondo);
-    color: var(--texto);
-    font-family: 'Outfit', sans-serif;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.constructor-inputs select:hover,
-.constructor-inputs button:hover {
-    border-color: var(--acento);
-    box-shadow: 0 0 8px rgba(var(--acento-rgb), 0.5);
-}
-
-.constructor-inputs button {
-    background-color: var(--acento);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.constructor-inputs button:hover {
-    background-color: darken(var(--acento), 10%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
-
-.constructor-inputs label {
-    color: var(--texto-claro);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 1rem;
-}
-
-.constructor-inputs input[type="checkbox"] {
-    transform: scale(1.2);
-    margin-right: 5px;
-}
-
-/* Constructor output animation */
-.constructor-output {
-    background-color: var(--constructor-bg-output);
-    padding: 1.5rem;
-    border-radius: 8px;
-    border: 1px dashed var(--acento);
-    margin-top: 2rem;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-    color: var(--texto-claro);
-    text-align: left;
-    /* Animación de aparición */
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-
-/* Clase para activar la animación del constructor */
-.constructor-output.active {
-    opacity: 1;
-    transform: scale(1);
-}
-
-
-.constructor-output h3 {
-    color: var(--acento);
-    margin-top: 0;
-    border-bottom: 1px solid var(--borde);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-    text-align: center;
-}
-
-.constructor-output p {
-    margin-bottom: 0.8rem;
-    font-size: 1.1rem;
-    text-align: center;
-}
-
-.constructor-output .ipa, .constructor-output .meaning {
-    font-style: italic;
-    font-size: 1rem;
-    color: rgba(var(--texto-claro-rgb), 0.8);
-}
-
-.play-output-button {
-    background-color: var(--acento);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    margin-top: 1.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.play-output-button:hover {
-    background-color: darken(var(--acento), 10%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
-
-/* Estilos para efectos de emociones en el constructor */
-.constructor-output.poetico {
-    background-color: #2c3a4e; /* Azul oscuro suave */
-    border-color: #8bbcdc; /* Azul cielo suave */
-    box-shadow: inset 0 0 15px rgba(139, 188, 220, 0.3);
-}
-
-.constructor-output.afectivo {
-    background-color: #4a2c3a; /* Rojo oscuro suave */
-    border-color: #d88c9a; /* Rosa suave */
-    box-shadow: inset 0 0 15px rgba(216, 140, 154, 0.3);
-}
-
-.constructor-output.melancolico {
-    background-color: #3b3b3b; /* Gris carbón */
-    border-color: #7b7b7b; /* Gris medio */
-    box-shadow: inset 0 0 15px rgba(123, 123, 123, 0.3);
-}
-
-/* ========================
-   🎯 Mejoras responsivas Kibotashi
-   ======================== */
-
-@media (max-width: 768px) {
-  /* Ajustes para textos grandes */
-  #hero h1 {
-    font-size: 3.2rem;
-  }
-
-  #hero p {
-    font-size: 1.2rem;
-  }
-
-  /* Navbar responsive con animación de hamburguesa */
-  .nav-container {
-    padding: 0.5rem 1rem;
-  }
-
-  .hamburger {
-    display: block; /* Muestra el botón de hamburguesa en móvil */
-  }
-
-  .nav-menu {
-    flex-direction: column;
-    width: 100%;
-    position: absolute;
-    top: 100%; /* Debajo de la navbar */
-    left: 0;
-    background-color: var(--navbar-bg);
-    border-top: 1px solid var(--borde);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    overflow: hidden; /* Importante para la animación de max-height */
-    max-height: 0; /* Inicialmente oculto */
-    transition: max-height 0.4s ease-in-out; /* Animación de despliegue */
-    padding: 0; /* Eliminar padding inicial para la animación */
-  }
-
-  .nav-menu.active {
-    max-height: 500px; /* Altura suficiente para mostrar todos los elementos */
-    padding: 1rem 0; /* Añadir padding cuando está activo */
-  }
-
-  .nav-menu li {
-    width: 100%;
-    text-align: center;
-    margin: 0; /* Eliminar margen para ocupar todo el ancho */
-  }
-
-  .nav-menu li a, #theme-toggle {
-    display: block; /* Hace que los enlaces y el botón ocupen todo el ancho del li */
-    padding: 0.8rem 1rem;
-    margin: 0.2rem auto;
-    width: calc(100% - 2rem); /* Ajuste por padding */
-  }
-
-  section {
-    padding: 1.2rem 4%;
-  }
-
-  section h2 {
-    font-size: 1.6rem;
-  }
-
-  .constructor-inputs {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .constructor-inputs select,
-  .constructor-inputs button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  #btnTop {
-    bottom: 15px;
-    right: 20px;
-    padding: 12px 14px;
-    font-size: 16px;
-  }
-}
-
-/* Ajustes adicionales para pantallas muy pequeñas */
-@media (max-width: 480px) {
-  header h1, #hero h1 {
-    font-size: 2.5rem;
-  }
-
-  #hero p {
-    font-size: 1rem;
-  }
-
-  .nav-menu li a {
-    font-size: 0.9rem;
-  }
-}
-
-/* Mejora para la sección hero en móviles */
-#hero {
-  min-height: 100dvh; /* Dinámico para pantallas móviles */
-  padding: 2rem 1rem;
-  box-sizing: border-box;
-}
-
-/* Tablas desplazables en móviles */
-.table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Estilos para el campo de búsqueda del glosario */
-#filtro-palabra {
-  width: calc(100% - 24px); /* Ancho completo menos padding */
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid var(--borde);
+  border: none;
   border-radius: 5px;
-  background-color: var(--fondo);
-  color: var(--texto);
-  font-family: 'Outfit', sans-serif;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
   font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
-#filtro-palabra:focus {
-  border-color: var(--acento);
-  box-shadow: 0 0 5px rgba(var(--acento-rgb), 0.5);
-  outline: none;
+.play-button:hover, .play-output-button:hover {
+  background-color: #c0a07c; /* Acennto ligeramente más oscuro */
+  transform: translateY(-2px); /* Pequeño efecto de elevación */
 }
-
-/* Estilos para el selector de categoría del glosario */
-#filtro-categoria {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid var(--borde);
+/* Estilos para la sección del constructor de frases */
+.constructor-container {
+  background-color: var(--oscuro);
+  color: var(--texto-claro);
+  padding: 3rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--borde);
+}
+.constructor-container h2 {
+  color: var(--texto-claro);
+  border-left-color: var(--acento);
+}
+.constructor-container p {
+  color: var(--texto-claro);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+.constructor-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.constructor-inputs select {
+  padding: 0.75rem 1rem;
   border-radius: 5px;
+  border: 1px solid var(--borde);
   background-color: var(--fondo);
   color: var(--texto);
   font-family: 'Outfit', sans-serif;
   font-size: 1rem;
   cursor: pointer;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  min-width: 180px;
+}
+.constructor-inputs button {
+  background-color: var(--acento);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+.constructor-inputs button:hover {
+  background-color: #c0a07c;
+}
+.constructor-output {
+  background-color: var(--constructor-bg-output); /* Usar variable para consistencia */
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 2rem;
+  color: var(--texto-claro);
+  border: 1px solid #555;
+}
+.constructor-output h3 {
+  color: var(--acento);
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+.constructor-output p {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.constructor-output .ipa {
+  font-family: monospace;
+  color: #aaa;
+  font-size: 1.1rem;
+}
+.constructor-output .meaning {
+  font-style: italic;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+/* Nuevos estilos para los tonos emocionales */
+.constructor-output.poetico {
+  background: #3a3040;
+  box-shadow: 0 0 15px rgba(180, 100, 200, 0.5); /* Sombra púrpura suave */
+}
+.constructor-output.afectivo {
+  background: #41302f;
+  box-shadow: 0 0 15px rgba(255, 100, 100, 0.5); /* Sombra rojiza suave */
+}
+.constructor-output.melancolico {
+  background: #2a2f38;
+  box-shadow: 0 0 15px rgba(100, 150, 255, 0.5); /* Sombra azul suave */
 }
 
-#filtro-categoria:focus {
-  border-color: var(--acento);
-  box-shadow: 0 0 5px rgba(var(--acento-rgb), 0.5);
-  outline: none;
+/* Estilos para la animación de caracteres */
+.character-cell {
+  cursor: pointer;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+  font-size: 2rem; /* Aumenta el tamaño para que el efecto sea visible */
+}
+.character-cell:hover {
+  transform: scale(1.3); /* Expande el carácter */
+  text-shadow: 0 0 10px var(--acento); /* Efecto de brillo */
+}
+/* Estilos para el modal personalizado */
+.custom-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background-color: var(--fondo); color: var(--texto);
+  padding: 20px; border: 1px solid var(--borde); border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000;
+  text-align: center; font-family: 'Outfit', sans-serif;
+}
+.custom-modal button {
+  background-color: var(--acento); color: white; border: none; border-radius: 5px;
+  padding: 8px 15px; cursor: pointer; margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+.custom-modal button:hover {
+  background-color: #c0a07c;
+}
+/* Styles for the "Scroll to Top" button */
+#btnTop {
+  position: fixed;
+  bottom: 40px;
+  right: 30px;
+  z-index: 99;
+  background-color: var(--acento); /* Use accent color */
+  color: var(--fondo); /* Use background color for contrast */
+  border: none;
+  padding: 12px 18px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: background 0.3s, transform 0.3s, opacity 0.3s;
+  display: none; /* Hidden by default, shown on scroll */
+}
+#btnTop:hover {
+  background-color: #bfa072; /* Slightly darker accent for hover */
+  transform: scale(1.1);
 }
