@@ -52,12 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZoneV = document.getElementById('drop-zone-v');
     const dropZoneC2 = document.getElementById('drop-zone-c2');
     const formWordBtn = document.getElementById('form-word-btn');
-    const formedWordOutput = document.getElementById('formed-word-output');
+    const formedWordOutput = document.getElementById('formed-word-output'); // Corrected assignment
     const formedKibotashiWord = document.getElementById('formed-kibotashi-word');
     const formedIpaWord = document.getElementById('formed-ipa-word');
     const formedMeaningWord = document.getElementById('formed-meaning-word');
     const speakFormedWordBtn = document.getElementById('speak-formed-word-btn');
-    const wordExistsStatus = document.getElementById('word-exists-status'); // NUEVO ELEMENTO
+    const wordExistsStatus = document.getElementById('word-exists-status');
 
 
     // Store current characters in drop zones
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Nosotros', kibotashi: 'Nual', category: 'Pronombre', ipa: '/ˈnu.al/' },
             { spanish: 'Ser', kibotashi: 'Ta', category: 'Verbo', ipa: '/ta/' },
             { spanish: 'Estar', kibotashi: 'Ni', category: 'Verbo', ipa: '/ni/' },
-            { kibotashi: 'Kel', category: 'Verbo', ipa: '/kel/' },
+            { spanish: 'Tener', kibotashi: 'Kel', category: 'Verbo', ipa: '/kel/' },
             { spanish: 'Hacer', kibotashi: 'Mir', category: 'Verbo', ipa: '/miʁ/' },
             { spanish: 'Sentir', kibotashi: 'Bin', category: 'Verbo', ipa: '/bin/' },
             { spanish: 'Ir', kibotashi: 'Jan', category: 'Verbo', ipa: '/ʒan/' },
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Saber', kibotashi: 'Zar', category: 'Verbo', ipa: '/zaʁ/' },
             { spanish: 'Querer', kibotashi: 'Katun', category: 'Verbo', ipa: '/ˈka.tun/' },
             { spanish: 'Poder', kibotashi: 'Solv', category: 'Verbo', ipa: '/solv/' }
-        ].sort((a, b) => a.spanish.localeCompare(b.spanish)) // Sort glossary alphabetically by Spanish word
+        ].sort((a, b) => (a.spanish || '').localeCompare(b.spanish || '')) // Sort glossary alphabetically by Spanish word, with undefined check
     };
 
     let currentPage = 1;
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentC2 = draggedCharData;
                     }
                 } else {
-                    showCustomModal(`¡Error! No puedes soltar una ${draggedCharData.type === 'vowel' ? 'vocal' : 'consonante'} en una zona de ${zoneType === 'vowel' ? 'vocal' : 'consonante'}.`, 'alert');
+                    showCustomModal(`¡Error! No puedes soltar una ${draggedCharData.type === 'vowel' ? 'vocal' : 'consonante'} en una zona de ${zoneType === 'vocal' ? 'vocal' : 'consonante'}.`, 'alert');
                 }
             }
             draggedCharData = null; // Reset dragged data
@@ -470,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Eliminar los caracteres '⧫', '⦾', '⬸', '⏁', '⨊', '␊', '⨅', '◉', '◍', '◯', '◎', '◌' del kibotashiWord
+        // Eliminar los caracteres de símbolos de Kibotashi del kibotashiWord
         kibotashiWord = kibotashiWord.replace(/[⧫⦾⬸⏁⨊␊⨅◉◍◯◎◌]/g, '');
 
         // Establece el texto para la palabra Kibotashi y IPA formadas
@@ -776,7 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchesSearch && matchesCategory;
         });
 
-        filteredGlossary.sort((a, b) => a.spanish.localeCompare(b.spanish)); // Re-sort after filtering
+        filteredGlossary.sort((a, b) => (a.spanish || '').localeCompare(b.spanish || '')); // Re-sort after filtering, with undefined check
         currentPage = 1; // Reset to first page after filtering
         displayGlossary(currentPage);
     }
