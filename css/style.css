@@ -8,6 +8,10 @@
   --oscuro: #2a2a2a; /* Fondo oscuro para el constructor */
   --texto-claro: #f0f0f0; /* Texto claro para el constructor */
   --constructor-bg-output: #3a3a3a; /* Fondo del área de salida del constructor */
+
+  /* Nuevas variables para la navegación */
+  --navbar-bg: #2a2a2a; /* Fondo de la barra de navegación */
+  --navbar-text: #e0e0e0; /* Color de texto de la barra de navegación */
 }
 
 /* Variables de color para modo oscuro */
@@ -20,6 +24,10 @@ html.dark-mode {
   --oscuro: #111111;
   --texto-claro: #ffffff;
   --constructor-bg-output: #2b2b2b;
+
+  /* Nuevas variables para la navegación en modo oscuro */
+  --navbar-bg: #111111;
+  --navbar-text: #ffffff;
 }
 
 /* Añadido: Desplazamiento suave para toda la página */
@@ -36,9 +44,10 @@ body {
   background-color: var(--fondo);
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden; /* Evita el scroll horizontal */
+  padding-top: 60px; /* Espacio para la barra de navegación fija */
 }
 
-/* Estilos del encabezado principal */
+/* Estilos del encabezado principal (ahora debajo de la navbar fija) */
 header {
   background-color: var(--gris);
   color: var(--texto);
@@ -46,6 +55,7 @@ header {
   padding: 1rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  margin-top: -60px; /* Compensar el padding-top del body para la barra fija */
 }
 
 header h1 {
@@ -61,51 +71,84 @@ header p {
   font-size: 1.1rem;
 }
 
-/* Estilos de la barra de navegación */
-nav {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
-  background-color: var(--oscuro); /* Fondo oscuro para la navegación */
-  padding: 0.8rem 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  position: sticky;
+/* 🌙 Estilo menú hamburguesa */
+.navbar {
+  width: 100%;
+  background-color: var(--navbar-bg); /* Usa la nueva variable de fondo para la navbar */
+  position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
+  z-index: 999; /* Asegura que esté por encima de otros elementos */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-nav a {
-  color: var(--texto-claro); /* Texto claro para enlaces de navegación */
-  text-decoration: none;
-  padding: 0.6rem 1rem;
-  margin: 0.2rem 0.5rem; /* Margen para espacio entre enlaces */
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: auto;
+  padding: 0.8rem 1rem;
 }
 
-nav a:hover {
-  background-color: var(--acento); /* Color de acento al pasar el ratón */
+.logo {
+  color: var(--acento); /* Color del logo Kibotashi */
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.hamburger {
+  display: none; /* Oculto por defecto en desktop */
+  font-size: 2rem;
+  color: var(--navbar-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 1.2rem;
+  list-style: none; /* Elimina los puntos de la lista */
+  margin: 0;
+  padding: 0;
+  align-items: center; /* Centra verticalmente los elementos */
+}
+
+.nav-menu li a {
+  color: var(--navbar-text); /* Color de los enlaces del menú */
+  text-decoration: none;
+  padding: 0.6rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  white-space: nowrap; /* Evita que los enlaces se rompan */
+}
+
+.nav-menu li a:hover {
+  background-color: var(--acento);
   color: #fff;
 }
 
-/* Botón de alternar tema */
+/* Botón de alternar tema dentro del nav-menu */
 #theme-toggle {
   background-color: var(--acento);
   color: white;
   border: none;
   border-radius: 5px;
   padding: 0.6rem 1rem;
-  margin: 0.2rem 0.5rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-family: 'Outfit', sans-serif;
   font-size: 1rem;
+  white-space: nowrap; /* Evita que el texto del botón se rompa */
 }
 
 #theme-toggle:hover {
   background-color: darken(var(--acento), 10%); /* Efecto de oscurecimiento al pasar el ratón */
 }
+
 
 /* Estilos de las secciones de contenido */
 section {
@@ -473,33 +516,66 @@ footer {
     box-shadow: inset 0 0 15px rgba(123, 123, 123, 0.3);
 }
 
-/* Responsive adjustments */
+/* ========================
+   🎯 Mejoras responsivas Kibotashi
+   ======================== */
+
 @media (max-width: 768px) {
+  /* Ajustes para textos grandes */
   #hero h1 {
-    font-size: 3.5rem;
+    font-size: 3.2rem;
   }
 
   #hero p {
     font-size: 1.2rem;
   }
 
-  nav {
-    flex-direction: column;
-    padding: 0.5rem;
+  /* NUEVO: Navbar responsive */
+  .nav-container {
+    padding: 0.5rem 1rem;
   }
 
-  nav a, #theme-toggle {
-    width: calc(100% - 20px); /* Ocupa casi todo el ancho */
-    margin: 0.2rem auto;
+  .hamburger {
+    display: block; /* Muestra el botón de hamburguesa en móvil */
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 100%; /* Debajo de la navbar */
+    left: 0;
+    background-color: var(--navbar-bg);
+    border-top: 1px solid var(--borde);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    display: none; /* Oculto por defecto */
+    transition: all 0.3s ease-out;
+    padding: 1rem 0;
+  }
+
+  .nav-menu.active {
+    display: flex; /* Muestra el menú cuando está activo */
+  }
+
+  .nav-menu li {
+    width: 100%;
     text-align: center;
+    margin: 0; /* Eliminar margen para ocupar todo el ancho */
+  }
+
+  .nav-menu li a, #theme-toggle {
+    display: block; /* Hace que los enlaces y el botón ocupen todo el ancho del li */
+    padding: 0.8rem 1rem;
+    margin: 0.2rem auto;
+    width: calc(100% - 2rem); /* Ajuste por padding */
   }
 
   section {
-    padding: 1.5rem 3%;
+    padding: 1.2rem 4%;
   }
 
   section h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
 
   .constructor-inputs {
@@ -512,4 +588,80 @@ footer {
     width: 100%;
     margin-bottom: 10px;
   }
+
+  #btnTop {
+    bottom: 15px;
+    right: 20px;
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+}
+
+/* Ajustes adicionales para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  header h1, #hero h1 {
+    font-size: 2.5rem;
+  }
+
+  #hero p {
+    font-size: 1rem;
+  }
+
+  .nav-menu li a {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mejora para la sección hero en móviles */
+#hero {
+  min-height: 100dvh; /* Dinámico para pantallas móviles */
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Tablas desplazables en móviles */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Estilos para el campo de búsqueda del glosario */
+#filtro-palabra {
+  width: calc(100% - 24px); /* Ancho completo menos padding */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--borde);
+  border-radius: 5px;
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#filtro-palabra:focus {
+  border-color: var(--acento);
+  box-shadow: 0 0 5px rgba(var(--acento-rgb), 0.5);
+  outline: none;
+}
+
+/* Estilos para el selector de categoría del glosario */
+#filtro-categoria {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid var(--borde);
+  border-radius: 5px;
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#filtro-categoria:focus {
+  border-color: var(--acento);
+  box-shadow: 0 0 5px rgba(var(--acento-rgb), 0.5);
+  outline: none;
 }
