@@ -171,10 +171,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const negationCheckbox = document.getElementById('negation-checkbox');
     const moodSelect = document.getElementById('mood-select');
     const affixSelect = document.getElementById('affix-select');
-    const emotionSelect = document.getElementById('emotion-select'); // AHORA EXISTE EN EL HTML
+    const emotionSelect = document.getElementById('emotion-select');
     const randomizeCheckbox = document.getElementById('randomize-checkbox');
-    const buildPhraseBtn = document.getElementById('build-phrase-btn'); // Nuevo ID del botón Construir
-    const speakConstructedPhraseBtn = document.getElementById('speak-constructed-phrase-btn'); // Nuevo ID del botón Escuchar Frase
+    const buildPhraseBtn = document.getElementById('build-phrase-btn');
+    const speakConstructedPhraseBtn = document.getElementById('speak-constructed-phrase-btn');
 
     const kibotashiPhraseOutput = document.getElementById('kibotashi-phrase');
     const ipaPhraseOutput = document.getElementById('ipa-phrase');
@@ -700,8 +700,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.getElementById('main-content');
 
     if (enterWorldButton && gameStartAudio && heroicIntroAudio && voiceIntroAudio && mainContent) {
-        enterWorldButton.addEventListener('click', function(event) {
+        enterWorldButton.addEventListener('click', async function(event) { // Make it async
             event.preventDefault();
+
+            // Resume Tone.js AudioContext on user gesture
+            if (Tone.context.state !== 'running') {
+                await Tone.start();
+                console.log('AudioContext resumed!');
+            }
 
             // Play the game start audio
             gameStartAudio.play().catch(e => console.error("Error playing game start audio:", e)); // Added catch
