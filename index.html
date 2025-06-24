@@ -1,364 +1,824 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Kibotashi — Lengua Pura</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet" />
-    <!-- Enlace al archivo CSS externo -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Incluye la librería Tone.js para la generación de sonido -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
-    <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-<!-- Cinematic Hero Section -->
-<section id="hero">
-    <h1>KIBOTASHI</h1>
-    <p>El lenguaje donde cada carácter encierra intención</p>
-    <!-- Botón "Entrar al Mundo" que ahora llama a una función JavaScript para reproducir sonido -->
-    <a href="#intro" id="enter-world-button">
-        Entrar al Mundo
-    </a>
-    <!-- Elemento de audio para el sonido del botón "Entrar al Mundo" -->
-    <audio id="game-start-audio" src="audios/Game Star.mp3" preload="auto"></audio>
-    <!-- Elemento de audio para la intro heroica de música de fondo, inicialmente silenciado -->
-    <audio id="heroic-intro-audio" src="audios/heroic-intro.mp3" preload="auto" muted loop></audio>
-    <!-- Elemento de audio para la voz heroica de la intro, inicialmente silenciado -->
-    <audio id="voice-intro-audio" src="audios/voice-intro.wav" preload="auto" muted></audio>
-</section>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Global Elements ---
+    const htmlElement = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const sections = document.querySelectorAll('section');
+    const btnTop = document.getElementById('btnTop');
+    const fixedNav = document.querySelector('nav'); // Reference to the fixed navigation bar
 
-<!-- Main content of the page -->
-<div id="main-content">
-    <header>
-        <h1>KIBOTASHI</h1>
-        <p>Una lengua pura nacida del alma, la estructura y el símbolo</p>
-    </header>
+    // --- Hero Section Audio ---
+    const enterWorldButton = document.getElementById('enter-world-button');
+    const gameStartAudio = document.getElementById('game-start-audio');
+    const heroicIntroAudio = document.getElementById('heroic-intro-audio');
+    const voiceIntroAudio = document.getElementById('voice-intro-audio');
 
-    <!-- Nueva barra de navegación con hamburguesa -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">Kibotashi</div>
-            <button class="hamburger" id="hamburger" aria-label="Toggle navigation">&#9776;</button>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#intro">Inicio</a></li>
-                <li><a href="#pronombres">Pronombres</a></li>
-                <li><a href="#verbos">Verbos</a></li>
-                <li><a href="#conjugaciones">Conjugaciones</a></li>
-                <li><a href="#preguntas">Preguntas</a></li>
-                <li><a href="#caracteres">Caracteres</a></li>
-                <li><a href="#guia-escritura">Escritura</a></li>
-                <li><a href="#estructura">Estructura</a></li>
-                <li><a href="#constructor">Constructor</a></li>
-                <li><a href="#audio">Audio</a></li>
-                <li><a href="#glosario">Glosario</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-                <li><button id="theme-toggle" aria-label="Toggle theme">Modo Oscuro</button></li>
-            </ul>
-        </div>
-    </nav>
+    // --- Navigation ---
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+    const navLinks = navMenu.querySelectorAll('a, button'); // All clickable elements in menu
 
-    <section id="intro">
-        <h2>🌟 ¡Bienvenido/a al sitio oficial de la lengua Kibotashi! 🌟</h2>
-        <p>
-            ¡Me da gusto ver que te animas a emprender este viaje! Kibotashi no es solo un idioma, es una puerta a un mundo donde cada carácter encierra intención y cada palabra resuena con el alma. Inspirado en la belleza del Hangul, la profundidad de las lenguas élficas y la intuición simbólica, Kibotashi combina armonía fonética, emocional y visual. Su sistema está basado en bloques CVC (consonante-vocal-consonante), raíces temáticas, sufijos afectivos y una fonología limpia y amable con el habla humana. Prepárate para descubrir una lengua pura nacida del corazón, la estructura y el símbolo.
-        </p>
-    </section>
+    // --- Phrase Constructor Elements ---
+    const pronounSelect = document.getElementById('pronoun-select');
+    const verbSelect = document.getElementById('verb-select');
+    const tenseSelect = document.getElementById('tense-select');
+    const objectSelect = document.getElementById('object-select');
+    const negationCheckbox = document.getElementById('negation-checkbox');
+    const moodSelect = document.getElementById('mood-select');
+    const affixSelect = document.getElementById('affix-select');
+    const emotionSelect = document.getElementById('emotion-select');
+    const randomizeCheckbox = document.getElementById('randomize-checkbox');
+    const buildPhraseBtn = document.getElementById('build-phrase-btn');
+    const constructorOutput = document.getElementById('constructor-output');
+    const kibotashiPhraseSpan = document.getElementById('kibotashi-phrase');
+    const ipaPhraseSpan = document.getElementById('ipa-phrase');
+    const meaningPhraseSpan = document.getElementById('meaning-phrase');
+    const speakConstructedPhraseBtn = document.getElementById('speak-constructed-phrase-btn');
 
-    <section id="pronombres">
-        <h2>🧍 Pronombres & Posesivos</h2>
-        <table>
-            <tr><th>Kibotashi</th><th>Español</th><th>Uso</th></tr>
-            <tr><td>Ena</td><td>Yo</td><td>Formal / neutro</td></tr>
-            <tr><td>Lun</td><td>Yo</td><td>Poético / íntimo</td></tr>
-            <tr><td>Bua</td><td>Tú</td><td>Singular / cercano</td></tr>
-            <tr><td>Sual</td><td>Él / Ella</td><td>3ª persona</td></tr>
-            <tr><td>Nual</td><td>Nosotros</td><td>Plural inclusivo</td></tr>
-        </table>
-        <h3 style="margin-top: 2rem;">🔗 Sufijos posesivos</h3>
-        <table>
-            <tr><th>Sufijo</th><th>Significado</th><th>Ejemplo</th></tr>
-            <tr><td>-en</td><td>Mi</td><td>Katen = mi amor</td></tr>
-            <tr><td>-ua</td><td>Tu</td><td>Katua = tu amor</td></tr>
-            <tr><td>-sa</td><td>Su</td><td>Katsa = su amor</td></tr>
-            <tr><td>-nal</td><td>Nuestro</td><td>Katnal = nuestro amor</td></tr>
-        </table>
-    </section>
+    // --- Audio Section Elements ---
+    const playButtons = document.querySelectorAll('.play-button');
 
-    <section id="verbos">
-        <h2>📘 Verbos esenciales</h2>
-        <p>Los verbos base de Kibotashi son simples y regulares. Representan acción, estado y emoción con raíz simbólica clara.</p>
-        <table>
-            <tr><th>Kibotashi</th><th>Español</th><th>Fonética (IPA)</th></tr>
-            <tr><td>Ta</td><td>Ser</td><td>/ta/</td></tr>
-            <tr><td>Ni</td><td>Estar</td><td>/ni/</td></tr>
-            <tr><td>Kel</td><td>Tener</td><td>/kel/</td></tr>
-            <tr><td>Mir</td><td>Hacer</td><td>/miʁ/</td></tr>
-            <tr><td>Bin</td><td>Sentir</td><td>/bin/</td></tr>
-            <tr><td>Jan</td><td>Ir</td><td>/ʒan/</td></tr>
-            <tr><td>Vael</td><td>Decir</td><td>/ˈva.el/</td></tr>
-            <tr><td>Zar</td><td>Saber</td><td>/zaʁ/</td></tr>
-            <tr><td>Katun</td><td>Querer</td><td>/ˈka.tun/</td></tr>
-            <tr><td>Solv</td><td>Poder</td><td>/solv/</td></tr>
-        </table>
-    </section>
+    // --- Glossary Elements ---
+    const filtroPalabra = document.getElementById('filtro-palabra');
+    const buscarPalabraBtn = document.getElementById('buscar-palabra-btn');
+    const filtroCategoria = document.getElementById('filtro-categoria');
+    const glosarioBody = document.getElementById('glosario-body');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('page-info');
 
-    <section id="conjugaciones">
-        <h2>🔧 Conjugaciones regulares</h2>
-        <p>Kibotashi usa sufijos de tiempo sencillos. Todos los verbos siguen esta lógica:</p>
-        <ul>
-            <li><strong>Presente:</strong> raíz + terminación personal (Tao, Tua, Tai...)</li>
-            <li><strong>Pasado:</strong> raíz + "or" (Taor = fui)</li>
-            <li><strong>Futuro:</strong> raíz + "el" (Tael = seré)</li>
-            <li><strong>Negación:</strong> Ne + verbo conjugado (Netao = no soy)</li>
-        </ul>
-        <h3>Conjugación del verbo Ta (ser)</h3>
-        <table>
-            <tr><th>Pronombre</th><th>Presente</th><th>Pasado</th><th>Futuro</th><th>Negativo</th></tr>
-            <tr><td>Ena</td><td>Tao</td><td>Taor</td><td>Tael</td><td>Netao</td></tr>
-            <tr><td>Bua</td><td>Tua</td><td>Tauor</td><td>Tuel</td><td>Netua</td></tr>
-            <tr><td>Sual</td><td>Tai</td><td>Tair</td><td>Taiel</td><td>Netai</td></tr>
-            <tr><td>Nual</td><td>Tanal</td><td>Tanor</td><td>Tanel</td><td>Netanal</td></tr>
-        </table>
-    </section>
+    // --- Interactive Character Builder Elements ---
+    const characterCells = document.querySelectorAll('.character-cell');
+    const dropZoneC1 = document.getElementById('drop-zone-c1');
+    const dropZoneV = document.getElementById('drop-zone-v');
+    const dropZoneC2 = document.getElementById('drop-zone-c2');
+    const formWordBtn = document.getElementById('form-word-btn');
+    const formedWordOutput = document = document.getElementById('formed-word-output');
+    const formedKibotashiWord = document.getElementById('formed-kibotashi-word');
+    const formedIpaWord = document.getElementById('formed-ipa-word');
+    const formedMeaningWord = document.getElementById('formed-meaning-word');
+    const speakFormedWordBtn = document.getElementById('speak-formed-word-btn');
+    const wordExistsStatus = document.getElementById('word-exists-status'); // NUEVO ELEMENTO
 
-    <section id="preguntas">
-        <h2>❓ Preguntas y Partículas</h2>
-        <p>Las preguntas en Kibotashi se forman invirtiendo el orden o agregando la partícula final <strong>na</strong>.</p>
-        <table>
-            <tr><th>Interrogativo</th><th>Significado</th><th>Ejemplo</th></tr>
-            <tr><td>Na</td><td>¿Qué?</td><td>Na Tarenua? (¿Qué es familia?)</td></tr>
-            <tr><td>Né</td><td>¿Cómo?</td><td>Bua Binua Né? (¿Cómo te sientes?)</td></tr>
-            <tr><td>Non</td><td>¿Dónde?</td><td>Janua Non? (¿Dónde vas?)</td></tr>
-            <tr><td>Nen</td><td>¿Cuándo?</td><td>Binor Nen? (¿Cuándo sentiste?)</td></tr>
-        </table>
-    </section>
 
-    <section id="caracteres">
-        <h2>🔤 Caracteres del Alfabeto Kibotashi</h2>
-        <p>El alfabeto de Kibotashi está compuesto por sonidos fonéticos básicos, cada uno con su carácter visual. Estos caracteres se combinan para formar bloques silábicos del tipo <strong>CVC</strong> (Consonante + Vocal + Consonante).</p>
-        <table>
-            <tr><th>Fonema</th><th>Letra</th><th><span class="character-header">Carácter</span></th><th>Pronunciación</th></tr>
-            <tr><td>/k/</td><td>K</td><td class="character-cell" data-phoneme="k" data-char="⧫">⧫</td><td>como “k” en kilómetro</td></tr>
-            <tr><td>/t/</td><td>T</td><td class="character-cell" data-phoneme="t" data-char="⦾">⦾</td><td>como “t” en tierra</td></tr>
-            <tr><td>/b/</td><td>B</td><td class="character-cell" data-phoneme="b" data-char="⬸">⬸</td><td>como “b” suave</td></tr>
-            <tr><td>/n/</td><td>N</td><td class="character-cell" data-phoneme="n" data-char="⏁">⏁</td><td>como “n” en nube</td></tr>
-            <tr><td>/m/</td><td>M</td><td class="character-cell" data-phoneme="m" data-char="⨊">⨊</td><td>como “m” en mano</td></tr>
-            <tr><td>/s/</td><td>S</td><td class="character-cell" data-phoneme="s" data-char="␊">␊</td><td>como “s” suave</td></tr>
-            <tr><td>/l/</td><td>L</td><td class="character-cell" data-phoneme="l" data-char="⨅">⨅</td><td>como “l” clara</td></tr>
-            <tr><td>/a/</td><td>A</td><td class="character-cell" data-phoneme="a" data-char="◉">◉</td><td>como “a” abierta</td></tr>
-            <tr><td>/e/</td><td>E</td><td class="character-cell" data-phoneme="e" data-char="◍">◍</td><td>como “e” media</td></tr>
-            <tr><td>/i/</td><td>I</td><td class="character-cell" data-phoneme="i" data-char="◯">◯</td><td>como “i” tensa</td></tr>
-            <tr><td>/o/</td><td>O</td><td class="character-cell" data-phoneme="o" data-char="◎">◎</td><td>como “o” profunda</td></tr>
-            <tr><td>/u/</td><td>U</td><td class="character-cell" data-phoneme="u" data-char="◌">◌</td><td>como “u” redonda</td></tr>
-        </table>
+    // Store current characters in drop zones
+    let currentC1 = { phoneme: '', char: '' };
+    let currentV = { phoneme: '', char: '' };
+    let currentC2 = { phoneme: '', char: '' };
 
-        <h3 style="margin-top: 2rem;">🛠️ Constructor de Caracteres Interactivo</h3>
-        <p>Arrastra y suelta caracteres (Consonante, Vocal, Consonante) en las zonas para formar una palabra. Haz clic en "Formar Palabra" para ver el resultado y escucharlo.</p>
-        <div class="character-builder-area">
-            <div class="drop-zone" id="drop-zone-c1" data-type="consonant">C1</div>
-            <div class="drop-zone" id="drop-zone-v" data-type="vowel">V</div>
-            <div class="drop-zone" id="drop-zone-c2" data-type="consonant">C2</div>
-        </div>
-        <button id="form-word-btn" class="play-button" style="margin-top: 1rem;">Formar Palabra</button>
 
-        <div id="formed-word-output" class="constructor-output" style="display:none; margin-top: 2rem;">
-            <h3>Palabra Formada:</h3>
-            <p id="formed-kibotashi-word"></p>
-            <p class="ipa">IPA: <span id="formed-ipa-word"></span></p>
-            <p class="meaning">Significado: <span id="formed-meaning-word"></span></p>
-            <p id="word-exists-status" class="word-status"></p> <!-- NUEVO: Mensaje de estado de existencia -->
-            <button id="speak-formed-word-btn" class="play-output-button">🗣️ Escuchar Palabra</button>
-        </div>
-    </section>
+    // --- Data for Phrase Constructor and Glossary ---
+    const data = {
+        pronouns: [
+            { kibotashi: 'Ena', spanish: 'Yo', ipa: '/e.na/' },
+            { kibotashi: 'Lun', spanish: 'Yo (poético)', ipa: '/lun/' },
+            { kibotashi: 'Bua', spanish: 'Tú', ipa: '/bua/' },
+            { kibotashi: 'Sual', spanish: 'Él/Ella', ipa: '/su.al/' },
+            { kibotashi: 'Nual', spanish: 'Nosotros', ipa: '/nu.al/' }
+        ],
+        verbs: [
+            { kibotashi: 'Ta', spanish: 'Ser', ipa: '/ta/' },
+            { kibotashi: 'Ni', spanish: 'Estar', ipa: '/ni/' },
+            { kibotashi: 'Kel', spanish: 'Tener', ipa: '/kel/' },
+            { kibotashi: 'Mir', spanish: 'Hacer', ipa: '/miʁ/' },
+            { kibotashi: 'Bin', spanish: 'Sentir', ipa: '/bin/' },
+            { kibotashi: 'Jan', spanish: 'Ir', ipa: '/ʒan/' },
+            { kibotashi: 'Vael', spanish: 'Decir', ipa: '/ˈva.el/' },
+            { kibotashi: 'Zar', spanish: 'Saber', ipa: '/zaʁ/' },
+            { kibotashi: 'Katun', spanish: 'Querer', ipa: '/ˈka.tun/' },
+            { kibotashi: 'Solv', spanish: 'Poder', ipa: '/solv/' }
+        ],
+        tenses: [
+            { name: 'Presente', suffix: '', spanish: 'Presente' },
+            { name: 'Pasado', suffix: 'or', spanish: 'Pasado' },
+            { name: 'Futuro', suffix: 'el', spanish: 'Futuro' }
+        ],
+        conjugations: {
+            // Base verb 'Ta' (ser) conjugation examples. Add more if needed.
+            'Ta': {
+                'Ena': { presente: 'Tao', pasado: 'Taor', futuro: 'Tael' },
+                'Bua': { presente: 'Tua', pasado: 'Tauor', futuro: 'Tuel' },
+                'Sual': { presente: 'Tai', pasado: 'Tair', futuro: 'Taiel' },
+                'Nual': { presente: 'Tanal', pasado: 'Tanor', futuro: 'Tanel' }
+            }
+        },
+        objects: [
+            { kibotashi: 'Katen', spanish: 'mi amor', ipa: '/ˈka.ten/' },
+            { kibotashi: 'Kuren', spanish: 'amigo', ipa: '/ˈku.ʁen/' },
+            { kibotashi: 'Tovar', spanish: 'voz', ipa: '/ˈto.var/' },
+            { kibotashi: 'Naviirsa', spanish: 'su pareja', ipa: '/na.ˈviʁ.sa/' },
+            { kibotashi: 'Alma', spanish: 'alma', ipa: '/ˈal.ma/' }
+        ],
+        affixes: [
+            { value: 'ul', meaning: 'cariño suave', applyTo: 'noun', kibotashi: '-ul' },
+            { value: 'ei', meaning: 'íntimo', applyTo: 'noun', kibotashi: '-ei' },
+            { value: 'an', meaning: 'confianza', applyTo: 'noun', kibotashi: '-an' }
+        ],
+        // Example Glossary Data (Expanded for demonstration)
+        glossary: [
+            { spanish: 'Lluvia suave', kibotashi: 'Zariel', category: 'Naturaleza', ipa: '/ˈza.ɾjel/' },
+            { spanish: 'Lluvia intensa', kibotashi: 'Zarunel', category: 'Naturaleza', ipa: '/ˈza.ɾu.nel/' },
+            { spanish: 'Corriente', kibotashi: 'Zareth', category: 'Naturaleza', ipa: '/ˈza.ɾeθ/' },
+            { spanish: 'Charco', kibotashi: 'Zaril', category: 'Naturaleza', ipa: '/ˈza.ɾil/' },
+            { spanish: 'Río', kibotashi: 'Zarunor', category: 'Naturaleza', ipa: '/ˈza.ɾu.noɾ/' },
+            { spanish: 'Humedad', kibotashi: 'Zarim', category: 'Entorno', ipa: '/ˈza.ɾim/' },
+            { spanish: 'Niebla húmeda', kibotashi: 'Zarvai', category: 'Entorno', ipa: '/ˈzaɾ.vai/' },
+            { spanish: 'Gota', kibotashi: 'Zari', category: 'Naturaleza', ipa: '/ˈza.ɾi/' },
+            { spanish: 'Mar', kibotashi: 'Zaruai', category: 'Lugar', ipa: '/ˈza.ɾu.ai/' },
+            { spanish: 'Agua bendita', kibotashi: 'Zarael', category: 'Valor', ipa: '/ˈza.ɾa.el/' },
+            { spanish: 'Suelo fértil', kibotashi: 'Feolin', category: 'Naturaleza', ipa: '/ˈfe.o.lin/' },
+            { spanish: 'Polvo', kibotashi: 'Feolar', category: 'Naturaleza', ipa: '/ˈfe.o.laɾ/' },
+            { spanish: 'Terreno', kibotashi: 'Feoren', category: 'Lugar', ipa: '/ˈfe.o.ɾen/' },
+            { spanish: 'Piedra', kibotashi: 'Feorun', category: 'Naturaleza', ipa: '/ˈfe.o.ɾun/' },
+            { spanish: 'Montículo', kibotashi: 'Feolai', category: 'Lugar', ipa: '/ˈfe.o.lai/' },
+            { spanish: 'Ceniza', kibotashi: 'Feolun', category: 'Naturaleza', ipa: '/ˈfe.o.lun/' },
+            { spanish: 'Lodo', kibotashi: 'Zarfeol', category: 'Combinado', ipa: '/ˈzaɾ.fe.ol/' },
+            { spanish: 'Caverna', kibotashi: 'Feolur', category: 'Lugar', ipa: '/ˈfe.o.luɾ/' },
+            { spanish: 'Raíz', kibotashi: 'Feomir', category: 'Naturaleza', ipa: '/ˈfe.o.miɾ/' },
+            { spanish: 'Semilla', kibotashi: 'Feonel', category: 'Naturaleza', ipa: '/ˈfe.o.nel/' },
+            { spanish: 'Tormenta', kibotashi: 'Vaareth', category: 'Naturaleza', ipa: '/ˈva.a.ɾeθ/' },
+            { spanish: 'Brisa', kibotashi: 'Vaarel', category: 'Entorno', ipa: '/ˈva.a.ɾel/' },
+            { spanish: 'Susurro de aire', kibotashi: 'Vaarin', category: 'Entorno', ipa: '/ˈva.a.ɾin/' },
+            { spanish: 'Remolino', kibotashi: 'Vaalur', category: 'Naturaleza', ipa: '/ˈva.a.luɾ/' },
+            { spanish: 'Aliento', kibotashi: 'Vaor', category: 'Cuerpo', ipa: '/ˈva.oɾ/' },
+            { spanish: 'Norte', kibotashi: 'Vaaron', category: 'Ubicación', ipa: '/ˈva.a.ɾon/' },
+            { spanish: 'Viento cálido', kibotashi: 'Vaarun', category: 'Entorno', ipa: '/ˈva.a.ɾun/' },
+            { spanish: 'Eco del viento', kibotashi: 'Vaelei', category: 'Entorno', ipa: '/ˈva.e.lei/' },
+            { spanish: 'Vuelo', kibotashi: 'Vaelen', category: 'Acción', ipa: '/ˈva.e.len/' },
+            { spanish: 'Aire puro', kibotashi: 'Vaerel', category: 'Valor', ipa: '/ˈva.e.ɾel/' },
+            { spanish: 'Amor', kibotashi: 'Kat', category: 'Emociones', ipa: '/kat/' },
+            { spanish: 'Alegría', kibotashi: 'Biné', category: 'Emociones', ipa: '/ˈbi.ne/' },
+            { spanish: 'Ternura', kibotashi: 'Kol', category: 'Emociones', ipa: '/kol/' },
+            { spanish: 'Ternura íntima', kibotashi: 'Tin', category: 'Emociones', ipa: '/tin/' },
+            { spanish: 'Calma interior', kibotashi: 'Mior', category: 'Emociones', ipa: '/ˈmjɔʁ/' },
+            { spanish: 'Dolor emocional', kibotashi: 'Harun', category: 'Emociones', ipa: '/ˈha.ʁun/' },
+            { spanish: 'Esperanza', kibotashi: 'Zinar', category: 'Emociones', ipa: '/ˈzi.naʁ/' },
+            { spanish: 'Coraje', kibotashi: 'Brel', category: 'Emociones', ipa: '/bʁel/' },
+            { spanish: 'Bien / equilibrio', kibotashi: 'Kéa', category: 'Emociones', ipa: '/ˈke.a/' },
+            { spanish: 'Malestar', kibotashi: 'Ruom', category: 'Emociones', ipa: '/ʁu.om/' },
+            { spanish: 'Agua', kibotashi: 'Zarun', category: 'Naturaleza', ipa: '/ˈza.ʁun/' },
+            { spanish: 'Tierra', kibotashi: 'Feol', category: 'Naturaleza', ipa: '/fe.ol/' },
+            { spanish: 'Viento', kibotashi: 'Vaar', category: 'Naturaleza', ipa: '/vaːʁ/' },
+            { spanish: 'Sol', kibotashi: 'Kuar', category: 'Naturaleza', ipa: '/ˈkuaʁ/' },
+            { spanish: 'Roca', kibotashi: 'Drin', category: 'Naturaleza', ipa: '/dʁin/' },
+            { spanish: 'Mañana', kibotashi: 'Rinar', category: 'Tiempo', ipa: '/ˈʁi.naʁ/' },
+            { spanish: 'Tarde', kibotashi: 'Taren', category: 'Tiempo', ipa: '/ˈta.ʁen/' },
+            { spanish: 'Yo', kibotashi: 'Ena', category: 'Pronombre', ipa: '/ˈe.na/' },
+            { spanish: 'Tú', kibotashi: 'Bua', category: 'Pronombre', ipa: '/ˈbu.a/' },
+            { spanish: 'Él / Ella', kibotashi: 'Sual', category: 'Pronombre', ipa: '/ˈsu.al/' },
+            { spanish: 'Nosotros', kibotashi: 'Nual', category: 'Pronombre', ipa: '/ˈnu.al/' },
+            { spanish: 'Ser', kibotashi: 'Ta', category: 'Verbo', ipa: '/ta/' },
+            { spanish: 'Estar', kibotashi: 'Ni', category: 'Verbo', ipa: '/ni/' },
+            { kibotashi: 'Kel', category: 'Verbo', ipa: '/kel/' },
+            { spanish: 'Hacer', kibotashi: 'Mir', category: 'Verbo', ipa: '/miʁ/' },
+            { spanish: 'Sentir', kibotashi: 'Bin', category: 'Verbo', ipa: '/bin/' },
+            { spanish: 'Ir', kibotashi: 'Jan', category: 'Verbo', ipa: '/ʒan/' },
+            { spanish: 'Decir', kibotashi: 'Vael', category: 'Verbo', ipa: '/ˈva.el/' },
+            { spanish: 'Saber', kibotashi: 'Zar', category: 'Verbo', ipa: '/zaʁ/' },
+            { spanish: 'Querer', kibotashi: 'Katun', category: 'Verbo', ipa: '/ˈka.tun/' },
+            { spanish: 'Poder', kibotashi: 'Solv', category: 'Verbo', ipa: '/solv/' }
+        ].sort((a, b) => (a.spanish || '').localeCompare(b.spanish || '')) // Sort glossary alphabetically by Spanish word, with undefined check
+    };
 
-    <section id="guia-escritura">
-        <h2>✍️ Guía para escribir palabras</h2>
-        <p>Las palabras en Kibotashi se escriben combinando sonidos según la estructura CVC o CV. Cada sílaba puede formar un carácter visual.</p>
-        <ul style="margin-top: 1rem;">
-            <li><strong>Ejemplo 1:</strong> <code>Kat</code> (amor) = K + A + T → ⧫◉⦾</li>
-            <li><strong>Ejemplo 2:</strong> <code>Biné</code> (alegría) = B + I + N + Énfasis tonal → ⬸◯⏁</li>
-            <li><strong>Ejemplo 3:</b> <code>Tin</code> (ternura) = T + I + N → ⦾◯⏁</li>
-        </ul>
-        <p>Si usas herramientas interactivas, puedes representar cada carácter con un SVG o imagen ilustrativa basada en estos bloques.</p>
-    </section>
+    let currentPage = 1;
+    const rowsPerPage = 10;
+    let filteredGlossary = data.glossary; // Initialize with full glossary
 
-    <section id="estructura">
-        <h2>🏗️ Estructura de Oraciones</h2>
-        <p>Las oraciones en Kibotashi siguen una estructura sencilla para asegurar claridad y belleza.</p>
-        <h3>Orden de Palabras Básico (Sujeto-Verbo-Objeto)</h3>
-        <p>El orden más común en Kibotashi es <strong>Sujeto + Verbo + Objeto</strong>. Los adjetivos generalmente preceden a los sustantivos y los adverbios siguen a los verbos.</p>
-        <ul style="margin-top: 1rem;">
-            <li><strong>Ena Katun Katen.</strong> (Yo querer mi amor.) - <i>I want my love.</i></li>
-            <li><strong>Bua Mir Tovar.</strong> (Tú hacer voz.) - <i>You make a sound/voice.</i></li>
-            <li><strong>Sual Zalin Naviirsa.</strong> (Él/Ella cuidar su pareja.) - <i>He/She cares for their partner.</i></li>
-        </ul>
-        <h3>Ejemplos de frases</h3>
-        <table>
-            <tr><th>Kibotashi</th><th>Traducción Literal</th><th>Significado</th></tr>
-            <tr><td data-pron="/e.na ˈta.o ˈku.ʁen/">Ena Tao Kuren.</td><td>Yo ser amigo.</td><td>Soy un amigo.</td></tr>
-            <tr><td data-pron="/ˈbua ˈjan.el ˈnon/">Bua Janel Non?</td><td>Tú irás dónde?</td><td>¿Adónde irás?</td></tr>
-            <tr><td data-pron="/ˈmi.var ˈma.ʁan.an/">Mivar Maranan.</td><td>Acompañar compañero familiar.</td><td>Acompañar al compañero de confianza.</td></tr>
-        </table>
-    </section>
+    // --- Functions ---
 
-    <section id="constructor" class="constructor-container">
-        <h2>CONSTRUCTOR DE FRASES</h2>
-        <p>La mejor forma de aprender es haciendo. Utiliza esta herramienta para combinar pronombres, verbos y tiempos verbales. Observa cómo se forman las palabras y las frases en tiempo real y empieza a pensar en Kibotashi.</p>
-        <p>(Las pronunciaciones son simuladas.)</p>
-        <div class="constructor-inputs">
-            <select id="pronoun-select"></select>
-            <select id="verb-select"></select>
-            <select id="tense-select"></select>
-            <select id="object-select"></select>
-            <label for="negation-checkbox" style="display:flex; align-items:center; gap:0.5rem;">
-                <input type="checkbox" id="negation-checkbox"> Negación
-            </label>
-            <select id="mood-select">
-                <option value="indicativo">Modo Indicativo</option>
-                <option value="condicional">Modo Condicional</option>
-            </select>
-            <select id="affix-select">
-                <option value="">Sin sufijo</option>
-                <option value="ul">Cariño suave (-ul)</option>
-                <option value="ei">Íntimo (-ei)</option>
-                <option value="an">Confianza (-an)</option>
-            </select>
-            <select id="emotion-select"> <!-- AÑADIDO: Select para emociones -->
-                <option value="neutro">Tono Neutro</option>
-                <option value="poetico">Poético</option>
-                <option value="afectivo">Afectivo</option>
-                <option value="melancolico">Melancólico</option>
-            </select>
-            <label style="display:flex; align-items:center; gap:0.5rem;">
-                <input type="checkbox" id="randomize-checkbox" />
-                Frase aleatoria
-            </label>
-            <button id="build-phrase-btn">Construir</button> <!-- CAMBIADO: ID para eventListener -->
-        </div>
-        <p>Selecciona los componentes y haz clic en "Construir".</p>
-        <div id="constructor-output" class="constructor-output" style="display:none;">
-            <h3>Frase Construida:</h3>
-            <p id="kibotashi-phrase"></p>
-            <p class="ipa">IPA: <span id="ipa-phrase"></span></p>
-            <p class="meaning">Significado: <span id="meaning-phrase"></span></p>
-            <button id="speak-constructed-phrase-btn" class="play-output-button">🗣️ Escuchar Frase</button> <!-- CAMBIADO: ID para eventListener -->
-        </div>
-    </section>
+    // Function to show a custom modal (replaces alert/confirm)
+    function showCustomModal(message, type = 'alert') {
+        const existingModal = document.querySelector('.custom-modal');
+        if (existingModal) existingModal.remove();
 
-    <section id="audio">
-        <h2>🔊 Pronunciaciones y Fonética</h2>
-        <p>Cada palabra tiene su transcripción en formato IPA y puede ir acompañada por su archivo de audio alojado en la carpeta <code>/audios/</code>. Además, se ha añadido una función de texto a voz para una pronunciación sintética, ideal para navegadores modernos.</p>
-        <table>
-            <tr><th>Palabra</th><th>Pronunciación IPA</th><th>Audio / Voz Sintética</th></tr>
-            <tr><td data-pron="/ˈka.tun/">Katun</td><td>/ˈka.tun/</td><td><audio id="katun-audio" src="audios/katun.mp3"></audio><button class="play-button" data-audio="audios/katun.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Katun">🗣️ (Voz)</button></td></tr>
-            <tr><td data-pron="/ˈbi.ne/">Biné</td><td>/ˈbi.ne/</td><td><audio id="bine-audio" src="audios/bine.mp3"></audio><button class="play-button" data-audio="audios/bine.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Biné">🗣️ (Voz)</button></td></tr>
-            <tr><td data-pron="/ˈza.lin/">Zalin</td><td>/ˈza.lin/</td><td><audio id="zalin-audio" src="audios/zalin.mp3"></audio><button class="play-button" data-audio="audios/zalin.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Zalin">🗣️ (Voz)</button></td></tr>
-            <tr><td data-pron="/ta.o/">Tao</td><td>/ta.o/</td><td><audio id="tao-audio" src="audios/tao.mp3"></audio><button class="play-button" data-audio="audios/tao.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Tao">🗣️ (Voz)</button></td></tr>
-            <!-- Puedes continuar añadiendo más palabras -->
-        </table>
-        <p style="margin-top: 1.5rem;">
-            📝 <strong>Nota:</strong> La función de "Voz Sintética" utiliza la API de voz del navegador y buscará una voz femenina en español latinoamericano. La disponibilidad y calidad de la voz pueden variar según tu navegador y sistema operativo.
-        </p>
-    </section>
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'custom-modal';
+        modalDiv.innerHTML = `<p>${message}</p><button>Cerrar</button>`;
+        document.body.appendChild(modalDiv);
 
-    <section id="glosario"> <!-- Glosario Kibotashi -->
-        <h2>📘 Glosario Kibotashi</h2>
+        modalDiv.querySelector('button').addEventListener('click', () => {
+            modalDiv.remove();
+        });
+    }
 
-        <input type="text" id="filtro-palabra" placeholder="🔍 Buscar palabra...">
-        <button id="buscar-palabra-btn" class="play-button" style="margin-left: 10px;">Buscar</button>
-        <select id="filtro-categoria">
-            <option value="">Todas las categorías</option>
-            <option>Acción</option>
-            <option>Acción mental</option>
-            <option>Adjetivos</option>
-            <option>Agua</option>
-            <option>Alimentos</option>
-            <option>Bebidas</option>
-            <option>Combinado</option>
-            <option>Comunicación</option>
-            <option>Comida</option>
-            <option>Cortesía</option>
-            <option>Cuerpo</option>
-            <option>Cuerpo y acción</option>
-            <option>Emociones</option>
-            <option>Entorno</option>
-            <option>Espacio</option>
-            <option>Gente</option>
-            <option>Higiene</option>
-            <option>Hogar</option>
-            <option>Lugar</option>
-            <option>Mente</option>
-            <option>Mente y cognición</option>
-            <option>Movimiento</option>
-            <option>Naturaleza</option>
-            <option>Números</option>
-            <option>Objeto</option>
-            <option>Respuestas</option>
-            <option>Saludos</option>
-            <option>Salud</option>
-            <option>Tecnología</option>
-            <option>Tiempo</option>
-            <option>Ubicación</option>
-            <option>Utensilio</option>
-            <option>Valor</option>
-            <option>Verbos relacionales</option>
-            <option>Voluntad</option>
-        </select>
+    // Function to handle smooth scrolling with fixed header offset
+    function scrollToSection(event) {
+        event.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            const headerOffset = fixedNav.offsetHeight; // Get height of your fixed nav
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // -20 for a little extra space
 
-        <div class="table-wrapper">
-            <table id="tabla-glosario">
-                <thead>
-                    <tr>
-                        <th>Español</th>
-                        <th>Kibotashi</th>
-                        <th>Categoría</th>
-                        <th>Audio</th>
-                    </tr>
-                </thead>
-                <tbody id="glosario-body">
-                    <!-- Las filas del glosario serán insertadas aquí por JavaScript -->
-                </tbody>
-            </table>
-        </div>
-        <div class="pagination-controls">
-            <button id="prev-page">Anterior</button>
-            <span id="page-info">Página 1 de 1</span>
-            <button id="next-page">Siguiente</button>
-        </div>
-    </section>
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    }
 
-    <!-- Sección de Contacto (Ejemplo) -->
-    <section id="contacto">
-        <h2>✉️ Contacto</h2>
-        <p>Si tienes preguntas o comentarios sobre la lengua Kibotashi, no dudes en contactarnos.</p>
-        <form action="#" method="POST">
-            <div style="margin-bottom: 1rem;">
-                <label for="nombre">Nombre:</label><br>
-                <input type="text" id="nombre" name="nombre" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid var(--borde); background-color: var(--fondo); color: var(--texto);">
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid var(--borde); background-color: var(--fondo); color: var(--texto);">
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <label for="mensaje">Mensaje:</label><br>
-                <textarea id="mensaje" name="mensaje" rows="5" required style="width: 100%; padding: 0.5rem; border-radius: 5px; border: 1px solid var(--borde); background-color: var(--fondo); color: var(--texto);"></textarea>
-            </div>
-            <button type="submit" style="background-color: var(--acento); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">Enviar Mensaje</button>
-        </form>
-    </section>
+    // Function for "Scroll to Top" button
+    window.scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
 
-    <footer>
-        <p>Creado por Gabriel · Kibotashi · 2025 — Tama roku. ⨅␊⨉ ⬸⏁⦾</p>
-    </footer>
-</div>
+    // --- Hero Section Audio Logic ---
+    enterWorldButton.addEventListener('click', (event) => {
+        // Prevent default anchor link behavior for now, as we handle scroll manually
+        event.preventDefault();
 
-<!-- Botón para volver arriba -->
-<button onclick="scrollToTop()" id="btnTop" title="Ir arriba">⬆</button>
+        // Play game start audio
+        gameStartAudio.currentTime = 0;
+        gameStartAudio.play();
 
-<!-- Enlace al archivo JavaScript externo -->
-<script src="js/script.js"></script>
-</body>
-</html>
+        // After a short delay, start heroic intro and voice intro
+        setTimeout(() => {
+            heroicIntroAudio.muted = false;
+            heroicIntroAudio.volume = 0.6; // Set a reasonable volume
+            heroicIntroAudio.play();
+        }, 500); // Start 0.5 seconds after button click sound
+
+        setTimeout(() => {
+            voiceIntroAudio.muted = false;
+            voiceIntroAudio.volume = 0.8; // Set a reasonable volume
+            voiceIntroAudio.play();
+        }, 1500); // Start 1.5 seconds after button click sound
+
+        // Scroll to the intro section after a delay to allow audio to start
+        const targetElement = document.querySelector('#intro');
+        if (targetElement) {
+            const headerOffset = fixedNav.offsetHeight;
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
+
+            setTimeout(() => {
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }, 2000); // Scroll after 2 seconds
+        }
+    });
+
+    // --- Theme Toggle Logic ---
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        htmlElement.classList.add(currentTheme);
+        themeToggle.textContent = currentTheme === 'dark-mode' ? 'Modo Claro' : 'Modo Oscuro';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark-mode');
+        themeToggle.textContent = 'Modo Claro';
+    } else {
+        themeToggle.textContent = 'Modo Oscuro';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        if (htmlElement.classList.contains('dark-mode')) {
+            htmlElement.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light-mode');
+            themeToggle.textContent = 'Modo Oscuro';
+        } else {
+            htmlElement.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark-mode');
+            themeToggle.textContent = 'Modo Claro';
+        }
+    });
+
+    // --- Section Visibility Animation (Intersection Observer) ---
+    const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // When 10% of the section is visible
+    };
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Optional: Stop observing once visible if animation only plays once
+                // observer.unobserve(entry.target);
+            } else {
+                // Optional: Remove 'visible' class if you want animation to re-trigger on scroll back
+                // entry.target.classList.remove('visible');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // --- Navigation (Hamburger Menu) Logic ---
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('is-active'); // For potential animation of the icon
+    });
+
+    // Close menu when a link is clicked (for smooth scrolling and mobile UX)
+    navLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('is-active');
+            }
+            // Use the custom smooth scrolling function
+            scrollToSection.call(link, event);
+        });
+    });
+
+    // --- Character Cell Audio Playback (Individual) ---
+    // Make character cells draggable
+    characterCells.forEach(cell => {
+        cell.setAttribute('draggable', true); // Make characters draggable
+        cell.addEventListener('click', () => {
+            const phoneme = cell.dataset.phoneme;
+            if (phoneme) {
+                try {
+                    const synth = new Tone.Synth().toDestination();
+                    let frequency;
+                    switch (phoneme) {
+                        case 'k': frequency = 'C4'; break;
+                        case 't': frequency = 'D4'; break;
+                        case 'b': frequency = 'E4'; break;
+                        case 'n': frequency = 'F4'; break;
+                        case 'm': frequency = 'G4'; break;
+                        case 's': frequency = 'A4'; break;
+                        case 'l': frequency = 'B4'; break;
+                        case 'a': frequency = 'C5'; break;
+                        case 'e': frequency = 'D5'; break;
+                        case 'i': frequency = 'E5'; break;
+                        case 'o': frequency = 'F5'; break;
+                        case 'u': frequency = 'G5'; break;
+                        default: frequency = 'C4';
+                    }
+                    synth.triggerAttackRelease(frequency, '8n');
+                } catch (e) {
+                    console.error("Error playing phoneme with Tone.js:", e);
+                    showCustomModal("Error al reproducir el sonido. Asegúrate de que el audio esté habilitado y de que Tone.js esté cargado correctamente.", 'alert');
+                }
+            }
+        });
+    });
+
+    // --- Interactive Character Builder Logic ---
+    let draggedCharData = null; // To store data of the dragged character
+
+    characterCells.forEach(cell => {
+        cell.addEventListener('dragstart', (e) => {
+            draggedCharData = {
+                phoneme: cell.dataset.phoneme,
+                char: cell.dataset.char,
+                type: (cell.dataset.phoneme === 'a' || cell.dataset.phoneme === 'e' || cell.dataset.phoneme === 'i' || cell.dataset.phoneme === 'o' || cell.dataset.phoneme === 'u') ? 'vowel' : 'consonant'
+            };
+            e.dataTransfer.effectAllowed = 'copy'; // Visual feedback for copying
+        });
+    });
+
+    [dropZoneC1, dropZoneV, dropZoneC2].forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Necessary to allow dropping
+            e.dataTransfer.dropEffect = 'copy'; // Visual feedback for copying
+            zone.classList.add('hover'); // Add hover effect
+        });
+
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('hover'); // Remove hover effect
+        });
+
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('hover'); // Remove hover effect
+            zone.classList.add('filled'); // Indicate it's filled
+
+            if (draggedCharData) {
+                // Check if the dropped character type matches the drop zone type
+                const zoneType = zone.dataset.type;
+                if (
+                    (zoneType === 'consonant' && draggedCharData.type === 'consonant') ||
+                    (zoneType === 'vowel' && draggedCharData.type === 'vowel')
+                ) {
+                    zone.innerHTML = `<span class="dropped-char">${draggedCharData.char}</span>`;
+                    zone.dataset.phoneme = draggedCharData.phoneme; // Store phoneme in dataset
+
+                    // Update internal state for word building
+                    if (zone.id === 'drop-zone-c1') {
+                        currentC1 = draggedCharData;
+                    } else if (zone.id === 'drop-zone-v') {
+                        currentV = draggedCharData;
+                    } else if (zone.id === 'drop-zone-c2') {
+                        currentC2 = draggedCharData;
+                    }
+                } else {
+                    showCustomModal(`¡Error! No puedes soltar una ${draggedCharData.type === 'vowel' ? 'vocal' : 'consonante'} en una zona de ${zoneType === 'vowel' ? 'vocal' : 'consonante'}.`, 'alert');
+                }
+            }
+            draggedCharData = null; // Reset dragged data
+        });
+
+        // Allow clicking on a filled drop zone to clear it
+        zone.addEventListener('click', () => {
+            if (zone.classList.contains('filled')) {
+                zone.innerHTML = zone.dataset.type === 'consonant' ? 'C' + (zone.id.includes('c1') ? '1' : '2') : 'V';
+                zone.classList.remove('filled');
+                zone.dataset.phoneme = ''; // Clear stored phoneme
+
+                if (zone.id === 'drop-zone-c1') {
+                    currentC1 = { phoneme: '', char: '' };
+                } else if (zone.id === 'drop-zone-v') {
+                    currentV = { phoneme: '', char: '' };
+                } else if (zone.id === 'drop-zone-c2') {
+                    currentC2 = { phoneme: '', char: '' };
+                }
+            }
+        });
+    });
+
+    formWordBtn.addEventListener('click', () => {
+        let kibotashiWord = '';
+        let ipaWord = '';
+        let meaningDescription = 'Combinación de sonidos: '; // Descripción por defecto
+
+        // Lógica para construir la palabra Kibotashi e IPA
+        // Se asegura de que al menos un carácter válido esté presente
+        if (currentC1.phoneme || currentV.phoneme || currentC2.phoneme) {
+            // Construir la palabra concatenando los caracteres
+            // Solo si un fonema está presente, se agrega su carácter.
+            // Esto evita que "undefine" o "null" se concatenen si una zona está vacía.
+            kibotashiWord = `${currentC1.char || ''}${currentV.char || ''}${currentC2.char || ''}`;
+            ipaWord = `/${currentC1.phoneme || ''}${currentV.phoneme || ''}${currentC2.phoneme || ''}/`;
+
+            // Eliminar barras diagonales dobles si se forman, para IPA limpio.
+            ipaWord = ipaWord.replace(/\/\//g, '/');
+            // Eliminar la barra inicial si la palabra está vacía (ej. //)
+            if (ipaWord === '//') ipaWord = '';
+            // Si termina con una barra doble (ej. /abc//), quitar una.
+            ipaWord = ipaWord.replace(/\/$/, '');
+
+
+            // Actualiza la descripción de significado basada en la combinación de fonemas
+            let phonemeCombination = [];
+            if (currentC1.phoneme) phonemeCombination.push(currentC1.phoneme);
+            if (currentV.phoneme) phonemeCombination.push(currentV.phoneme);
+            if (currentC2.phoneme) phonemeCombination.push(currentC2.phoneme);
+            meaningDescription = `Combinación de sonidos: ${phonemeCombination.join('-')}`;
+        } else {
+            showCustomModal("Por favor, arrastra al menos un carácter válido para formar una palabra.", "alert");
+            formedWordOutput.style.display = 'none';
+            return;
+        }
+
+        // Eliminar los caracteres de símbolos de Kibotashi del kibotashiWord
+        kibotashiWord = kibotashiWord.replace(/[⧫⦾⬸⏁⨊␊⨅◉◍◯◎◌]/g, '');
+
+        // Establece el texto para la palabra Kibotashi y IPA formadas
+        formedKibotashiWord.textContent = kibotashiWord;
+        formedIpaWord.textContent = ipaWord;
+
+        // Reinicia y oculta el mensaje de estado de existencia
+        wordExistsStatus.textContent = '';
+        wordExistsStatus.style.display = 'none';
+
+        // Busca la palabra formada en el glosario
+        const foundWord = data.glossary.find(item => item.kibotashi.toLowerCase() === kibotashiWord.toLowerCase());
+
+        if (foundWord) {
+            formedMeaningWord.textContent = foundWord.spanish; // Usa el significado real del glosario
+            wordExistsStatus.textContent = "¡Esta palabra ya existe en el glosario!";
+            wordExistsStatus.style.display = 'block'; // Muestra el mensaje
+        } else {
+            formedMeaningWord.textContent = meaningDescription; // Usa la descripción de combinación fonética
+        }
+
+        formedWordOutput.style.display = 'block'; // Muestra el área de resultados
+    });
+
+
+    speakFormedWordBtn.addEventListener('click', () => {
+        const textToSpeak = formedKibotashiWord.textContent;
+        if (textToSpeak) {
+            speakText(textToSpeak);
+        } else {
+            showCustomModal("No hay palabra para escuchar. Forma una palabra primero.", "alert");
+        }
+    });
+
+
+    // --- Phrase Constructor Logic ---
+
+    // Populate selects
+    function populateSelect(selectElement, options, textKey, valueKey) {
+        selectElement.innerHTML = ''; // Clear previous options
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.textContent = option[textKey];
+            opt.value = option[valueKey];
+            selectElement.appendChild(opt);
+        });
+    }
+
+    populateSelect(pronounSelect, data.pronouns, 'spanish', 'kibotashi');
+    populateSelect(verbSelect, data.verbs, 'spanish', 'kibotashi');
+    populateSelect(tenseSelect, data.tenses, 'name', 'name');
+    populateSelect(objectSelect, data.objects, 'spanish', 'kibotashi');
+
+    // Add "Sin objeto" option to object select
+    const noObjectOpt = document.createElement('option');
+    noObjectOpt.textContent = 'Sin objeto';
+    noObjectOpt.value = '';
+    objectSelect.prepend(noObjectOpt); // Add it at the beginning
+
+    // Function to get IPA for a given Kibotashi word
+    function getIpa(word, type = 'word') {
+        let ipa = '';
+        if (type === 'pronoun') {
+            const pronoun = data.pronouns.find(p => p.kibotashi === word);
+            if (pronoun) ipa = pronoun.ipa;
+        } else if (type === 'verb') {
+            const verb = data.verbs.find(v => v.kibotashi === word);
+            if (verb) ipa = verb.ipa;
+        } else if (type === 'object') {
+            const object = data.objects.find(o => o.kibotashi === word);
+            if (object) ipa = object.ipa;
+        } else if (type === 'affix') {
+             const affix = data.affixes.find(a => a.value === word);
+             if (affix) ipa = affix.ipa || word; // Return affix itself if no specific IPA
+        }
+        return ipa.replace(/\//g, ''); // Remove slashes for concatenation
+    }
+
+    // Function to build the phrase
+    function buildPhrase() {
+        let selectedPronoun = pronounSelect.value;
+        let selectedVerb = verbSelect.value;
+        let selectedTense = tenseSelect.value;
+        let selectedObject = objectSelect.value;
+        let isNegated = negationCheckbox.checked;
+        let selectedMood = moodSelect.value;
+        let selectedAffix = affixSelect.value;
+        let selectedEmotion = emotionSelect.value;
+
+        // Handle randomize option
+        if (randomizeCheckbox.checked) {
+            selectedPronoun = data.pronouns[Math.floor(Math.random() * data.pronouns.length)].kibotashi;
+            selectedVerb = data.verbs[Math.floor(Math.random() * data.verbs.length)].kibotashi;
+            selectedTense = data.tenses[Math.floor(Math.random() * data.tenses.length)].name;
+            selectedObject = Math.random() < 0.5 ? '' : data.objects[Math.floor(Math.random() * data.objects.length)].kibotashi; // Randomly include/exclude object
+            isNegated = Math.random() < 0.3; // 30% chance of negation
+            selectedMood = Math.random() < 0.5 ? 'indicativo' : 'condicional';
+            selectedAffix = Math.random() < 0.4 ? (data.affixes[Math.floor(Math.random() * data.affixes.length)].value) : '';
+            selectedEmotion = ['neutro', 'poetico', 'afectivo', 'melancolico'][Math.floor(Math.random() * 4)];
+
+            // Update selects to reflect randomized choice
+            pronounSelect.value = selectedPronoun;
+            verbSelect.value = selectedVerb;
+            tenseSelect.value = selectedTense;
+            objectSelect.value = selectedObject;
+            negationCheckbox.checked = isNegated;
+            moodSelect.value = selectedMood;
+            affixSelect.value = selectedAffix;
+            emotionSelect.value = selectedEmotion;
+        }
+
+        let kibotashiSentence = selectedPronoun;
+        let ipaSentence = getIpa(selectedPronoun, 'pronoun');
+        let meaningSentence = data.pronouns.find(p => p.kibotashi === selectedPronoun)?.spanish || selectedPronoun;
+
+        let conjugatedVerb = selectedVerb;
+        let verbMeaning = data.verbs.find(v => v.kibotashi === selectedVerb)?.spanish;
+        let verbIpa = getIpa(selectedVerb, 'verb');
+
+        // Apply conjugation based on selected verb and tense (using 'Ta' as example for now)
+        if (selectedVerb === 'Ta' && data.conjugations.Ta) {
+            const verbConjugations = data.conjugations.Ta[selectedPronoun];
+            if (verbConjugations) {
+                conjugatedVerb = verbConjugations[selectedTense.toLowerCase()];
+                // Update IPA based on specific conjugation if needed, otherwise use base verb IPA
+                // For simplicity, we'll append tense suffix IPA for now
+                if (selectedTense === 'Pasado') verbIpa = '/ta.oɾ/'; // Example for 'Taor'
+                else if (selectedTense === 'Futuro') verbIpa = '/ta.el/'; // Example for 'Tael'
+                else verbIpa = getIpa(selectedVerb, 'verb');
+            }
+        } else {
+             // For other verbs, just append the tense suffix for now (simple model)
+             let suffix = data.tenses.find(t => t.name === selectedTense)?.suffix || '';
+             conjugatedVerb = selectedVerb + suffix;
+             // Simple IPA concatenation for other verbs (needs more complex phonological rules for accuracy)
+             verbIpa = getIpa(selectedVerb, 'verb') + (suffix ? `.${suffix.toLowerCase()}` : '');
+        }
+
+        // Apply mood (simplified)
+        if (selectedMood === 'condicional') {
+            conjugatedVerb += 'r'; // Simple conditional suffix
+            verbMeaning += ' (condicional)';
+            verbIpa += 'ɾ'; // Add conditional IPA suffix
+        }
+
+        // Apply negation
+        if (isNegated) {
+            kibotashiSentence += ' Ne';
+            ipaSentence += ' /ne/';
+            meaningSentence += ' no';
+        }
+
+        kibotashiSentence += ' ' + conjugatedVerb;
+        ipaSentence += ' ' + verbIpa;
+        meaningSentence += ' ' + verbMeaning;
+
+        if (selectedObject) {
+            const objectMeaning = data.objects.find(o => o.kibotashi === selectedObject)?.spanish;
+            kibotashiSentence += ' ' + selectedObject;
+            ipaSentence += ' ' + getIpa(selectedObject, 'object');
+            meaningSentence += ' ' + objectMeaning;
+        }
+
+        // Apply affix
+        if (selectedAffix) {
+            // This is a simplified application for demonstration.
+            // In a real conlang, affixes attach to specific parts of speech.
+            // For now, append to the last word.
+            const affixData = data.affixes.find(a => a.value === selectedAffix);
+            if (affixData) {
+                const lastWord = kibotashiSentence.split(' ').pop();
+                kibotashiSentence = kibotashiSentence.replace(lastWord, lastWord + affixData.kibotashi);
+                ipaSentence += affixData.ipa ? ` ${affixData.ipa}` : ` ${affixData.kibotashi}`;
+                meaningSentence += ` (${affixData.meaning})`;
+            }
+        }
+
+        // Display results
+        kibotashiPhraseSpan.textContent = kibotashiSentence.trim() + '.'; // Add period
+        ipaPhraseSpan.textContent = ipaSentence.trim() + '/'; // Add trailing slash for IPA
+        meaningPhraseSpan.textContent = meaningSentence.trim() + '.'; // Add period
+
+        // Add emotion class to constructor output
+        constructorOutput.className = 'constructor-output'; // Reset classes
+        if (selectedEmotion && selectedEmotion !== 'neutro') {
+            constructorOutput.classList.add(selectedEmotion);
+        }
+
+        constructorOutput.style.display = 'block'; // Show output
+    }
+
+    buildPhraseBtn.addEventListener('click', buildPhrase);
+
+    // Initial phrase build on load
+    buildPhrase();
+
+
+    // Text-to-Speech (TTS) for constructed phrases
+    speakConstructedPhraseBtn.addEventListener('click', () => {
+        const textToSpeak = kibotashiPhraseSpan.textContent;
+        if (textToSpeak) {
+            speakText(textToSpeak);
+        } else {
+            showCustomModal("No hay frase para escuchar. Construye una frase primero.", "alert");
+        }
+    });
+
+    // --- Audio Section Play Buttons Logic ---
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-LA'; // Spanish (Latin America)
+            utterance.rate = 0.9; // Slightly slower
+            utterance.pitch = 1.0; // Normal pitch
+
+            // Try to find a female voice
+            let femaleVoice = null;
+            const voices = speechSynthesis.getVoices();
+            for (let i = 0; i < voices.length; i++) {
+                // Look for a Spanish voice, preferably female, though 'female' isn't standard in all voice objects
+                if (voices[i].lang === 'es-LA' || voices[i].lang === 'es-US') {
+                     // Check for names that might imply female, or just pick the first good Spanish voice
+                    if (voices[i].name.includes('Femenino') || voices[i].name.includes('Female')) {
+                        femaleVoice = voices[i];
+                        break;
+                    }
+                    if (!femaleVoice) femaleVoice = voices[i]; // Take first Spanish voice if no female found yet
+                }
+            }
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            } else {
+                console.warn("No se encontró una voz femenina en español-LA/US. Usando la voz predeterminada.");
+            }
+
+            speechSynthesis.speak(utterance);
+        } else {
+            showCustomModal("Tu navegador no soporta la API de SpeechSynthesis (Texto a Voz).", 'alert');
+        }
+    }
+
+    playButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const audioSrc = button.dataset.audio;
+            const textToSpeak = button.dataset.text;
+
+            if (audioSrc) {
+                const audio = new Audio(audioSrc);
+                audio.play().catch(e => {
+                    console.error("Error playing audio:", e);
+                    showCustomModal("Error al reproducir el archivo de audio. Asegúrate de que la ruta sea correcta y el archivo exista.", 'alert');
+                });
+            } else if (textToSpeak) {
+                speakText(textToSpeak);
+            }
+        });
+    });
+
+
+    // --- Glossary Filtering and Pagination ---
+    function displayGlossary(page) {
+        glosarioBody.innerHTML = ''; // Clear current table body
+
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedItems = filteredGlossary.slice(start, end);
+
+        paginatedItems.forEach(word => {
+            const row = document.createElement('tr');
+            const audioPath = `audios/${word.kibotashi.toLowerCase().replace(/\s/g, '-')}.mp3`; // Standardize filename
+
+            row.innerHTML = `
+                <td>${word.spanish}</td>
+                <td>${word.kibotashi}</td>
+                <td>${word.category}</td>
+                <td>
+                    <button class="play-button" data-audio="${audioPath}" onerror="this.style.display='none'; showCustomModal('Audio file not found for ${word.kibotashi}', 'alert');">▶️ (Archivo)</button>
+                    <button class="play-button" data-text="${word.kibotashi}">🗣️ (Voz)</button>
+                </td>
+            `;
+            glosarioBody.appendChild(row);
+        });
+
+        // Update pagination controls
+        const totalPages = Math.ceil(filteredGlossary.length / rowsPerPage);
+        pageInfoSpan.textContent = `Página ${page} de ${totalPages}`;
+        prevPageBtn.disabled = page === 1;
+        nextPageBtn.disabled = page === totalPages || totalPages === 0; // Disable if no pages
+    }
+
+    function filterAndDisplayGlossary() {
+        const searchTerm = filtroPalabra.value.toLowerCase().trim();
+        const categoryFilter = filtroCategoria.value;
+
+        filteredGlossary = data.glossary.filter(word => {
+            const matchesSearch = searchTerm === '' ||
+                                  word.spanish.toLowerCase().includes(searchTerm) ||
+                                  word.kibotashi.toLowerCase().includes(searchTerm);
+
+            const matchesCategory = categoryFilter === '' ||
+                                    word.category === categoryFilter;
+
+            return matchesSearch && matchesCategory;
+        });
+
+        filteredGlossary.sort((a, b) => (a.spanish || '').localeCompare(b.spanish || '')); // Re-sort after filtering, with undefined check
+        currentPage = 1; // Reset to first page after filtering
+        displayGlossary(currentPage);
+    }
+
+    // Event Listeners for Glossary Filters
+    buscarPalabraBtn.addEventListener('click', filterAndDisplayGlossary);
+    filtroPalabra.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+            filterAndDisplayGlossary();
+        } else {
+            // Optional: Filter as user types (can be performance intensive for very large datasets)
+            // filterAndDisplayGlossary();
+        }
+    });
+    filtroCategoria.addEventListener('change', filterAndDisplayGlossary);
+
+    // Event Listeners for Pagination
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            displayGlossary(currentPage);
+        }
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredGlossary.length / rowsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayGlossary(currentPage);
+        }
+    });
+
+    // Initial display of glossary
+    filterAndDisplayGlossary(); // Call once on load
+
+    // --- Scroll to Top Button Visibility ---
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) { // Show button after scrolling 300px
+            btnTop.style.display = 'block';
+        } else {
+            btnTop.style.display = 'none';
+        }
+    });
+
+});
