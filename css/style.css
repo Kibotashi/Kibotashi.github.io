@@ -9,6 +9,7 @@
     --texto-claro: #f0f0f0; /* Texto claro para el constructor */
     --constructor-bg-output: #3a3a3a; /* Fondo del área de salida del constructor */
     --gris-rgb: 245, 245, 245; /* RGB para #f5f5f5 */
+    --acento-rgb: 210, 180, 140; /* RGB para #d2b48c (necesario para rgba) */
 }
 /* Variables de color para modo oscuro */
 html.dark-mode {
@@ -21,6 +22,7 @@ html.dark-mode {
     --texto-claro: #ffffff;
     --constructor-bg-output: #2b2b2b;
     --gris-rgb: 34, 34, 34; /* RGB para #222222 */
+    --acento-rgb: 240, 192, 128; /* RGB para #f0c080 */
 }
 /* Estilos base del cuerpo */
 body {
@@ -40,8 +42,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* Ruta de la imagen de fondo corregida para usar el archivo subido */
-    background-image: url('images/montanas-flotantes.png'); /* ¡Ruta corregida! */
+    /* Ruta de la imagen de fondo: se recomienda usar la versión .webp y optimizar su tamaño */
+    background-image: url('images/montanas-flotantes.webp'); /* Usando la imagen WebP optimizada */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -198,7 +200,7 @@ nav a:hover::after {
     padding: 0.5rem 1rem;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 700; /* Añadido para consistencia */
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin-left: 20px; /* Espacio para el botón */
 }
@@ -243,13 +245,14 @@ nav a:hover::after {
         left: 0;
         width: 100%;
         height: 100vh; /* Full height when open */
-        background-color: var(--gris); /* Background for mobile menu */
+        background-color: rgba(var(--gris-rgb), 0.95); /* Background for mobile menu */
         justify-content: center;
         align-items: center;
         transform: translateX(100%); /* Hide off-screen by default */
         transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
         opacity: 0; /* Start hidden */
         pointer-events: none; /* Disable interaction when hidden */
+        display: flex; /* Ensure it's flex when active, even if hidden initially */
     }
 
     .nav-menu.active {
@@ -269,6 +272,7 @@ nav a:hover::after {
 
     #theme-toggle {
         margin-top: 1.5rem; /* Space toggle button from links */
+        display: block; /* Explicitly ensure it's a block element in mobile menu */
     }
 
     .hamburger {
@@ -340,6 +344,7 @@ footer {
     padding: 0.5rem 1rem;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: 700; /* Añadido para consistencia */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .play-button:hover, .play-output-button:hover {
@@ -438,14 +443,66 @@ footer {
 
 /* Estilos para la animación de caracteres */
 .character-cell {
-    cursor: pointer;
+    cursor: grab; /* Cambiado a grab para indicar que es arrastrable */
     transition: transform 0.3s ease, text-shadow 0.3s ease;
     font-size: 2rem; /* Aumenta el tamaño para que el efecto sea visible */
+    padding: 0.5rem;
+    border: 1px solid var(--borde);
+    border-radius: 5px;
+    background-color: var(--fondo);
+    color: var(--texto);
+    display: inline-block; /* Para que ocupen el espacio justo */
+    margin: 5px; /* Pequeño margen */
 }
 .character-cell:hover {
-    transform: scale(1.3); /* Expande el carácter */
+    transform: scale(1.1); /* Ligeramente más grande al pasar el ratón */
     text-shadow: 0 0 10px var(--acento); /* Efecto de brillo */
+    background-color: var(--gris);
 }
+.character-cell:active {
+    cursor: grabbing; /* Cambia a grabbing al arrastrar */
+}
+
+
+/* Estilos para el constructor de caracteres interactivo */
+.character-builder-area {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 2rem;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+}
+
+.drop-zone {
+    width: 100px;
+    height: 100px;
+    border: 2px dashed var(--acento);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    color: var(--texto);
+    background-color: rgba(var(--gris-rgb), 0.2); /* Fondo semi-transparente */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    flex-shrink: 0; /* Evita que se encojan en flexbox */
+}
+
+.drop-zone.hover {
+    background-color: rgba(var(--acento-rgb), 0.2); /* Usa el acento con opacidad */
+    border-color: var(--acento);
+}
+
+.drop-zone.filled {
+    background-color: var(--constructor-bg-output);
+    border-style: solid;
+}
+
+.drop-zone span.dropped-char {
+    font-size: 3rem; /* Carácter grande dentro de la zona de caída */
+    color: var(--texto-claro);
+}
+
 /* Estilos para el modal personalizado */
 .custom-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -480,7 +537,7 @@ footer {
     display: none; /* Hidden by default, shown on scroll */
 }
 #btnTop:hover {
-    background-color: #bfa072; /* Slightly darker accent for hover */
+    background-color: #bfa07c; /* Slightly darker accent for hover */
     transform: scale(1.1);
 }
 
