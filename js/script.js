@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scrolling for navigation links
+    // Desplazamiento suave para los enlaces de navegación
     document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
+            e.preventDefault(); // Previene el comportamiento por defecto del enlace
+            const targetId = this.getAttribute('href'); // Obtiene el ID del destino (ej. "#intro")
+            const targetElement = document.querySelector(targetId); // Selecciona el elemento objetivo
             if (targetElement) {
+                // Desplaza la vista hacia el elemento de forma suave
                 targetElement.scrollIntoView({
                     behavior: 'smooth'
                 });
@@ -13,63 +14,64 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Theme toggle functionality
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const htmlElement = document.documentElement;
+    // Funcionalidad de cambio de tema (claro/oscuro)
+    const themeToggleBtn = document.getElementById('theme-toggle'); // Botón de cambio de tema
+    const htmlElement = document.documentElement; // Elemento raíz del documento (<html>)
 
-    // Check for saved theme preference or default to light
+    // Comprueba la preferencia de tema guardada o establece el tema predeterminado (claro)
     const currentTheme = localStorage.getItem('theme') || 'light';
     if (currentTheme === 'dark') {
-        htmlElement.classList.add('dark-mode');
-        themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+        htmlElement.classList.add('dark-mode'); // Aplica la clase para el modo oscuro
+        themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Modo Claro'; // Cambia el texto del botón
     } else {
-        themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro';
+        themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro'; // Cambia el texto del botón
     }
 
+    // Agrega un escuchador de eventos al botón de cambio de tema
     themeToggleBtn.addEventListener('click', () => {
         if (htmlElement.classList.contains('dark-mode')) {
-            htmlElement.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light');
-            themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro';
+            htmlElement.classList.remove('dark-mode'); // Elimina la clase de modo oscuro
+            localStorage.setItem('theme', 'light'); // Guarda la preferencia
+            themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro'; // Actualiza el texto
         } else {
-            htmlElement.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
-            themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+            htmlElement.classList.add('dark-mode'); // Añade la clase de modo oscuro
+            localStorage.setItem('theme', 'dark'); // Guarda la preferencia
+            themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Modo Claro'; // Actualiza el texto
         }
     });
 
-    // Intersection Observer for fade-in effect on sections
-    const sections = document.querySelectorAll('section');
+    // Observer de Intersección para el efecto de fade-in en las secciones
+    const sections = document.querySelectorAll('section'); // Todas las secciones
     const options = {
-        root: null, // relative to the viewport
+        root: null, // Relativo a la ventana (viewport)
         rootMargin: '0px',
-        threshold: 0.1 // 10% of the section must be visible
+        threshold: 0.1 // El 10% de la sección debe ser visible para activar
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target); // Stop observing once visible
+                entry.target.classList.add('visible'); // Añade la clase 'visible'
+                observer.unobserve(entry.target); // Deja de observar una vez que es visible
             }
         });
     }, options);
 
     sections.forEach(section => {
-        observer.observe(section);
+        observer.observe(section); // Empieza a observar cada sección
     });
 
-    // Hamburger menu functionality for mobile
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
+    // Funcionalidad del menú hamburguesa para dispositivos móviles
+    const hamburger = document.querySelector('.hamburger'); // Botón hamburguesa
+    const navMenu = document.querySelector('.nav-menu'); // Menú de navegación
 
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            hamburger.classList.toggle('active'); // Toggle active class for hamburger too
+            navMenu.classList.toggle('active'); // Alterna la clase 'active' en el menú
+            hamburger.classList.toggle('active'); // Alterna la clase 'active' en el botón hamburguesa
         });
 
-        // Close menu when a link is clicked (for mobile)
+        // Cierra el menú cuando se hace clic en un enlace (para móviles)
         document.querySelectorAll('.nav-menu li a').forEach(link => {
             link.addEventListener('click', () => {
                 if (navMenu.classList.contains('active')) {
@@ -80,55 +82,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Audio Playback for .play-button elements (for specific audio files like from audio section)
+    // Reproducción de audio para elementos con data-audio (ej. sección de audio)
     document.querySelectorAll('button.play-button[data-audio]').forEach(button => {
         button.addEventListener('click', function() {
-            const audioSrc = this.dataset.audio;
+            const audioSrc = this.dataset.audio; // Obtiene la ruta del audio del atributo data-audio
             if (audioSrc) {
-                const audio = new Audio(audioSrc);
-                audio.play().catch(e => console.error("Error playing audio:", e));
+                const audio = new Audio(audioSrc); // Crea un nuevo objeto Audio
+                audio.play().catch(e => console.error("Error al reproducir audio:", e)); // Reproduce y captura errores
             } else {
-                console.warn("No audio source defined for this button.");
+                console.warn("No se definió la fuente de audio para este botón.");
             }
         });
     });
 
-    // Audio Playback for .play-button elements that use text-to-speech
+    // Reproducción de audio para elementos con data-text (texto a voz)
     document.querySelectorAll('button.play-button[data-text]').forEach(button => {
         button.addEventListener('click', function() {
-            const textToSpeak = this.dataset.text;
+            const textToSpeak = this.dataset.text; // Obtiene el texto del atributo data-text
             if (textToSpeak) {
-                window.speakText(textToSpeak);
+                window.speakText(textToSpeak); // Llama a la función global para hablar texto
             } else {
-                console.warn("No text defined for this button to speak.");
+                console.warn("No se definió texto para este botón para hablar.");
             }
         });
     });
 
-    // Function to speak text using Web Speech API
+    // Función para hablar texto usando la API de voz del navegador
     window.speakText = function(text) {
-        if ('speechSynthesis' in window) {
+        if ('speechSynthesis' in window) { // Comprueba si la API está disponible
             const synth = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'es-LA'; // Set to Latin American Spanish
+            const utterance = new SpeechSynthesisUtterance(text); // Crea una nueva 'utterance'
+            utterance.lang = 'es-LA'; // Establece el idioma a español latinoamericano
 
-            // Find a suitable voice
+            // Intenta encontrar una voz femenina en español latinoamericano
             let voice = synth.getVoices().find(v => v.lang === 'es-LA' && v.name.includes('female'));
-            if (!voice) {
+            if (!voice) { // Si no la encuentra, busca femenina en cualquier español
                 voice = synth.getVoices().find(v => v.lang.startsWith('es') && v.name.includes('female'));
             }
-            if (!voice) {
+            if (!voice) { // Si aún no la encuentra, busca cualquier voz en español
                 voice = synth.getVoices().find(v => v.lang.startsWith('es'));
             }
-            utterance.voice = voice;
+            utterance.voice = voice; // Asigna la voz encontrada
 
-            synth.speak(utterance);
+            synth.speak(utterance); // Inicia la reproducción de voz
         } else {
-            console.warn("Speech Synthesis not supported in this browser.");
+            console.warn("La síntesis de voz no es compatible con este navegador.");
         }
     };
 
-    // Constructor functionality (example data - expand as needed)
+    // Funcionalidad del Constructor de frases (datos de ejemplo)
     const pronouns = {
         Ena: "Yo",
         Lun: "Yo (poético)",
@@ -164,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
         futuro: { suffix: "el" }
     };
 
+    // Elementos del DOM para el constructor
     const pronounSelect = document.getElementById('pronoun-select');
     const verbSelect = document.getElementById('verb-select');
     const tenseSelect = document.getElementById('tense-select');
@@ -182,13 +185,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const constructorOutputDiv = document.getElementById('constructor-output');
 
 
-    // Populate selects
+    // Función para poblar elementos select
     function populateSelect(selectElement, data, addEmptyOption = true) {
         if (!selectElement) {
-            console.error("populateSelect: selectElement is null for data", data);
+            console.error("populateSelect: el elemento select es nulo para los datos", data);
             return;
         }
-        selectElement.innerHTML = '';
+        selectElement.innerHTML = ''; // Limpia las opciones existentes
         if (addEmptyOption) {
             const option = document.createElement('option');
             option.value = "";
@@ -196,21 +199,22 @@ document.addEventListener('DOMContentLoaded', function() {
                                  data === verbs ? "Selecciona un verbo" :
                                  data === objects ? "Selecciona un objeto" :
                                  "Selecciona";
-            selectElement.appendChild(option);
+            selectElement.appendChild(option); // Añade la opción vacía
         }
         for (const key in data) {
             const option = document.createElement('option');
             option.value = key;
             option.textContent = data[key];
-            selectElement.appendChild(option);
+            selectElement.appendChild(option); // Añade las opciones de datos
         }
     }
 
+    // Pobla todos los select iniciales
     populateSelect(pronounSelect, pronouns);
     populateSelect(verbSelect, verbs);
     populateSelect(objectSelect, objects);
 
-    // Manually populate tense select as it has different structure
+    // Pobla el select de tiempo manualmente (estructura diferente)
     if (tenseSelect) {
         tenseSelect.innerHTML = `
             <option value="">Selecciona un tiempo</option>
@@ -219,10 +223,10 @@ document.addEventListener('DOMContentLoaded', function() {
             <option value="futuro">Futuro</option>
         `;
     } else {
-        console.error("tenseSelect is null");
+        console.error("tenseSelect es nulo");
     }
 
-    // Manually populate emotion select
+    // Pobla el select de emociones manualmente
     if (emotionSelect) {
         emotionSelect.innerHTML = `
             <option value="tono neutro">Tono Neutro</option>
@@ -232,11 +236,12 @@ document.addEventListener('DOMContentLoaded', function() {
             <option value="sorprendido">Sorprendido</option>
         `;
     } else {
-        console.error("emotionSelect is null");
+        console.error("emotionSelect es nulo");
     }
 
-
+    // Función principal para construir la frase
     window.buildPhrase = function() {
+        // Lógica para la frase aleatoria
         if (randomizeCheckbox && randomizeCheckbox.checked) {
             const randomPronounKey = Object.keys(pronouns)[Math.floor(Math.random() * Object.keys(pronouns).length)];
             const randomVerbKey = Object.keys(verbs)[Math.floor(Math.random() * Object.keys(verbs).length)];
@@ -247,9 +252,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (verbSelect) verbSelect.value = randomVerbKey;
             if (tenseSelect) tenseSelect.value = randomTenseKey;
             if (objectSelect) objectSelect.value = randomObjectKey;
-            if (negationCheckbox) negationCheckbox.checked = Math.random() > 0.5; // Random true/false
+            if (negationCheckbox) negationCheckbox.checked = Math.random() > 0.5; // Aleatorio true/false
             if (moodSelect) moodSelect.value = Math.random() > 0.5 ? 'indicativo' : 'condicional';
-            // Ensure affixSelect and emotionSelect have options before randomizing
+            // Asegura que affixSelect y emotionSelect tengan opciones antes de aleatorizar
             if (affixSelect && affixSelect.options.length > 0) {
                  affixSelect.value = affixSelect.options[Math.floor(Math.random() * affixSelect.options.length)].value;
             }
@@ -258,6 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Obtiene los valores seleccionados (con comprobaciones de nulidad)
         const selectedPronoun = pronounSelect ? pronounSelect.value : '';
         const selectedVerb = verbSelect ? verbSelect.value : '';
         const selectedTense = tenseSelect ? tenseSelect.value : '';
@@ -268,6 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedEmotion = emotionSelect ? emotionSelect.value : '';
 
 
+        // Valida que se hayan seleccionado los componentes básicos
         if (!selectedPronoun || !selectedVerb || !selectedTense) {
             if(kibotashiPhraseOutput) kibotashiPhraseOutput.textContent = "Por favor, selecciona un pronombre, verbo y tiempo.";
             if(ipaPhraseOutput) ipaPhraseOutput.textContent = "";
@@ -281,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let phraseMeaning = "";
         let ipaPronunciation = "";
 
-        // Apply tense
+        // Aplica el tiempo verbal
         if (selectedTense === "presente") {
             const personalSuffix = tenses.presente.personal[selectedPronoun];
             if (personalSuffix) {
@@ -293,26 +300,26 @@ document.addEventListener('DOMContentLoaded', function() {
             phraseMeaning = `${pronouns[selectedPronoun]} ${translatedVerb}${tenses[selectedTense].suffix ? ' (en ' + selectedTense + ')' : ''}`;
         }
 
-        // Apply negation
+        // Aplica la negación
         if (isNegated) {
             kibotashiVerb = "Ne" + kibotashiVerb;
             phraseMeaning = `No ${phraseMeaning}`;
         }
 
-        // Apply mood (simplified)
+        // Aplica el modo (simplificado)
         if (selectedMood === "condicional") {
-            kibotashiVerb += "-ka"; // Example conditional affix
+            kibotashiVerb += "-ka"; // Sufijo de ejemplo condicional
             phraseMeaning += " (condicional)";
         }
 
-        // Apply affix
+        // Aplica el sufijo afectivo
         if (selectedAffix) {
-            // This is a simplified application. Real affix might change the word.
+            // Esta es una aplicación simplificada. El sufijo real podría cambiar la palabra.
             kibotashiVerb += selectedAffix;
             phraseMeaning += ` con ${selectedAffix} (${affixSelect.options[affixSelect.selectedIndex].textContent})`;
         }
 
-        // Apply emotion (simplified for phrase meaning)
+        // Aplica la emoción (simplificado para el significado de la frase)
         if (selectedEmotion && selectedEmotion !== "tono neutro") {
             phraseMeaning += ` [Tono: ${emotionSelect.options[emotionSelect.selectedIndex].textContent}]`;
         }
@@ -320,34 +327,37 @@ document.addEventListener('DOMContentLoaded', function() {
         let fullKibotashiPhrase = kibotashiVerb;
         let fullMeaning = phraseMeaning;
 
+        // Añade el objeto si está seleccionado
         if (selectedObject) {
             fullKibotashiPhrase += ` ${selectedObject}`;
             fullMeaning += ` ${objects[selectedObject]}`;
         }
 
-        // Placeholder IPA (you'd need a more complex system to generate real IPA)
+        // IPA de marcador de posición (se necesitaría un sistema más complejo para generar IPA real)
         ipaPronunciation = `/${fullKibotashiPhrase.toLowerCase().replace(/[^a-z]/g, '')}/`;
 
+        // Actualiza los elementos de salida del constructor
         if(kibotashiPhraseOutput) kibotashiPhraseOutput.textContent = fullKibotashiPhrase;
         if(ipaPhraseOutput) ipaPhraseOutput.textContent = ipaPronunciation;
         if(meaningPhraseOutput) meaningPhraseOutput.textContent = fullMeaning;
         if(constructorOutputDiv) constructorOutputDiv.style.display = 'block';
 
-        // --- NEW: Trigger glossary search with the constructed phrase ---
-        // Set the glossary search input value
+        // --- NUEVO: Activa la búsqueda en el glosario con la frase construida ---
+        // Establece el valor del input de búsqueda del glosario
         if (filtroPalabraInput) {
             filtroPalabraInput.value = fullKibotashiPhrase;
         }
-        // Reset current page and render the glossary to apply the search
+        // Reinicia la página actual y renderiza el glosario para aplicar la búsqueda
         currentPage = 1;
         renderGlossary();
-        // Scroll to the glossary section for immediate feedback
+        // Desplázate a la sección del glosario para una retroalimentación inmediata
         const glosarioSection = document.getElementById('glosario');
         if (glosarioSection) {
             glosarioSection.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
+    // Función para reproducir la frase construida
     window.speakConstructedPhrase = function() {
         const textToSpeak = kibotashiPhraseOutput.textContent;
         if (textToSpeak) {
@@ -355,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Event listeners for changes in constructor selects (moved here)
+    // Escuchadores de eventos para cambios en los select del constructor
     if (pronounSelect) pronounSelect.addEventListener('change', window.buildPhrase);
     if (verbSelect) verbSelect.addEventListener('change', window.buildPhrase);
     if (tenseSelect) tenseSelect.addEventListener('change', window.buildPhrase);
@@ -366,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (emotionSelect) emotionSelect.addEventListener('change', window.buildPhrase);
     if (randomizeCheckbox) randomizeCheckbox.addEventListener('change', window.buildPhrase);
 
-    // Event listeners for Constructor buttons (added here)
+    // Escuchadores de eventos para los botones del Constructor
     if (buildPhraseBtn) {
         buildPhraseBtn.addEventListener('click', window.buildPhrase);
     }
@@ -374,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function() {
         speakConstructedPhraseBtn.addEventListener('click', window.speakConstructedPhrase);
     }
 
-    // Function to scroll to top
+    // Función para desplazarse a la parte superior de la página
     window.scrollToTop = function() {
         window.scrollTo({
             top: 0,
@@ -382,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 
-    // Show/hide scroll to top button
+    // Muestra/oculta el botón "Volver arriba"
     window.onscroll = function() {
         const btnTop = document.getElementById("btnTop");
         if (btnTop) {
@@ -394,11 +404,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // --- Glosario Data and Pagination Logic ---
+    // --- Datos del Glosario y Lógica de Paginación ---
 
-    // All glossary data
+    // Todos los datos del glosario (tu vocabulario)
     const allGlossaryData = [
-        // Existing vocabulary
+        // Vocabulario existente
         { espanol: "Amor", kibotashi: "Kat", categoria: "Emoción" },
         { espanol: "Casa", kibotashi: "Hana", categoria: "Hogar" },
         { espanol: "Comer", kibotashi: "Men", categoria: "Acción" },
@@ -471,8 +481,8 @@ document.addEventListener('DOMContentLoaded', function() {
         { espanol: "especias", kibotashi: "mireth", categoria: "Comida" },
         { espanol: "olla pequeña", kibotashi: "naku", categoria: "Utensilio" },
         { espanol: "tabla de cortar", kibotashi: "kavrel", categoria: "Utensilio" },
-        { espanol: "colador", kibotashi: "shuren", categoria: "Utensilio" },
-        // New entries from previous steps
+        { espanol: "colador", kibotashi: "shuren", categoria: "Higiene" },
+        // Nuevas entradas de glosario (de pasos anteriores)
         { espanol: "ventilador", kibotashi: "furel", categoria: "Hogar" },
         { espanol: "balcón", kibotashi: "zavinel", categoria: "Hogar" },
         { espanol: "cortina", kibotashi: "mireth", categoria: "Hogar" },
@@ -541,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { espanol: "claridad", kibotashi: "kuanev", categoria: "Valor" }
     ];
 
-    console.log("Longitud de allGlossaryData al inicio:", allGlossaryData.length); // NEW LOG
+    console.log("Longitud de allGlossaryData al inicio:", allGlossaryData.length);
 
     const itemsPerPage = 10;
     let currentPage = 1;
@@ -555,24 +565,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextPageBtn = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('page-info');
 
-    // Function to render the glossary table with pagination and filters
+    // Función para renderizar la tabla del glosario con paginación y filtros
     function renderGlossary() {
-        console.log("renderGlossary called.");
+        console.log("renderGlossary llamado.");
         const textFilter = filtroPalabraInput ? filtroPalabraInput.value.toLowerCase() : '';
         const categoryFilter = filtroCategoriaSelect ? filtroCategoriaSelect.value : '';
 
-        console.log("Text Filter (actual value):", textFilter); // NEW LOG
-        console.log("Category Filter (actual value):", categoryFilter); // NEW LOG
+        console.log("Filtro de texto (valor actual):", textFilter);
+        console.log("Filtro de categoría (valor actual):", categoryFilter);
 
 
-        // Apply filters
+        // Aplica los filtros
         filteredGlossary = allGlossaryData.filter(item => {
             const matchesText = (textFilter === "" || item.espanol.toLowerCase().includes(textFilter) || item.kibotashi.toLowerCase().includes(textFilter));
             const matchesCategory = (categoryFilter === "" || item.categoria === categoryFilter);
             return matchesText && matchesCategory;
         });
 
-        // Sort filteredGlossary by category and then by Spanish word for consistent pagination
+        // Ordena el glosario filtrado por categoría y luego por palabra en español
         filteredGlossary.sort((a, b) => {
             if (a.categoria < b.categoria) return -1;
             if (a.categoria > b.categoria) return 1;
@@ -583,36 +593,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalPages = Math.ceil(filteredGlossary.length / itemsPerPage);
 
-        console.log("Filtered Glossary Length:", filteredGlossary.length);
-        console.log("Items Per Page:", itemsPerPage);
-        console.log("Total Pages:", totalPages);
-        console.log("Current Page (before adjustment):", currentPage);
+        console.log("Longitud del glosario filtrado:", filteredGlossary.length);
+        console.log("Elementos por página:", itemsPerPage);
+        console.log("Total de páginas:", totalPages);
+        console.log("Página actual (antes del ajuste):", currentPage);
 
 
-        // Adjust current page if it's out of bounds after filtering
+        // Ajusta la página actual si está fuera de los límites después de filtrar
         if (currentPage > totalPages && totalPages > 0) {
             currentPage = totalPages;
         } else if (totalPages === 0) {
-            currentPage = 0; // No pages if no results
+            currentPage = 0; // No hay páginas si no hay resultados
         } else if (currentPage === 0 && totalPages > 0) {
-            currentPage = 1; // Reset to first page if no page selected but results exist
+            currentPage = 1; // Reinicia a la primera página si no hay página seleccionada pero hay resultados
         }
 
-        console.log("Current Page (after adjustment):", currentPage);
+        console.log("Página actual (después del ajuste):", currentPage);
 
 
-        // Get items for the current page
+        // Obtiene los elementos para la página actual
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const itemsToDisplay = filteredGlossary.slice(startIndex, endIndex);
 
-        console.log("Items to Display (slice):", itemsToDisplay);
+        console.log("Elementos a mostrar (slice):", itemsToDisplay);
 
 
-        // Clear existing rows
+        // Limpia las filas existentes de la tabla
         if(glosarioBody) glosarioBody.innerHTML = '';
 
-        // Populate table with itemsToDisplay
+        // Rellena la tabla con los elementos a mostrar
         if (itemsToDisplay.length === 0) {
             if (glosarioBody) {
                 const noResultsRow = glosarioBody.insertRow();
@@ -636,23 +646,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Update pagination info
+        // Actualiza la información de paginación
         if(pageInfoSpan) pageInfoSpan.textContent = `Página ${currentPage || 0} de ${totalPages || 0}`;
 
-        // Enable/disable pagination buttons
+        // Habilita/deshabilita los botones de paginación
         if(prevPageBtn) prevPageBtn.disabled = currentPage <= 1;
         if(nextPageBtn) nextPageBtn.disabled = currentPage >= totalPages;
 
-        // Re-attach play button event listeners for newly created buttons
+        // Vuelve a adjuntar los escuchadores de eventos para los botones de reproducción recién creados
         glosarioBody.querySelectorAll('button.play-button[data-audio]').forEach(button => {
             button.addEventListener('click', function() {
-                const audio = this.previousElementSibling; // Get the audio tag
-                audio.play().catch(e => console.error("Error playing audio:", e));
+                const audio = this.previousElementSibling; // Obtiene la etiqueta de audio
+                audio.play().catch(e => console.error("Error al reproducir audio:", e));
             });
         });
     }
 
-    // Event listeners for pagination
+    // Escuchadores de eventos para la paginación
     if(prevPageBtn) {
         prevPageBtn.addEventListener('click', () => {
             if (currentPage > 1) {
@@ -672,73 +682,80 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Event listener for "Buscar" button click
+    // Escuchador de eventos para el clic en el botón "Buscar"
     if(buscarPalabraBtn) {
         buscarPalabraBtn.addEventListener('click', () => {
-            currentPage = 1; // Reset to first page on filter change
+            currentPage = 1; // Reinicia a la primera página al cambiar el filtro
             renderGlossary();
         });
     }
 
-
-    // Event listener for category filter change (still triggers immediate render)
+    // Escuchador de eventos para el cambio de filtro de categoría (también activa el renderizado inmediato)
     if(filtroCategoriaSelect) {
         filtroCategoriaSelect.addEventListener('change', () => {
-            currentPage = 1; // Reset to first page on filter change
+            currentPage = 1; // Reinicia a la primera página al cambiar el filtro
             renderGlossary();
         });
     }
 
-    // Initial render of the glossary (shows first 10 words by default)
+    // Renderizado inicial del glosario (muestra las primeras 10 palabras por defecto)
     renderGlossary();
 
-    // Event listener for the "Enter the World" button
+    // Lógica para el botón "Entrar al Mundo" y las intros de audio/scroll
     const enterWorldButton = document.getElementById('enter-world-button');
     const gameStartAudio = document.getElementById('game-start-audio');
     const heroicIntroAudio = document.getElementById('heroic-intro-audio');
     const voiceIntroAudio = document.getElementById('voice-intro-audio');
     const mainContent = document.getElementById('main-content');
+    const introSection = document.getElementById('intro'); // Referencia a la sección de intro para el scroll
 
-    if (enterWorldButton && gameStartAudio && heroicIntroAudio && voiceIntroAudio && mainContent) {
-        enterWorldButton.addEventListener('click', async function(event) { // Make it async
-            event.preventDefault();
+    if (enterWorldButton && gameStartAudio && heroicIntroAudio && voiceIntroAudio && mainContent && introSection) {
+        enterWorldButton.addEventListener('click', async function(event) {
+            event.preventDefault(); // Previene el comportamiento de ancla por defecto
 
-            // Resume Tone.js AudioContext on user gesture
+            // Reanuda el AudioContext de Tone.js con el gesto del usuario
             if (Tone.context.state !== 'running') {
                 await Tone.start();
-                console.log('AudioContext resumed!');
+                console.log('AudioContext de Tone.js reanudado!');
             }
 
-            // Play the game start audio
-            gameStartAudio.play().catch(e => console.error("Error playing game start audio:", e)); // Added catch
+            // Reproduce el audio de inicio de juego (efecto de sonido corto)
+            gameStartAudio.play().catch(e => console.error("Error al reproducir el audio de inicio de juego:", e));
 
-            // After a short delay, start the heroic intro music and voice
-            setTimeout(() => {
-                heroicIntroAudio.muted = false;
-                heroicIntroAudio.play().catch(e => console.error("Error playing heroic intro audio:", e));
+            // Desactiva el silencio y reproduce la música de intro heroica
+            // ¡Importante! Asegúrate de que 'heroic-intro.mp3' tenga el atributo 'loop' en tu HTML si quieres que se repita hasta que la voz termine.
+            heroicIntroAudio.muted = false;
+            heroicIntroAudio.play().catch(e => console.error("Error al reproducir la música de intro heroica:", e));
 
-                voiceIntroAudio.muted = false;
-                voiceIntroAudio.play().catch(e => console.error("Error playing voice intro audio:", e));
-            }, 500); // Start music/voice after 0.5 seconds
+            // Desactiva el silencio y reproduce el audio de voz de la intro
+            voiceIntroAudio.muted = false;
+            voiceIntroAudio.play().catch(e => console.error("Error al reproducir el audio de voz de la intro:", e));
 
-            // Smooth scroll to the intro section
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
+            // Muestra el contenido principal y desplaza INMEDIATAMENTE
+            mainContent.style.display = 'block'; // Muestra el resto del contenido
+            introSection.scrollIntoView({ behavior: 'smooth' }); // Desplaza a la sección de intro
 
-            // After a longer delay, stop the intro music and show main content
-            setTimeout(() => {
+            // Cuando el audio de voz de la intro termina, pausa la música heroica
+            voiceIntroAudio.onended = function() {
+                console.log("El audio de voz de la intro ha terminado. Pausando música heroica.");
                 heroicIntroAudio.pause();
-                heroicIntroAudio.currentTime = 0; // Reset audio to beginning
-                voiceIntroAudio.pause();
-                voiceIntroAudio.currentTime = 0;
+                heroicIntroAudio.currentTime = 0; // Reinicia la música para futuras reproducciones
+            };
 
-                mainContent.style.display = 'block'; // Show the rest of the content
-            }, 10000); // Adjust this delay based on your audio lengths
+            // Fallback: Si por alguna razón el evento 'onended' de voiceIntroAudio no se dispara,
+            // nos aseguramos de que la música heroica se detenga después de un tiempo prudencial.
+            // Esto es una medida de seguridad, ya que la reproducción y los eventos pueden ser complejos en diferentes navegadores.
+            setTimeout(() => {
+                if (!voiceIntroAudio.paused && !voiceIntroAudio.ended) { // Si la voz sigue sonando (o nunca terminó)
+                    console.warn("Fallback: La voz de la intro no terminó. Pausando música heroica después de 15 segundos.");
+                    heroicIntroAudio.pause();
+                    heroicIntroAudio.currentTime = 0;
+                }
+            }, 15000); // Ajusta este tiempo si tu 'voice-intro.wav' dura más de 15 segundos.
         });
     }
 
-    // Hide main content initially (assuming hero section is the first thing users see)
+    // Oculta el contenido principal inicialmente
     if (mainContent) {
         mainContent.style.display = 'none';
     }
