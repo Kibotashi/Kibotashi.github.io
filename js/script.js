@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZoneV = document.getElementById('drop-zone-v'); // Corrected assignment here
     const dropZoneC2 = document.getElementById('drop-zone-c2');
     const formWordBtn = document.getElementById('form-word-btn');
-    const formedWordOutput = document.getElementById('formed-word-output'); // Corrected assignment here
+    const formedWordOutput = document.getElementById('formed-word-output');
     const formedKibotashiWord = document.getElementById('formed-kibotashi-word');
     const formedIpaWord = document.getElementById('formed-ipa-word');
     const formedMeaningWord = document.getElementById('formed-meaning-word');
@@ -168,20 +168,26 @@ document.addEventListener('DOMContentLoaded', () => {
             { spanish: 'Nosotros', kibotashi: 'Nual', category: 'Pronombre', ipa: '/ˈnu.al/' },
             { spanish: 'Ser', kibotashi: 'Ta', category: 'Verbo', ipa: '/ta/' },
             { spanish: 'Estar', kibotashi: 'Ni', category: 'Verbo', ipa: '/ni/' },
-            { spanish: 'Tener', kibotashi: 'Kel', category: 'Verbo', ipa: '/kel/' },
-            { spanish: 'Hacer', kibotashi: 'Mir', category: 'Verbo', ipa: '/miʁ/' },
-            { spanish: 'Sentir', kibotashi: 'Bin', category: 'Verbo', ipa: '/bin/' },
-            { spanish: 'Ir', kibotashi: 'Jan', category: 'Verbo', ipa: '/ʒan/' },
-            { spanish: 'Decir', kibotashi: 'Vael', category: 'Verbo', ipa: '/ˈva.el/' },
-            { spanish: 'Saber', kibotashi: 'Zar', category: 'Verbo', ipa: '/zaʁ/' },
-            { spanish: 'Querer', kibotashi: 'Katun', category: 'Verbo', ipa: '/ˈka.tun/' },
-            { spanish: 'Poder', kibotashi: 'Solv', category: 'Verbo', ipa: '/solv/' }
+            { kibotashi: 'Tener', category: 'Verbo', ipa: '/kel/' },
+            { kibotashi: 'Mir', spanish: 'Hacer', ipa: '/miʁ/' },
+            { kibotashi: 'Bin', spanish: 'Sentir', ipa: '/bin/' },
+            { kibotashi: 'Jan', spanish: 'Ir', ipa: '/ʒan/' },
+            { kibotashi: 'Vael', spanish: 'Decir', ipa: '/ˈva.el/' },
+            { kibotashi: 'Zar', spanish: 'Saber', ipa: '/zaʁ/' },
+            { kibotashi: 'Querer', kibotashi: 'Katun', category: 'Verbo', ipa: '/ˈka.tun/' },
+            { kibotashi: 'Poder', kibotashi: 'Solv', category: 'Verbo', ipa: '/solv/' }
         ].sort((a, b) => (a.spanish || '').localeCompare(b.spanish || '')) // Sort glossary alphabetically by Spanish word, with undefined check
     };
 
     let currentPage = 1;
     const rowsPerPage = 10;
     let filteredGlossary = data.glossary; // Initialize with full glossary
+
+    // --- New elements for collapsible section ---
+    const constructorToggleHeader = document.getElementById('constructor-toggle-header');
+    const constructorControls = document.getElementById('constructor-controls');
+    const toggleIcon = document.getElementById('toggle-icon');
+
 
     // --- Functions ---
 
@@ -421,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentC2 = draggedCharData;
                     }
                 } else {
-                    showCustomModal(`¡Error! No puedes soltar una ${draggedCharData.type === 'vowel' ? 'vocal' : 'consonante'} en una zona de ${zoneType === 'vowel' ? 'vocal' : 'consonante'}.`, 'alert');
+                    showCustomModal(`¡Error! No puedes soltar una ${draggedCharData.type === 'vowel' ? 'vocal' : 'consonante'} en una zona de ${zoneType === 'vocal' ? 'vocal' : 'consonante'}.`, 'alert');
                 }
             }
             draggedCharData = null; // Reset dragged data
@@ -829,5 +835,15 @@ document.addEventListener('DOMContentLoaded', () => {
             btnTop.style.display = 'none';
         }
     });
+
+    // --- Collapsible Constructor Controls Logic ---
+    constructorToggleHeader.addEventListener('click', () => {
+        constructorControls.classList.toggle('collapsed');
+        constructorToggleHeader.classList.toggle('collapsed'); // Also toggle class on header for icon rotation
+    });
+
+    // Initialize constructor controls to be collapsed by default
+    constructorControls.classList.add('collapsed');
+    constructorToggleHeader.classList.add('collapsed');
 
 });
