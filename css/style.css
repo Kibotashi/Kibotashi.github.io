@@ -9,6 +9,7 @@
   --texto-claro: #f0f0f0; /* Texto claro para el constructor */
   --constructor-bg-output: #3a3a3a; /* Fondo del área de salida del constructor */
 }
+
 /* Variables de color para modo oscuro */
 html.dark-mode {
   --fondo: #1a1a1a;
@@ -20,325 +21,494 @@ html.dark-mode {
   --texto-claro: #ffffff;
   --constructor-bg-output: #2b2b2b;
 }
+
+/* Añadido: Desplazamiento suave para toda la página */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Estilos base del cuerpo */
 body {
   margin: 0;
   font-family: 'Outfit', sans-serif;
-  background-color: var(--fondo);
+  line-height: 1.6;
   color: var(--texto);
-  line-height: 1.7;
+  background-color: var(--fondo);
+  transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden; /* Evita el scroll horizontal */
-  scroll-behavior: smooth; /* Habilita el scroll suave para los enlaces ancla */
 }
-/* Cinematic Hero Section Styles */
+
+/* Estilos del encabezado principal */
+header {
+  background-color: var(--gris);
+  color: var(--texto);
+  text-align: center;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: var(--acento); /* Color de acento para el título principal */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  font-size: 1.1rem;
+}
+
+/* Estilos de la barra de navegación */
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+  background-color: var(--oscuro); /* Fondo oscuro para la navegación */
+  padding: 0.8rem 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+nav a {
+  color: var(--texto-claro); /* Texto claro para enlaces de navegación */
+  text-decoration: none;
+  padding: 0.6rem 1rem;
+  margin: 0.2rem 0.5rem; /* Margen para espacio entre enlaces */
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+  background-color: var(--acento); /* Color de acento al pasar el ratón */
+  color: #fff;
+}
+
+/* Botón de alternar tema */
+#theme-toggle {
+  background-color: var(--acento);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.6rem 1rem;
+  margin: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+}
+
+#theme-toggle:hover {
+  background-color: darken(var(--acento), 10%); /* Efecto de oscurecimiento al pasar el ratón */
+}
+
+/* Estilos de las secciones de contenido */
+section {
+  padding: 2rem 5%; /* Padding responsivo */
+  margin: 1rem auto;
+  max-width: 900px;
+  background-color: var(--fondo);
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  opacity: 0; /* Inicialmente invisible */
+  transform: translateY(20px); /* Ligeramente desplazado hacia abajo */
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+section h2 {
+  color: var(--acento);
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--borde);
+  padding-bottom: 0.5rem;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+section h3 {
+  color: var(--texto);
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+section p, section ul {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+section ul {
+  list-style-type: disc;
+  margin-left: 2rem;
+}
+
+section li {
+  margin-bottom: 0.5rem;
+}
+
+/* Estilos de tabla generales */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background-color: var(--fondo);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden; /* Asegura que las esquinas redondeadas se apliquen */
+  opacity: 0; /* Inicialmente invisible */
+  transform: translateY(20px); /* Ligeramente desplazado hacia abajo */
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+table.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+table th, table td {
+  border: 1px solid var(--borde);
+  padding: 12px 15px;
+  text-align: left;
+  transition: border-color 0.3s ease;
+}
+
+table th {
+  background-color: var(--gris);
+  color: var(--acento);
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+table tr:nth-child(even) {
+  background-color: var(--gris); /* Fila par con color de fondo */
+}
+
+table tr:hover {
+  background-color: var(--borde); /* Resaltar fila al pasar el ratón */
+}
+
+/* Estilos para audio y botones de reproducción */
+td audio {
+  display: none; /* Oculta el reproductor de audio nativo */
+}
+
+.play-button {
+  background-color: var(--acento);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin-left: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+}
+
+.play-button:hover {
+  background-color: darken(var(--acento), 10%);
+}
+
+/* Cinematic Hero Section */
 #hero {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Ruta de la imagen de fondo corregida a .png */
-  background-image: url('../images/montanas-flotantes.png'); /* ¡Corregido a .png! */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  text-align: center;
+  color: white;
+  background: url('../montanas-flotantes.jpg') no-repeat center center/cover;
   position: relative;
   overflow: hidden;
-  text-align: center;
-  color: var(--texto-claro); /* Adjusted for dark background */
-}
-#hero h1 {
-  font-size: 4rem;
-  font-weight: 700;
-  letter-spacing: 6px;
-  color: #fff; /* White text for contrast on dark background */
-  /* Painterly text effect */
-  text-shadow:
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    -2px -2px 4px rgba(0, 0, 0, 0.7),
-    4px 4px 8px rgba(0, 0, 0, 0.5),
-    -4px -4px 8px rgba(0, 0, 0, 0.5),
-    6px 6px 12px rgba(0, 0, 0, 0.3);
-  animation: fadeIn 1.5s ease-out;
-}
-#hero p {
-  font-size: 1.2rem;
-  color: #ccc; /* Lighter gray for contrast */
-  margin-top: 1rem;
-  animation: fadeIn 2s ease-out 0.5s forwards;
-  opacity: 0; /* Starts hidden for animation */
-}
-#hero a {
-  margin-top: 2.5rem;
-  padding: 1rem 2rem;
-  border: 2px solid var(--acento);
-  color: #fff; /* White text for button */
-  background-color: rgba(0,0,0,0.3); /* Semi-transparent background for the button */
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover */
-  border-radius: 8px; /* Rounded corners for the button */
-}
-#hero a:hover {
-  background-color: var(--acento);
-  color: var(--oscuro); /* Dark text on accent background for contrast */
-}
-/* Keyframes for fade-in animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Estilos del encabezado */
-header {
-  padding: 4rem 2rem;
-  text-align: center;
-  background-color: transparent; /* Changed to transparent */
-  border-bottom: 4px solid var(--acento);
-}
-/* Estilos del título del encabezado */
-header h1 {
-  font-size: 3rem;
-  letter-spacing: 2px;
-  margin: 0;
-}
-/* Estilos de la barra de navegación */
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 1rem;
-  background-color: var(--gris); /* Usar --gris para consistencia */
-  border-bottom: 1px solid var(--borde);
-  position: relative; /* Para posicionar el botón de tema */
-}
-/* Estilos de los enlaces de navegación */
-nav a {
-  text-decoration: none;
-  color: var(--texto);
-  font-weight: 700;
-  font-size: 0.95rem;
-  transition: color 0.3s ease; /* Transición suave para el hover */
-}
-/* Efecto hover de los enlaces de navegación */
-nav a:hover {
-  color: var(--acento);
-}
-/* Botón de cambio de tema */
-#theme-toggle {
-  background-color: var(--acento);
-  color: var(--texto-claro);
-  border: none;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-left: 20px; /* Espacio para el botón */
-}
-#theme-toggle:hover {
-  background-color: #c0a07c;
-  transform: translateY(-2px);
-}
-/* Estilos de las secciones */
-section {
-  max-width: 1000px;
-  margin: auto;
-  padding: 3rem 2rem;
-  border-bottom: 1px solid var(--borde);
-  /* Animación de fade-in para secciones */
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-/* Estilos de las tablas */
-table {
+#hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1.5rem;
-  /* Eliminado opacity: 0 y transform: translateY(10px) aquí para que sean visibles por defecto */
-  /* La animación de fade-in se aplicará cuando la sección sea visible */
-  transition: opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s;
-}
-/* Clase visible para tablas, si se desea animar individualmente al aparecer con la sección */
-table.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-/* Estilos del encabezado y celdas de tabla */
-th, td {
-  padding: 1rem;
-  border-bottom: 1px solid var(--borde); /* Usar --borde para consistencia */
-  text-align: left;
-}
-/* Estilos específicos del encabezado de tabla */
-th {
-  color: var(--acento);
-  text-transform: uppercase;
-  font-size: 0.9rem;
-}
-/* Estilos del pie de página */
-footer {
-  background-color: var(--gris);
-  text-align: center;
-  padding: 2rem;
-  font-size: 0.9rem;
-  color: #666;
-}
-/* Estilo para el botón de reproducción de audio */
-.play-button, .play-output-button {
-  background-color: var(--acento);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.play-button:hover, .play-output-button:hover {
-  background-color: #c0a07c; /* Acennto ligeramente más oscuro */
-  transform: translateY(-2px); /* Pequeño efecto de elevación */
-}
-/* Estilos para la sección del constructor de frases */
-.constructor-container {
-  background-color: var(--oscuro);
-  color: var(--texto-claro);
-  padding: 3rem 2rem;
-  text-align: center;
-  border-bottom: 1px solid var(--borde);
-}
-.constructor-container h2 {
-  color: var(--texto-claro);
-  border-left-color: var(--acento);
-}
-.constructor-container p {
-  color: var(--texto-claro);
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-}
-.constructor-inputs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-.constructor-inputs select {
-  padding: 0.75rem 1rem;
-  border-radius: 5px;
-  border: 1px solid var(--borde);
-  background-color: var(--fondo);
-  color: var(--texto);
-  font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
-  cursor: pointer;
-  min-width: 180px;
-}
-.constructor-inputs button {
-  background-color: var(--acento);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 700;
-  transition: background-color 0.3s ease;
-}
-.constructor-inputs button:hover {
-  background-color: #c0a07c;
-}
-.constructor-output {
-  background-color: var(--constructor-bg-output); /* Usar variable para consistencia */
-  border-radius: 8px;
-  padding: 2rem;
-  margin-top: 2rem;
-  color: var(--texto-claro);
-  border: 1px solid #555;
-}
-.constructor-output h3 {
-  color: var(--acento);
-  margin-top: 0;
-  font-size: 1.5rem;
-}
-.constructor-output p {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-.constructor-output .ipa {
-  font-family: monospace;
-  color: #aaa;
-  font-size: 1.1rem;
-}
-.constructor-output .meaning {
-  font-style: italic;
-  color: #ccc;
-  margin-bottom: 1rem;
-}
-/* Nuevos estilos para los tonos emocionales */
-.constructor-output.poetico {
-  background: #3a3040;
-  box-shadow: 0 0 15px rgba(180, 100, 200, 0.5); /* Sombra púrpura suave */
-}
-.constructor-output.afectivo {
-  background: #41302f;
-  box-shadow: 0 0 15px rgba(255, 100, 100, 0.5); /* Sombra rojiza suave */
-}
-.constructor-output.melancolico {
-  background: #2a2f38;
-  box-shadow: 0 0 15px rgba(100, 150, 255, 0.5); /* Sombra azul suave */
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Oscurece la imagen de fondo */
+  z-index: 1;
 }
 
-/* Estilos para la animación de caracteres */
-.character-cell {
-  cursor: pointer;
-  transition: transform 0.3s ease, text-shadow 0.3s ease;
-  font-size: 2rem; /* Aumenta el tamaño para que el efecto sea visible */
+#hero h1 {
+  font-size: 5rem;
+  margin-bottom: 0.5rem;
+  z-index: 2;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
 }
-.character-cell:hover {
-  transform: scale(1.3); /* Expande el carácter */
-  text-shadow: 0 0 10px var(--acento); /* Efecto de brillo */
+
+#hero p {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  z-index: 2;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
-/* Estilos para el modal personalizado */
-.custom-modal {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  background-color: var(--fondo); color: var(--texto);
-  padding: 20px; border: 1px solid var(--borde); border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000;
-  text-align: center; font-family: 'Outfit', sans-serif;
+
+#hero a {
+  background-color: var(--acento);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
-.custom-modal button {
-  background-color: var(--acento); color: white; border: none; border-radius: 5px;
-  padding: 8px 15px; cursor: pointer; margin-top: 10px;
-  transition: background-color 0.3s ease;
+
+#hero a:hover {
+  background-color: darken(var(--acento), 15%);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
-.custom-modal button:hover {
-  background-color: #c0a07c;
+
+/* Main content adjustments */
+#main-content {
+  padding-top: 0; /* Elimina el padding superior para que las secciones empiecen justo después de la nav */
 }
+
+/* Footer styles */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: var(--gris);
+  color: var(--texto);
+  margin-top: 2rem;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
 /* Styles for the "Scroll to Top" button */
 #btnTop {
-  position: fixed;
-  bottom: 40px;
-  right: 30px;
-  z-index: 99;
-  background-color: var(--acento); /* Use accent color */
-  color: var(--fondo); /* Use background color for contrast */
-  border: none;
-  padding: 12px 18px;
-  border-radius: 50%;
-  font-size: 18px;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: background 0.3s, transform 0.3s, opacity 0.3s;
-  display: none; /* Hidden by default, shown on scroll */
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed position */
+  bottom: 20px; /* Place the button at the bottom of the page */
+  right: 30px; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  background-color: var(--acento); /* Set a background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: 15px; /* Some padding */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 18px; /* Increase font size */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
 #btnTop:hover {
-  background-color: #bfa072; /* Slightly darker accent for hover */
-  transform: scale(1.1);
+  background-color: darken(var(--acento), 10%); /* Darker background on hover */
+  transform: translateY(-3px);
+}
+
+/* Constructor Section Styles */
+.constructor-container {
+    background-color: var(--oscuro); /* Fondo oscuro para el constructor */
+    color: var(--texto-claro); /* Texto claro */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.constructor-container h2 {
+    color: var(--acento);
+    border-bottom: 2px solid var(--texto-claro);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.constructor-container p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center; /* Centrar el texto en el constructor */
+}
+
+.constructor-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 2rem;
+}
+
+.constructor-inputs select,
+.constructor-inputs button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--borde);
+    background-color: var(--fondo);
+    color: var(--texto);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.constructor-inputs select:hover,
+.constructor-inputs button:hover {
+    border-color: var(--acento);
+    box-shadow: 0 0 8px rgba(var(--acento-rgb), 0.5);
+}
+
+.constructor-inputs button {
+    background-color: var(--acento);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.constructor-inputs button:hover {
+    background-color: darken(var(--acento), 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.constructor-inputs label {
+    color: var(--texto-claro);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+}
+
+.constructor-inputs input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 5px;
+}
+
+.constructor-output {
+    background-color: var(--constructor-bg-output);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px dashed var(--acento);
+    margin-top: 2rem;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    color: var(--texto-claro);
+    text-align: left;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.constructor-output h3 {
+    color: var(--acento);
+    margin-top: 0;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.constructor-output p {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.constructor-output .ipa, .constructor-output .meaning {
+    font-style: italic;
+    font-size: 1rem;
+    color: rgba(var(--texto-claro-rgb), 0.8);
+}
+
+.play-output-button {
+    background-color: var(--acento);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.play-output-button:hover {
+    background-color: darken(var(--acento), 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* Estilos para efectos de emociones en el constructor */
+.constructor-output.poetico {
+    background-color: #2c3a4e; /* Azul oscuro suave */
+    border-color: #8bbcdc; /* Azul cielo suave */
+    box-shadow: inset 0 0 15px rgba(139, 188, 220, 0.3);
+}
+
+.constructor-output.afectivo {
+    background-color: #4a2c3a; /* Rojo oscuro suave */
+    border-color: #d88c9a; /* Rosa suave */
+    box-shadow: inset 0 0 15px rgba(216, 140, 154, 0.3);
+}
+
+.constructor-output.melancolico {
+    background-color: #3b3b3b; /* Gris carbón */
+    border-color: #7b7b7b; /* Gris medio */
+    box-shadow: inset 0 0 15px rgba(123, 123, 123, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #hero h1 {
+    font-size: 3.5rem;
+  }
+
+  #hero p {
+    font-size: 1.2rem;
+  }
+
+  nav {
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+
+  nav a, #theme-toggle {
+    width: calc(100% - 20px); /* Ocupa casi todo el ancho */
+    margin: 0.2rem auto;
+    text-align: center;
+  }
+
+  section {
+    padding: 1.5rem 3%;
+  }
+
+  section h2 {
+    font-size: 1.8rem;
+  }
+
+  .constructor-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .constructor-inputs select,
+  .constructor-inputs button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
