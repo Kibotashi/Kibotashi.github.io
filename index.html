@@ -130,7 +130,7 @@
             <tr><th>Interrogativo</th><th>Significado</th><th>Ejemplo</th></tr>
             <tr><td>Na</td><td>¿Qué?</td><td>Na Tarenua? (¿Qué es familia?)</td></tr>
             <tr><td>Né</td><td>¿Cómo?</td><td>Bua Binua Né? (¿Cómo te sientes?)</td></tr>
-            <tr><td>Non</td><td>¿Dónde?</td><td>Janua Non? (¿Dónde vas?)</td></tr>
+            <tr><td>Non</td><td>¿Dónde?</td><td>Janua Non? (¿Dónde vas?)</td>
             <tr><td>Nen</td><td>¿Cuándo?</td><td>Binor Nen? (¿Cuándo sentiste?)</td></tr>
         </table>
     </section>
@@ -205,39 +205,45 @@
 
     <section id="constructor" class="constructor-container">
         <h2>CONSTRUCTOR DE FRASES</h2>
-        <p>La mejor forma de aprender es haciendo. Utiliza esta herramienta para combinar pronombres, verbos y tiempos verbales. Observa cómo se forman las palabras y las frases en tiempo real y empieza a pensar en Kibotashi.</p>
-        <p>(Las pronunciaciones son simuladas.)</p>
-        <div class="constructor-inputs">
-            <select id="pronoun-select"></select>
-            <select id="verb-select"></select>
-            <select id="tense-select"></select>
-            <select id="object-select"></select>
-            <label for="negation-checkbox" style="display:flex; align-items:center; gap:0.5rem;">
-                <input type="checkbox" id="negation-checkbox"> Negación
-            </label>
-            <select id="mood-select">
-                <option value="indicativo">Modo Indicativo</option>
-                <option value="condicional">Modo Condicional</option>
-            </select>
-            <select id="affix-select">
-                <option value="">Sin sufijo</option>
-                <option value="ul">Cariño suave (-ul)</option>
-                <option value="ei">Íntimo (-ei)</option>
-                <option value="an">Confianza (-an)</option>
-            </select>
-            <select id="emotion-select"> <!-- AÑADIDO: Select para emociones -->
-                <option value="neutro">Tono Neutro</option>
-                <option value="poetico">Poético</option>
-                <option value="afectivo">Afectivo</option>
-                <option value="melancolico">Melancólico</option>
-            </select>
-            <label style="display:flex; align-items:center; gap:0.5rem;">
-                <input type="checkbox" id="randomize-checkbox" />
-                Frase aleatoria
-            </label>
-            <button id="build-phrase-btn">Construir</button> <!-- CAMBIADO: ID para eventListener -->
+        <div class="collapsible-header" id="constructor-toggle-header">
+            <h3>Controles del Constructor</h3>
+            <span class="fas fa-chevron-down" id="toggle-icon"></span>
         </div>
-        <p>Selecciona los componentes y haz clic en "Construir".</p>
+        <div class="collapsible-content" id="constructor-controls">
+            <p>La mejor forma de aprender es haciendo. Utiliza esta herramienta para combinar pronombres, verbos y tiempos verbales. Observa cómo se forman las palabras y las frases en tiempo real y empieza a pensar en Kibotashi.</p>
+            <p>(Las pronunciaciones son simuladas.)</p>
+            <div class="constructor-inputs">
+                <select id="pronoun-select"></select>
+                <select id="verb-select"></select>
+                <select id="tense-select"></select>
+                <select id="object-select"></select>
+                <label for="negation-checkbox" style="display:flex; align-items:center; gap:0.5rem;">
+                    <input type="checkbox" id="negation-checkbox"> Negación
+                </label>
+                <select id="mood-select">
+                    <option value="indicativo">Modo Indicativo</option>
+                    <option value="condicional">Modo Condicional</option>
+                </select>
+                <select id="affix-select">
+                    <option value="">Sin sufijo</option>
+                    <option value="ul">Cariño suave (-ul)</option>
+                    <option value="ei">Íntimo (-ei)</option>
+                    <option value="an">Confianza (-an)</option>
+                </select>
+                <select id="emotion-select"> <!-- AÑADIDO: Select para emociones -->
+                    <option value="neutro">Tono Neutro</option>
+                    <option value="poetico">Poético</option>
+                    <option value="afectivo">Afectivo</option>
+                    <option value="melancolico">Melancólico</option>
+                </select>
+                <label style="display:flex; align-items:center; gap:0.5rem;">
+                    <input type="checkbox" id="randomize-checkbox" />
+                    Frase aleatoria
+                </label>
+                <button id="build-phrase-btn">Construir</button> <!-- CAMBIADO: ID para eventListener -->
+            </div>
+            <p>Selecciona los componentes y haz clic en "Construir".</p>
+        </div>
         <div id="constructor-output" class="constructor-output" style="display:none;">
             <h3>Frase Construida:</h3>
             <p id="kibotashi-phrase"></p>
