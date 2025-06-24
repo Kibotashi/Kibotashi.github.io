@@ -111,7 +111,7 @@
             <li><strong>Presente:</strong> raíz + terminación personal (Tao, Tua, Tai...)</li>
             <li><strong>Pasado:</strong> raíz + "or" (Taor = fui)</li>
             <li><strong>Futuro:</strong> raíz + "el" (Tael = seré)</li>
-            <li><strong>Negación:</strong> Ne + verbo conjugado (Netao = no soy)</li>
+            <li><strong>Negación:</b> Ne + verbo conjugado (Netao = no soy)</li>
         </ul>
         <h3>Conjugación del verbo Ta (ser)</h3>
         <table>
@@ -161,7 +161,7 @@
         <ul style="margin-top: 1rem;">
             <li><strong>Ejemplo 1:</strong> <code>Kat</code> (amor) = K + A + T → ⧫◉⦾</li>
             <li><strong>Ejemplo 2:</strong> <code>Biné</code> (alegría) = B + I + N + Énfasis tonal → ⬸◯⏁</li>
-            <li><strong>Ejemplo 3:</b> <code>Tin</code> (ternura) = T + I + N → ⦾◯⏁</li>
+            <li><strong>Ejemplo 3:</strong> <code>Tin</code> (ternura) = T + I + N → ⦾◯⏁</li>
         </ul>
         <p>Si usas herramientas interactivas, puedes representar cada carácter con un SVG o imagen ilustrativa basada en estos bloques.</p>
     </section>
@@ -196,7 +196,7 @@
             <select id="object-select"></select>
             <label for="negation-checkbox">
                 <input type="checkbox" id="negation-checkbox"> Negación
-            </label> <!-- Nuevo checkbox para negación -->
+            </label>
             <select id="mood-select">
                 <option value="indicativo">Modo Indicativo</option>
                 <option value="condicional">Modo Condicional</option>
@@ -207,11 +207,18 @@
                 <option value="ei">Íntimo (-ei)</option>
                 <option value="an">Confianza (-an)</option>
             </select>
+            <select id="emotion-select"> <!-- AÑADIDO: Select para emociones -->
+                <option value="tono neutro">Tono Neutro</option>
+                <option value="alegre">Alegre</option>
+                <option value="triste">Triste</option>
+                <option value="enojado">Enojado</option>
+                <option value="sorprendido">Sorprendido</option>
+            </select>
             <label style="display:flex; align-items:center; gap:0.5rem;">
                 <input type="checkbox" id="randomize-checkbox" />
                 Frase aleatoria
             </label>
-            <button onclick="buildPhrase()">Construir</button>
+            <button id="build-phrase-btn">Construir</button> <!-- CAMBIADO: ID para eventListener -->
         </div>
         <p>Selecciona los componentes y haz clic en "Construir".</p>
         <div id="constructor-output" class="constructor-output" style="display:none;">
@@ -219,7 +226,7 @@
             <p id="kibotashi-phrase"></p>
             <p class="ipa">IPA: <span id="ipa-phrase"></span></p>
             <p class="meaning">Significado: <span id="meaning-phrase"></span></p>
-            <button class="play-output-button" onclick="speakConstructedPhrase()">🗣️ Escuchar Frase</button>
+            <button id="speak-constructed-phrase-btn" class="play-output-button">🗣️ Escuchar Frase</button> <!-- CAMBIADO: ID para eventListener -->
         </div>
     </section>
 
@@ -228,10 +235,10 @@
         <p>Cada palabra tiene su transcripción en formato IPA y puede ir acompañada por su archivo de audio alojado en la carpeta <code>/audios/</code>. Además, se ha añadido una función de texto a voz para una pronunciación sintética, ideal para navegadores modernos.</p>
         <table>
             <tr><th>Palabra</th><th>Pronunciación IPA</th><th>Audio / Voz Sintética</th></tr>
-            <tr><td data-pron="/ˈka.tun/">Katun</td><td>/ˈka.tun/</td><td><audio id="katun-audio" src="audios/katun.mp3"></audio><button class="play-button" onclick="document.getElementById('katun-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Katun')">🗣️ (Voz)</button></td></tr>
-            <tr><td data-pron="/ˈbi.ne/">Biné</td><td>/ˈbi.ne/</td><td><audio id="bine-audio" src="audios/bine.mp3"></audio><button class="play-button" onclick="document.getElementById('bine-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Biné')">🗣️ (Voz)</button></td></tr>
-            <tr><td data-pron="/ˈza.lin/">Zalin</td><td>/ˈza.lin/</td><td><audio id="zalin-audio" src="audios/zalin.mp3"></audio><button class="play-button" onclick="document.getElementById('zalin-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Zalin')">🗣️ (Voz)</button></td></tr>
-            <tr><td data-pron="/ta.o/">Tao</td><td>/ta.o/</td><td><audio id="tao-audio" src="audios/tao.mp3"></audio><button class="play-button" onclick="document.getElementById('tao-audio').play()">▶️ (Archivo)</button> <button class="play-button" onclick="speakText('Tao')">🗣️ (Voz)</button></td></tr>
+            <tr><td data-pron="/ˈka.tun/">Katun</td><td>/ˈka.tun/</td><td><audio id="katun-audio" src="audios/katun.mp3"></audio><button class="play-button" data-audio="audios/katun.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Katun">🗣️ (Voz)</button></td></tr>
+            <tr><td data-pron="/ˈbi.ne/">Biné</td><td>/ˈbi.ne/</td><td><audio id="bine-audio" src="audios/bine.mp3"></audio><button class="play-button" data-audio="audios/bine.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Biné">🗣️ (Voz)</button></td></tr>
+            <tr><td data-pron="/ˈza.lin/">Zalin</td><td>/ˈza.lin/</td><td><audio id="zalin-audio" src="audios/zalin.mp3"></audio><button class="play-button" data-audio="audios/zalin.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Zalin">🗣️ (Voz)</button></td></tr>
+            <tr><td data-pron="/ta.o/">Tao</td><td>/ta.o/</td><td><audio id="tao-audio" src="audios/tao.mp3"></audio><button class="play-button" data-audio="audios/tao.mp3">▶️ (Archivo)</button> <button class="play-button" data-text="Tao">🗣️ (Voz)</button></td></tr>
             <!-- Puedes continuar añadiendo más palabras -->
         </table>
         <p style="margin-top: 1.5rem;">
@@ -243,7 +250,7 @@
         <h2>📘 Glosario Kibotashi</h2>
 
         <input type="text" id="filtro-palabra" placeholder="🔍 Buscar palabra...">
-        <button id="buscar-palabra-btn" class="play-button" style="margin-left: 10px;">Buscar</button> <!-- Nuevo botón de buscar -->
+        <button id="buscar-palabra-btn" class="play-button" style="margin-left: 10px;">Buscar</button>
         <select id="filtro-categoria">
             <option value="">Todas las categorías</option>
             <option>Acción</option>
